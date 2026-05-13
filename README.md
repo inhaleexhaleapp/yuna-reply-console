@@ -10,4 +10,6 @@ It does not connect to X, use the X API, post, like, follow, DM, or automate any
 
 Open `index.html` directly in a browser. It works offline and stores history, favorites, and used replies in localStorage on the same browser.
 
+The Search Radar section includes local preset X search queries for manual discovery. Use the copy button or open a search in X, then review and reply manually.
+
 No build step, server, npm install, backend, external dependency, or API key is needed.

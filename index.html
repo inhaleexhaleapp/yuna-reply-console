@@ -356,9 +356,116 @@
       color: #ffd4d1;
     }
 
+    .radar-panel {
+      grid-column: 1 / -1;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(187, 161, 255, 0.11), transparent 34%),
+        linear-gradient(210deg, rgba(142, 214, 200, 0.08), transparent 38%),
+        var(--panel);
+    }
+
+    .radar-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .radar-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.36fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .radar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .radar-category,
+    .tonight-mode {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.045);
+      box-shadow: 0 16px 36px rgba(6, 4, 16, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .radar-category {
+      min-height: 100%;
+      padding: 12px;
+    }
+
+    .radar-category h3,
+    .tonight-mode h3 {
+      margin: 0 0 10px;
+      color: var(--soft);
+      font-size: 0.9rem;
+      font-weight: 720;
+      letter-spacing: 0;
+    }
+
+    .query-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .query-card {
+      display: grid;
+      gap: 9px;
+      padding: 10px;
+      border: 1px solid rgba(223, 209, 255, 0.13);
+      border-radius: 8px;
+      background: rgba(11, 9, 22, 0.36);
+    }
+
+    .query-text {
+      margin: 0;
+      color: var(--text);
+      font-size: 0.9rem;
+      line-height: 1.38;
+      overflow-wrap: anywhere;
+    }
+
+    .query-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .query-actions button {
+      min-height: 32px;
+      padding: 0 9px;
+      font-size: 0.78rem;
+    }
+
+    .tonight-mode {
+      position: sticky;
+      top: 16px;
+      padding: 14px;
+      border-color: rgba(187, 161, 255, 0.26);
+      background:
+        linear-gradient(145deg, rgba(187, 161, 255, 0.11), rgba(142, 214, 200, 0.045)),
+        rgba(255, 255, 255, 0.05);
+    }
+
     @media (max-width: 900px) {
       .layout {
         grid-template-columns: 1fr;
+      }
+
+      .radar-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .radar-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .tonight-mode {
+        position: static;
       }
 
       .app {
@@ -391,8 +498,13 @@
       .primary,
       .primary-actions button,
       .variant-actions button,
-      .section-actions button {
+      .section-actions button,
+      .query-actions button {
         width: 100%;
+      }
+
+      .radar-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -470,6 +582,24 @@
           </div>
         </div>
         <div class="memory-list" id="historyList"></div>
+      </section>
+
+      <section class="panel radar-panel" aria-labelledby="radar-title">
+        <div class="section-head">
+          <div>
+            <h2 id="radar-title">Search Radar</h2>
+            <p class="radar-note">Use Latest tab on X for fresher conversations.</p>
+          </div>
+          <p class="eyebrow">Manual discovery only. No API. No automation.</p>
+        </div>
+
+        <div class="radar-layout">
+          <div class="radar-grid" id="searchRadarList"></div>
+          <aside class="tonight-mode" aria-labelledby="tonight-title">
+            <h3 id="tonight-title">Tonight mode</h3>
+            <div class="query-list" id="tonightSearchList"></div>
+          </aside>
+        </div>
       </section>
     </div>
   </main>
@@ -860,6 +990,110 @@
       }
     ];
 
+    const searchPresets = [
+      {
+        category: "can't sleep",
+        queries: [
+          "\"can't sleep\" -filter:links",
+          "\"trying to sleep\" -filter:links"
+        ]
+      },
+      {
+        category: "overthinking",
+        queries: [
+          "\"overthinking tonight\" -filter:links",
+          "\"mind racing tonight\" -filter:links"
+        ]
+      },
+      {
+        category: "burnout",
+        queries: [
+          "\"burned out\" -filter:links",
+          "\"too tired to keep going\" -filter:links"
+        ]
+      },
+      {
+        category: "loneliness",
+        queries: [
+          "\"wish life was quieter\"",
+          "\"feel so alone tonight\" -filter:links"
+        ]
+      },
+      {
+        category: "anxiety",
+        queries: [
+          "\"can't relax tonight\"",
+          "\"need peace\" -filter:links"
+        ]
+      },
+      {
+        category: "soft internet",
+        queries: [
+          "\"need softer spaces online\"",
+          "\"internet feels too loud\" -filter:links"
+        ]
+      },
+      {
+        category: "meditation",
+        queries: [
+          "\"meditation helped me\"",
+          "\"looking for meditation\""
+        ]
+      },
+      {
+        category: "need calm",
+        queries: [
+          "\"need a calm app\"",
+          "\"need calm\" -filter:links"
+        ]
+      },
+      {
+        category: "mantra",
+        queries: [
+          "\"gentle mantra\" -filter:links",
+          "\"repeat to myself\" \"breathe\""
+        ]
+      },
+      {
+        category: "journey",
+        queries: [
+          "\"healing journey\"",
+          "\"learning to be gentle with myself\""
+        ]
+      },
+      {
+        category: "breathe",
+        queries: [
+          "\"trying to breathe through it\"",
+          "\"breathing exercises\""
+        ]
+      },
+      {
+        category: "myth",
+        queries: [
+          "\"myths and stories\"",
+          "\"old stories\" \"healing\""
+        ]
+      },
+      {
+        category: "dream",
+        queries: [
+          "\"dreams feel strange lately\"",
+          "\"night thoughts\""
+        ]
+      }
+    ];
+
+    const tonightSearches = [
+      "\"can't sleep\" -filter:links",
+      "\"overthinking tonight\" -filter:links",
+      "\"mind racing tonight\" -filter:links",
+      "\"can't relax tonight\"",
+      "\"trying to sleep\"",
+      "\"night thoughts\"",
+      "\"dreams feel strange lately\""
+    ];
+
     const storageKeys = {
       favorites: "yunaReplyFavorites",
       used: "yunaReplyUsed",
@@ -879,6 +1113,8 @@
     const suggestionsList = document.getElementById("suggestionsList");
     const favoritesList = document.getElementById("favoritesList");
     const historyList = document.getElementById("historyList");
+    const searchRadarList = document.getElementById("searchRadarList");
+    const tonightSearchList = document.getElementById("tonightSearchList");
     const clearFavoritesBtn = document.getElementById("clearFavoritesBtn");
     const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
@@ -1239,6 +1475,38 @@
       `;
     }
 
+    function buildXSearchUrl(query) {
+      return `https://x.com/search?q=${encodeURIComponent(query)}`;
+    }
+
+    function queryCard(query, category) {
+      const encodedQuery = encodeURIComponent(query);
+      return `
+        <article class="query-card">
+          <p class="query-text">${escapeHtml(query)}</p>
+          <div class="query-actions">
+            <button class="small" type="button" data-radar-action="copy" data-query="${encodedQuery}" aria-label="Copy ${escapeHtml(category)} search query">Copy query</button>
+            <button class="small" type="button" data-radar-action="open" data-query="${encodedQuery}" aria-label="Open ${escapeHtml(category)} search on X">Open in X</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderSearchRadar() {
+      searchRadarList.innerHTML = searchPresets.map((preset) => `
+        <section class="radar-category" aria-label="${escapeHtml(preset.category)} search presets">
+          <h3>${escapeHtml(preset.category)}</h3>
+          <div class="query-list">
+            ${preset.queries.map((query) => queryCard(query, preset.category)).join("")}
+          </div>
+        </section>
+      `).join("");
+
+      tonightSearchList.innerHTML = tonightSearches
+        .map((query) => queryCard(query, "Tonight mode"))
+        .join("");
+    }
+
     function renderSuggestions() {
       if (!currentReplies.length) {
         suggestionsList.innerHTML = '<p class="empty">Paste a tweet, choose a category and tone, then generate a soft reply set.</p>';
@@ -1288,6 +1556,7 @@
       renderSuggestions();
       renderFavorites();
       renderHistory();
+      renderSearchRadar();
     }
 
     suggestionsList.addEventListener("click", async (event) => {
@@ -1315,6 +1584,23 @@
     }
 
     document.addEventListener("click", async (event) => {
+      const radarButton = event.target.closest("button[data-radar-action]");
+      if (radarButton) {
+        const query = decodeURIComponent(radarButton.dataset.query || "");
+        if (!query) return;
+
+        if (radarButton.dataset.radarAction === "copy") {
+          await copyText(query);
+          setStatus("Search query copied.");
+        }
+
+        if (radarButton.dataset.radarAction === "open") {
+          window.open(buildXSearchUrl(query), "_blank", "noopener,noreferrer");
+          setStatus("Opened X search in a new tab.");
+        }
+        return;
+      }
+
       const button = event.target.closest("button[data-memory-action]");
       if (!button) return;
 
