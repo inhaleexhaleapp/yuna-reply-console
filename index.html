@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuna Reply Console</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #100c1d;
+      --bg-2: #19122a;
+      --panel: rgba(31, 24, 49, 0.82);
+      --panel-strong: rgba(39, 30, 61, 0.94);
+      --line: rgba(223, 209, 255, 0.16);
+      --line-strong: rgba(223, 209, 255, 0.26);
+      --text: #f6f0ff;
+      --muted: #c8bddb;
+      --soft: #e5d6ff;
+      --accent: #bba1ff;
+      --accent-2: #8ed6c8;
+      --warn: #f3c98b;
+      --danger: #ffaaa6;
+      --shadow: 0 22px 60px rgba(5, 3, 12, 0.35);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        linear-gradient(140deg, rgba(21, 15, 36, 0.98) 0%, rgba(35, 23, 56, 0.96) 47%, rgba(13, 20, 38, 0.98) 100%),
+        linear-gradient(90deg, rgba(142, 214, 200, 0.09), rgba(187, 161, 255, 0.1));
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      content: "";
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 34%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0, rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 120px);
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.08));
+    }
+
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      min-height: 42px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: rgba(187, 161, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.46;
+    }
+
+    button:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: 3px solid rgba(142, 214, 200, 0.38);
+      outline-offset: 2px;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 44px 0 36px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 12px;
+      padding: 28px 0 26px;
+    }
+
+    .eyebrow {
+      width: max-content;
+      max-width: 100%;
+      margin: 0;
+      padding: 8px 10px;
+      border: 1px solid rgba(142, 214, 200, 0.28);
+      border-radius: 8px;
+      color: #d7fff7;
+      background: rgba(142, 214, 200, 0.08);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 8vw, 5.8rem);
+      line-height: 0.95;
+      font-weight: 720;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 620px;
+      margin: 0;
+      color: var(--soft);
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      line-height: 1.55;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.78fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel,
+    .reply-card,
+    .memory-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel + .panel {
+      margin-top: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 1.02rem;
+      font-weight: 680;
+      letter-spacing: 0;
+    }
+
+    .section-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 650;
+    }
+
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      color: var(--text);
+      background: rgba(8, 7, 15, 0.45);
+    }
+
+    textarea {
+      min-height: 178px;
+      padding: 14px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    select {
+      min-height: 44px;
+      padding: 0 12px;
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+        linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) 19px,
+        calc(100% - 12px) 19px;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .input-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .primary-actions,
+    .variant-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .primary {
+      min-width: 160px;
+      border-color: rgba(187, 161, 255, 0.5);
+      color: #130d21;
+      background: linear-gradient(135deg, #efe7ff, #bba1ff 58%, #8ed6c8);
+      font-weight: 760;
+    }
+
+    .ghost {
+      color: var(--soft);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .small {
+      min-height: 34px;
+      padding: 0 10px;
+      font-size: 0.84rem;
+    }
+
+    .status {
+      min-height: 22px;
+      margin: 12px 0 0;
+      color: #d7fff7;
+      font-size: 0.88rem;
+    }
+
+    .reply-list,
+    .memory-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .reply-card,
+    .memory-card {
+      padding: 15px;
+      background: var(--panel-strong);
+    }
+
+    .reply-text,
+    .memory-text {
+      margin: 0;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .reply-meta,
+    .memory-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      min-height: 26px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .pill.safe {
+      border-color: rgba(142, 214, 200, 0.28);
+      color: #d7fff7;
+    }
+
+    .pill.warn {
+      border-color: rgba(243, 201, 139, 0.4);
+      color: var(--warn);
+    }
+
+    .reply-actions,
+    .memory-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 13px;
+    }
+
+    .empty {
+      margin: 0;
+      padding: 16px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.035);
+      line-height: 1.45;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .history-run {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.45;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .danger {
+      border-color: rgba(255, 170, 166, 0.32);
+      color: #ffd4d1;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .app {
+        padding-top: 22px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        width: min(100% - 22px, 1180px);
+      }
+
+      .hero {
+        padding-top: 14px;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+
+      .field-row,
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: grid;
+      }
+
+      .primary,
+      .primary-actions button,
+      .variant-actions button,
+      .section-actions button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <p class="eyebrow">Manual replies only. No automation. No X connection.</p>
+      <h1>Yuna Reply Console</h1>
+      <p class="subtitle">Find softer words for louder timelines.</p>
+    </header>
+
+    <div class="layout">
+      <section class="panel" aria-labelledby="compose-title">
+        <div class="section-head">
+          <h2 id="compose-title">Tweet input</h2>
+        </div>
+
+        <label for="tweetInput">Pasted tweet text</label>
+        <textarea id="tweetInput" placeholder="Paste the tweet you want to reply to..." aria-describedby="tweetMeta"></textarea>
+        <div class="input-meta" id="tweetMeta">
+          <span id="tweetCount">0 characters</span>
+          <span>Local only</span>
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label for="categorySelect">Category</label>
+            <select id="categorySelect" aria-label="Category selector"></select>
+          </div>
+          <div>
+            <label for="toneSelect">Tone</label>
+            <select id="toneSelect" aria-label="Tone selector"></select>
+          </div>
+        </div>
+
+        <div class="primary-actions">
+          <button class="primary" id="generateBtn" type="button">Generate 5 replies</button>
+          <button class="ghost" id="copyAllBtn" type="button" disabled>Copy All</button>
+        </div>
+
+        <div class="variant-actions" aria-label="Reply refinement actions">
+          <button class="ghost small" id="softerBtn" type="button" disabled>Make softer</button>
+          <button class="ghost small" id="humanBtn" type="button" disabled>Make more human</button>
+          <button class="ghost small" id="shorterBtn" type="button" disabled>Make shorter</button>
+        </div>
+
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="suggestions-title">
+        <div class="section-head">
+          <h2 id="suggestions-title">Reply suggestions</h2>
+        </div>
+        <div class="reply-list" id="suggestionsList">
+          <p class="empty">Paste a tweet, choose a category and tone, then generate a soft reply set.</p>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="favorites-title">
+        <div class="section-head">
+          <h2 id="favorites-title">Favorites</h2>
+          <div class="section-actions">
+            <button class="ghost small danger" id="clearFavoritesBtn" type="button">Clear Favorites</button>
+          </div>
+        </div>
+        <div class="memory-list" id="favoritesList"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="history-title">
+        <div class="section-head">
+          <h2 id="history-title">Used/history</h2>
+          <div class="section-actions">
+            <button class="ghost small danger" id="clearHistoryBtn" type="button">Clear History</button>
+          </div>
+        </div>
+        <div class="memory-list" id="historyList"></div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const categories = [
+      "can't sleep",
+      "overthinking",
+      "burnout",
+      "sadness",
+      "soft internet",
+      "need calm",
+      "loneliness",
+      "founder fatigue",
+      "meditation",
+      "app discovery"
+    ];
+
+    const tones = [
+      "soft",
+      "warm human",
+      "tiny poetic",
+      "minimal",
+      "Yuna voice",
+      "indie founder",
+      "gentle helpful"
+    ];
+
+    const replyBank = {
+      "can't sleep": {
+        "soft": [
+          "I hope the night gets a little less sharp soon. Even a few quiet breaths count as rest.",
+          "Being awake when everything is quiet can feel so loud. I hope your body finds its way down gently."
+        ],
+        "warm human": [
+          "That restless kind of tired is so real. Hope you can stop trying so hard for a minute and just be held by the dark.",
+          "I know that feeling. Sometimes the kindest move is not forcing sleep, just making the room feel safer."
+        ],
+        "tiny poetic": [
+          "May the night loosen its grip a little and let your thoughts land somewhere softer.",
+          "Some nights arrive like waves. I hope one small breath becomes a shore."
+        ],
+        "minimal": [
+          "Hope rest finds you soon, even in a small way.",
+          "A softer night to you. No forcing, just easing."
+        ],
+        "Yuna voice": [
+          "Maybe tonight is less about chasing sleep and more about giving your nervous system a dimmer switch.",
+          "Try letting the night be simple for a moment: one breath, one softer thought, one less thing to solve."
+        ],
+        "indie founder": [
+          "Sleep can feel impossible when your mind is still shipping thoughts. Hope you get one clean pause tonight.",
+          "The brain loves a midnight backlog. Wishing you a small shutdown window and no extra self-blame."
+        ],
+        "gentle helpful": [
+          "If sleep is far away, lowering the pressure can help. Resting still counts, even before you drift off.",
+          "Maybe try making the goal smaller: not sleep yet, just a calmer body for the next few minutes."
+        ]
+      },
+      "overthinking": {
+        "soft": [
+          "That loop can feel endless. I hope you get one quiet place inside it where you do not have to decide anything.",
+          "Some thoughts ask for more attention than they deserve. Hope you can set one down for a little while."
+        ],
+        "warm human": [
+          "Overthinking can feel like trying to protect yourself with a flashlight. Makes sense, and it is still exhausting.",
+          "I get this. Sometimes the mind keeps rehearsing because it wants safety, not because you failed at calm."
+        ],
+        "tiny poetic": [
+          "May the thought spiral become a small circle, then a dot, then room to breathe.",
+          "Not every thought needs a verdict. Some can pass like weather through an open window."
+        ],
+        "minimal": [
+          "You do not have to solve every thought tonight.",
+          "A pause is allowed before the next answer."
+        ],
+        "Yuna voice": [
+          "Maybe the gentlest reply to the loop is: I hear you, but I am not following you all night.",
+          "When the mind gets loud, try choosing the next breath instead of the next conclusion."
+        ],
+        "indie founder": [
+          "The mental tabs can multiply fast. Closing one tiny tab still counts as progress.",
+          "Not every scenario needs a product review from your nervous system. Hope one thing can wait."
+        ],
+        "gentle helpful": [
+          "It can help to name the loop without arguing with it: this is worry, and I can return to now.",
+          "Maybe write the thought down once, then let your body know it does not need to keep carrying it."
+        ]
+      },
+      "burnout": {
+        "soft": [
+          "Burnout has a way of making even simple things feel far away. Hope you can give yourself less to prove today.",
+          "That kind of empty tired deserves tenderness, not a new task list."
+        ],
+        "warm human": [
+          "This sounds like the kind of tired that sleep alone cannot fix. I hope you get real permission to go slower.",
+          "I am sorry it feels this heavy. Burnout can make your own life feel hard to reach."
+        ],
+        "tiny poetic": [
+          "May the part of you that has been carrying too much finally meet a softer pace.",
+          "Even a candle needs oxygen. I hope you get a little space around the flame."
+        ],
+        "minimal": [
+          "Less output. More oxygen. That counts.",
+          "You are allowed to be done for today."
+        ],
+        "Yuna voice": [
+          "Maybe the signal is not weakness. Maybe it is your system asking for a quieter way to continue.",
+          "A gentle reset can be more honest than another push through."
+        ],
+        "indie founder": [
+          "Burnout can make every tiny decision feel like a board meeting. Hope you can cancel a few internal meetings today.",
+          "Building while depleted is such a strange tax. Wishing you one protected hour with no performance."
+        ],
+        "gentle helpful": [
+          "If everything feels too much, choose the smallest repair first: water, food, a slower room, one postponed thing.",
+          "A useful first step might be removing one demand, not adding one wellness task."
+        ]
+      },
+      "sadness": {
+        "soft": [
+          "Sadness can take up the whole room sometimes. I hope you do not have to make it smaller to be understood.",
+          "That sounds tender. Wishing you a little company inside it, even if the day stays heavy."
+        ],
+        "warm human": [
+          "I am sorry. Some days just hurt in a way that does not need a silver lining.",
+          "That kind of sadness deserves a real pause. Hope someone meets you gently there."
+        ],
+        "tiny poetic": [
+          "May the heavy thing become a little less lonely in the light.",
+          "Some feelings are rain with nowhere to go. I hope you find a dry corner soon."
+        ],
+        "minimal": [
+          "No fixing. Just sending softness.",
+          "That sounds heavy. I hope it eases."
+        ],
+        "Yuna voice": [
+          "Maybe today does not need to become bright. Maybe it only needs one place where you can stop pretending.",
+          "Let the feeling be real without making it your whole future."
+        ],
+        "indie founder": [
+          "Hard to build or be visible when your heart is offline. Hope you can move gently and ignore the metrics for a bit.",
+          "Some days the only honest roadmap is: feel it, hydrate, answer less."
+        ],
+        "gentle helpful": [
+          "If you can, make the next hour smaller. A drink, a softer seat, one person who does not need a polished version.",
+          "Sometimes naming it plainly helps: this is sadness, and I do not have to solve it all at once."
+        ]
+      },
+      "soft internet": {
+        "soft": [
+          "The internet feels easier when people leave small gentle signals like this. Glad this corner exists.",
+          "A softer timeline is such a relief. Tiny human notes can change the whole room."
+        ],
+        "warm human": [
+          "This is the kind of internet I want more of. Low noise, real feeling, no performance required.",
+          "I love when online spaces remember there are nervous systems behind the screens."
+        ],
+        "tiny poetic": [
+          "A small soft post can feel like a lamp left on in the timeline.",
+          "May the timeline keep a few quiet windows open for people who need air."
+        ],
+        "minimal": [
+          "More of this kind of internet, please.",
+          "Soft posts make the timeline easier to breathe in."
+        ],
+        "Yuna voice": [
+          "This feels like a little pause button inside the scroll. Needed that.",
+          "The timeline can be loud, but this has a quieter temperature."
+        ],
+        "indie founder": [
+          "Tiny humane corners of the internet are still worth building for. This is a good reminder.",
+          "The best online moments still feel handmade. This has that quality."
+        ],
+        "gentle helpful": [
+          "This is a good reminder to choose slower inputs when the feed starts feeling like weather.",
+          "A little softness in the scroll can help people come back to themselves."
+        ]
+      },
+      "need calm": {
+        "soft": [
+          "Wishing you a little room between the feeling and the next thing you have to do.",
+          "I hope calm reaches you in a small believable way, not as pressure to be perfectly okay."
+        ],
+        "warm human": [
+          "That sounds like a lot for one nervous system. Hope you get a moment where nothing asks more of you.",
+          "I hope your body gets the message that it is allowed to stand down, even just a little."
+        ],
+        "tiny poetic": [
+          "May the noise lower by one shade and leave you enough quiet to breathe.",
+          "A small calm can still be a doorway."
+        ],
+        "minimal": [
+          "One breath is enough to begin.",
+          "Small calm is still calm."
+        ],
+        "Yuna voice": [
+          "Maybe the next step is not a solution. Maybe it is a softer inhale and one less urgent thought.",
+          "Let the moment shrink until it fits in one breath."
+        ],
+        "indie founder": [
+          "Not every moment needs a strategy. Sometimes the system just needs less input.",
+          "A calm minute is underrated infrastructure."
+        ],
+        "gentle helpful": [
+          "Try lowering the room by one notch: dim light, slower breath, fewer tabs, less pressure.",
+          "If calm feels far away, start with safety cues: feet on floor, jaw unclenched, one longer exhale."
+        ]
+      },
+      "loneliness": {
+        "soft": [
+          "Loneliness can be so quiet and so loud at the same time. I hope you feel reached, even a little.",
+          "I hope the night gives you one small reminder that you are not as alone as it feels."
+        ],
+        "warm human": [
+          "That ache is real. Sometimes being surrounded by people still does not touch the lonely part.",
+          "I am glad you said it out loud. Loneliness gets heavier when it has to stay perfectly hidden."
+        ],
+        "tiny poetic": [
+          "May one small thread of connection find its way through the quiet.",
+          "Even the loneliest room can hold a little light under the door."
+        ],
+        "minimal": [
+          "You are not strange for feeling this.",
+          "Hoping connection reaches you gently."
+        ],
+        "Yuna voice": [
+          "Maybe the first softness is not forcing the lonely feeling to disappear, just keeping it company.",
+          "Let this be a tiny signal back: you are here, and that matters."
+        ],
+        "indie founder": [
+          "Building things can be weirdly lonely, even in public. Hope you get a real human touchpoint today.",
+          "The online room can be crowded and still feel empty. Wishing you one real conversation."
+        ],
+        "gentle helpful": [
+          "If it feels possible, send one honest low-pressure message. Not to perform, just to make a thread.",
+          "A small connection counts: a voice note, a walk near people, a text that says the real thing."
+        ]
+      },
+      "founder fatigue": {
+        "soft": [
+          "Founder tired is a very specific kind of alone. I hope you can be a person before being a plan today.",
+          "The building can wait for a breath. You are allowed to have edges."
+        ],
+        "warm human": [
+          "This is so real. Carrying the vision and the tiny details can make your brain feel crowded all the time.",
+          "I hope you get a moment where nobody needs certainty from you, including you."
+        ],
+        "tiny poetic": [
+          "May the maker in you find a quiet table and put the weight down for a while.",
+          "Even the person holding the map needs somewhere to rest."
+        ],
+        "minimal": [
+          "You are more than the build.",
+          "Pause the dashboard. Keep the person."
+        ],
+        "Yuna voice": [
+          "Maybe the product does not need more of you tonight. Maybe you need more of you.",
+          "A softer founder rhythm still counts as momentum."
+        ],
+        "indie founder": [
+          "Solo building can make every unknown feel personal. It is not. Some fog is just fog.",
+          "The tiny founder loop of build, doubt, ship, refresh is a lot. Hope you can step out for a bit."
+        ],
+        "gentle helpful": [
+          "Try choosing one next action and one clear stop point. The stop point matters too.",
+          "If the list is endless, pick the task that protects your energy first."
+        ]
+      },
+      "meditation": {
+        "soft": [
+          "Meditation can be less about becoming calm and more about meeting yourself without flinching.",
+          "A quiet minute is still a practice. You do not have to arrive anywhere dramatic."
+        ],
+        "warm human": [
+          "I like this. The gentle version of practice is often the one people can actually return to.",
+          "Some days sitting with yourself is brave enough. Calm does not have to be instant."
+        ],
+        "tiny poetic": [
+          "The breath is small, but it knows the way back.",
+          "A single inhale can be a little doorway out of the rush."
+        ],
+        "minimal": [
+          "Return once. That is practice.",
+          "The breath is enough to start."
+        ],
+        "Yuna voice": [
+          "Maybe the point is not emptying the mind. Maybe it is learning not to believe every wave.",
+          "A soft practice can begin with one honest exhale."
+        ],
+        "indie founder": [
+          "Meditation is the rare reset that does not need a roadmap. Just enough attention to come back.",
+          "A calmer nervous system is useful, but the real gift is being less at war with yourself."
+        ],
+        "gentle helpful": [
+          "If sitting feels hard, try three slower exhales with your feet on the floor. That is a valid start.",
+          "You can count five breaths and begin again whenever you lose track. Losing track is part of it."
+        ]
+      },
+      "app discovery": {
+        "soft": [
+          "Finding a tool that feels quiet instead of demanding is such a relief. Hope you find one that meets you gently.",
+          "The best wellness tools feel like a soft place to land, not another thing to keep up with."
+        ],
+        "warm human": [
+          "I always appreciate tools that respect the mood I am already in. Calm design matters more than people think.",
+          "A good app in this space should feel like support, not pressure. That is the bar for me."
+        ],
+        "tiny poetic": [
+          "The right little tool can feel like a lamp for the pocket.",
+          "Sometimes a small ritual in your hand can help the day change shape."
+        ],
+        "minimal": [
+          "Quiet tools are underrated.",
+          "A calmer interface can make a real difference."
+        ],
+        "Yuna voice": [
+          "I am drawn to tools that help people soften without making self-care feel like homework.",
+          "The best kind of calm tool does not ask you to become a new person first."
+        ],
+        "indie founder": [
+          "The wellness apps I trust most feel carefully made and low-pressure. Less funnel, more feeling.",
+          "App discovery is easier when the product has restraint. Calm is partly what it chooses not to ask."
+        ],
+        "gentle helpful": [
+          "I would look for something private, simple, and easy to leave. A calm tool should not trap your attention.",
+          "A useful filter: does it make your nervous system feel safer within the first minute?"
+        ]
+      }
+    };
+
+    const contextualReplies = [
+      {
+        words: ["sleep", "insomnia", "awake", "night"],
+        category: "can't sleep",
+        replies: [
+          "If sleep is not here yet, I hope rest can still sit beside you for a while.",
+          "Long nights can make thoughts feel bigger. Wishing you one small soft landing."
+        ]
+      },
+      {
+        words: ["tired", "exhausted", "drained"],
+        category: "burnout",
+        replies: [
+          "That sounds like more than ordinary tired. Hope you can lower the demand instead of raising the effort.",
+          "Your tiredness might be asking for protection, not productivity."
+        ]
+      },
+      {
+        words: ["anxious", "anxiety", "panic", "worried"],
+        category: "need calm",
+        replies: [
+          "Anxiety can make the present feel too full. Hope the next breath gives you a little more room.",
+          "Your body may just need a safety signal before it can hear reason."
+        ]
+      },
+      {
+        words: ["internet", "timeline", "scroll", "online"],
+        category: "soft internet",
+        replies: [
+          "The scroll can get sharp fast. A softer corner of the internet really does matter.",
+          "I hope your timeline gives you more room to breathe than to brace."
+        ]
+      },
+      {
+        words: ["burnout", "burned", "overworked"],
+        category: "burnout",
+        replies: [
+          "Burnout is not a character flaw. It is often a long ignored message finally getting louder.",
+          "Pushing harder is not always the brave thing. Sometimes stopping is."
+        ]
+      },
+      {
+        words: ["lonely", "alone", "isolated"],
+        category: "loneliness",
+        replies: [
+          "That lonely feeling can be so heavy. I hope connection reaches you without you having to perform for it.",
+          "You deserve contact that does not ask you to be brighter than you feel."
+        ]
+      },
+      {
+        words: ["quiet", "rest", "pause", "still"],
+        category: "need calm",
+        replies: [
+          "Quiet can be a real form of care. Hope you get enough of it to hear yourself again.",
+          "Rest is not empty time. It is where your system gets some of itself back."
+        ]
+      }
+    ];
+
+    const storageKeys = {
+      favorites: "yunaReplyFavorites",
+      used: "yunaReplyUsed",
+      history: "yunaReplyHistory"
+    };
+
+    const tweetInput = document.getElementById("tweetInput");
+    const tweetCount = document.getElementById("tweetCount");
+    const categorySelect = document.getElementById("categorySelect");
+    const toneSelect = document.getElementById("toneSelect");
+    const generateBtn = document.getElementById("generateBtn");
+    const copyAllBtn = document.getElementById("copyAllBtn");
+    const softerBtn = document.getElementById("softerBtn");
+    const humanBtn = document.getElementById("humanBtn");
+    const shorterBtn = document.getElementById("shorterBtn");
+    const statusEl = document.getElementById("status");
+    const suggestionsList = document.getElementById("suggestionsList");
+    const favoritesList = document.getElementById("favoritesList");
+    const historyList = document.getElementById("historyList");
+    const clearFavoritesBtn = document.getElementById("clearFavoritesBtn");
+    const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+
+    let currentReplies = [];
+    let currentVariant = "base";
+    let appState = {
+      favorites: readStorage(storageKeys.favorites, []),
+      used: readStorage(storageKeys.used, []),
+      history: readStorage(storageKeys.history, [])
+    };
+
+    function readStorage(key, fallback) {
+      try {
+        const saved = localStorage.getItem(key);
+        return saved ? JSON.parse(saved) : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function writeStorage() {
+      localStorage.setItem(storageKeys.favorites, JSON.stringify(appState.favorites.slice(0, 80)));
+      localStorage.setItem(storageKeys.used, JSON.stringify(appState.used.slice(0, 120)));
+      localStorage.setItem(storageKeys.history, JSON.stringify(appState.history.slice(0, 40)));
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function populateSelectors() {
+      categorySelect.innerHTML = categories.map((category) => (
+        `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+      )).join("");
+
+      toneSelect.innerHTML = tones.map((tone) => (
+        `<option value="${escapeHtml(tone)}">${escapeHtml(tone)}</option>`
+      )).join("");
+
+      categorySelect.value = "need calm";
+      toneSelect.value = "warm human";
+    }
+
+    function updateTweetCount() {
+      const count = tweetInput.value.length;
+      tweetCount.textContent = `${count} ${count === 1 ? "character" : "characters"}`;
+    }
+
+    function setStatus(message) {
+      statusEl.textContent = message;
+    }
+
+    function containsAny(text, words) {
+      return words.some((word) => text.includes(word));
+    }
+
+    function detectKeywordCategories(tweetText) {
+      const lower = tweetText.toLowerCase();
+      const matches = new Set();
+
+      contextualReplies.forEach((entry) => {
+        if (containsAny(lower, entry.words)) {
+          matches.add(entry.category);
+        }
+      });
+
+      if (containsAny(lower, ["founder", "startup", "building", "shipping", "launch"])) {
+        matches.add("founder fatigue");
+      }
+
+      if (containsAny(lower, ["sad", "grief", "cry", "heavy"])) {
+        matches.add("sadness");
+      }
+
+      if (containsAny(lower, ["meditate", "breath", "breathing", "mindful"])) {
+        matches.add("meditation");
+      }
+
+      if (containsAny(lower, ["app", "tool", "product"])) {
+        matches.add("app discovery");
+      }
+
+      return Array.from(matches);
+    }
+
+    function buildCandidateReplies(tweetText, category, tone, variant) {
+      const lower = tweetText.toLowerCase();
+      const keywordCategories = detectKeywordCategories(tweetText);
+      const effectiveTone = variant === "softer"
+        ? "soft"
+        : variant === "human"
+          ? "warm human"
+          : variant === "shorter"
+            ? "minimal"
+            : tone;
+
+      const candidates = [];
+
+      function addGroup(groupCategory, groupTone, score) {
+        const group = replyBank[groupCategory] && replyBank[groupCategory][groupTone];
+        if (!group) return;
+        group.forEach((text) => {
+          candidates.push({
+            text,
+            category: groupCategory,
+            tone: groupTone,
+            score
+          });
+        });
+      }
+
+      addGroup(category, effectiveTone, 14);
+      if (effectiveTone !== tone) addGroup(category, tone, 9);
+
+      tones.forEach((availableTone) => {
+        if (availableTone !== effectiveTone && availableTone !== tone) {
+          addGroup(category, availableTone, 5);
+        }
+      });
+
+      keywordCategories.forEach((keywordCategory) => {
+        addGroup(keywordCategory, effectiveTone, keywordCategory === category ? 8 : 11);
+        addGroup(keywordCategory, tone, keywordCategory === category ? 6 : 8);
+      });
+
+      contextualReplies.forEach((entry) => {
+        if (containsAny(lower, entry.words)) {
+          entry.replies.forEach((text) => {
+            candidates.push({
+              text,
+              category: entry.category,
+              tone: "context",
+              score: entry.category === category ? 13 : 10
+            });
+          });
+        }
+      });
+
+      if (keywordCategories.length === 0) {
+        addGroup("need calm", effectiveTone, 4);
+        addGroup("soft internet", effectiveTone, 3);
+      }
+
+      return candidates;
+    }
+
+    function recentTextSet() {
+      const recent = new Set();
+      currentReplies.forEach((reply) => recent.add(reply.text));
+      appState.used.slice(0, 30).forEach((item) => recent.add(item.text));
+      appState.history.slice(0, 12).forEach((run) => {
+        (run.replies || []).forEach((text) => recent.add(text));
+      });
+      return recent;
+    }
+
+    function trimToLimit(text, limit) {
+      if (text.length <= limit) return text;
+      const clipped = text.slice(0, limit - 1).trim().replace(/[,\s]+$/, "");
+      return `${clipped}.`;
+    }
+
+    function makeShorter(text) {
+      if (text.length <= 138) return text;
+      const sentence = text.split(/[.!?]/).map((part) => part.trim()).find(Boolean);
+      return trimToLimit(sentence ? `${sentence}.` : text, 138);
+    }
+
+    function pickReplies(candidates, variant) {
+      const seen = new Set();
+      const recent = recentTextSet();
+      const maxLength = variant === "shorter" ? 155 : 220;
+      const unique = [];
+
+      candidates.forEach((candidate) => {
+        const text = variant === "shorter" ? makeShorter(candidate.text) : trimToLimit(candidate.text, 220);
+        if (!text || seen.has(text) || text.length > 220) return;
+        seen.add(text);
+        unique.push({
+          ...candidate,
+          text,
+          score: candidate.score
+            + Math.random() * 4
+            - (recent.has(text) ? 5 : 0)
+            - (text.length > maxLength ? 1.5 : 0)
+        });
+      });
+
+      unique.sort((a, b) => b.score - a.score);
+      return unique.slice(0, 5).map((item) => ({
+        text: item.text,
+        category: item.category,
+        tone: item.tone
+      }));
+    }
+
+    function generateReplies(variant = "base") {
+      const tweetText = tweetInput.value.trim();
+      const category = categorySelect.value;
+      const tone = toneSelect.value;
+
+      if (!tweetText) {
+        setStatus("Paste a tweet first, then generate replies.");
+        tweetInput.focus();
+        return;
+      }
+
+      currentVariant = variant;
+      const candidates = buildCandidateReplies(tweetText, category, tone, variant);
+      currentReplies = pickReplies(candidates, variant);
+
+      appState.history.unshift({
+        id: window.crypto && typeof window.crypto.randomUUID === "function"
+          ? window.crypto.randomUUID()
+          : `${Date.now()}-${Math.random()}`,
+        tweet: tweetText.slice(0, 280),
+        category,
+        tone,
+        variant,
+        replies: currentReplies.map((reply) => reply.text),
+        createdAt: new Date().toISOString()
+      });
+
+      writeStorage();
+      renderAll();
+      setStatus(variant === "base" ? "5 replies ready." : "Reply set refreshed.");
+    }
+
+    function soundsPromotional(text) {
+      const lower = text.toLowerCase();
+      const promoPhrases = [
+        "download",
+        "install",
+        "try my",
+        "try our",
+        "use our",
+        "sign up",
+        "subscribe",
+        "follow us",
+        "limited time",
+        "link in"
+      ];
+      return promoPhrases.some((phrase) => lower.includes(phrase));
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const helper = document.createElement("textarea");
+      helper.value = text;
+      helper.setAttribute("readonly", "");
+      helper.style.position = "fixed";
+      helper.style.opacity = "0";
+      document.body.appendChild(helper);
+      helper.select();
+      document.execCommand("copy");
+      document.body.removeChild(helper);
+    }
+
+    function isFavorite(text) {
+      return appState.favorites.some((item) => item.text === text);
+    }
+
+    function isUsed(text) {
+      return appState.used.some((item) => item.text === text);
+    }
+
+    function toggleFavorite(reply) {
+      if (isFavorite(reply.text)) {
+        appState.favorites = appState.favorites.filter((item) => item.text !== reply.text);
+        setStatus("Removed from favorites.");
+      } else {
+        appState.favorites.unshift({
+          ...reply,
+          sourceTweet: tweetInput.value.trim().slice(0, 280),
+          createdAt: new Date().toISOString()
+        });
+        setStatus("Saved to favorites.");
+      }
+      writeStorage();
+      renderAll();
+    }
+
+    function markUsed(reply) {
+      if (!isUsed(reply.text)) {
+        appState.used.unshift({
+          ...reply,
+          sourceTweet: tweetInput.value.trim().slice(0, 280),
+          createdAt: new Date().toISOString()
+        });
+      }
+      writeStorage();
+      renderAll();
+      setStatus("Marked as used.");
+    }
+
+    function formatDate(value) {
+      try {
+        return new Intl.DateTimeFormat(undefined, {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(new Date(value));
+      } catch (error) {
+        return "saved";
+      }
+    }
+
+    function replyCard(reply, index) {
+      const promo = soundsPromotional(reply.text);
+      const favorited = isFavorite(reply.text);
+      const used = isUsed(reply.text);
+      const safetyLabel = promo ? "Check promo tone" : "No promo signal";
+
+      return `
+        <article class="reply-card">
+          <p class="reply-text">${escapeHtml(reply.text)}</p>
+          <div class="reply-meta">
+            <span class="pill">${reply.text.length}/220</span>
+            <span class="pill">${escapeHtml(reply.category)}</span>
+            <span class="pill">${escapeHtml(reply.tone)}</span>
+            <span class="pill ${promo ? "warn" : "safe"}">${safetyLabel}</span>
+            ${used ? '<span class="pill safe">Used</span>' : ''}
+          </div>
+          <div class="reply-actions">
+            <button class="small" type="button" data-action="copy" data-index="${index}">Copy</button>
+            <button class="small" type="button" data-action="favorite" data-index="${index}">${favorited ? "Favorited" : "Favorite"}</button>
+            <button class="small" type="button" data-action="used" data-index="${index}">${used ? "Used" : "Mark as Used"}</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function memoryCard(item, type, index) {
+      return `
+        <article class="memory-card">
+          <p class="memory-text">${escapeHtml(item.text)}</p>
+          <div class="memory-meta">
+            <span class="pill">${escapeHtml(item.category || "saved")}</span>
+            <span class="pill">${escapeHtml(item.tone || "tone")}</span>
+            <span class="pill">${formatDate(item.createdAt)}</span>
+          </div>
+          <div class="memory-actions">
+            <button class="small" type="button" data-memory-action="copy" data-type="${type}" data-index="${index}">Copy</button>
+            ${type === "favorites" ? `<button class="small" type="button" data-memory-action="favorite" data-type="${type}" data-index="${index}">Remove</button>` : ""}
+            ${type === "favorites" ? `<button class="small" type="button" data-memory-action="used" data-type="${type}" data-index="${index}">Mark as Used</button>` : ""}
+          </div>
+        </article>
+      `;
+    }
+
+    function renderSuggestions() {
+      if (!currentReplies.length) {
+        suggestionsList.innerHTML = '<p class="empty">Paste a tweet, choose a category and tone, then generate a soft reply set.</p>';
+      } else {
+        suggestionsList.innerHTML = currentReplies.map(replyCard).join("");
+      }
+
+      const hasReplies = currentReplies.length > 0;
+      copyAllBtn.disabled = !hasReplies;
+      softerBtn.disabled = !hasReplies;
+      humanBtn.disabled = !hasReplies;
+      shorterBtn.disabled = !hasReplies;
+    }
+
+    function renderFavorites() {
+      clearFavoritesBtn.disabled = appState.favorites.length === 0;
+      favoritesList.innerHTML = appState.favorites.length
+        ? appState.favorites.slice(0, 12).map((item, index) => memoryCard(item, "favorites", index)).join("")
+        : '<p class="empty">Favorite replies will stay here on this browser.</p>';
+    }
+
+    function renderHistory() {
+      clearHistoryBtn.disabled = appState.used.length === 0 && appState.history.length === 0;
+
+      const usedCards = appState.used.slice(0, 8).map((item, index) => memoryCard(item, "used", index));
+      const runCards = appState.history.slice(0, 5).map((run) => {
+        const replies = (run.replies || []).slice(0, 2).map((reply) => `<span class="muted">${escapeHtml(reply)}</span>`).join("<br>");
+        return `
+          <article class="memory-card">
+            <p class="memory-text">${escapeHtml(run.tweet || "Recent generation")}</p>
+            <div class="memory-meta">
+              <span class="pill">${escapeHtml(run.category || "category")}</span>
+              <span class="pill">${escapeHtml(run.tone || "tone")}</span>
+              <span class="pill">${formatDate(run.createdAt)}</span>
+            </div>
+            <div class="history-run">${replies}</div>
+          </article>
+        `;
+      });
+
+      historyList.innerHTML = usedCards.length || runCards.length
+        ? [...usedCards, ...runCards].join("")
+        : '<p class="empty">Used replies and recent generations will appear here.</p>';
+    }
+
+    function renderAll() {
+      renderSuggestions();
+      renderFavorites();
+      renderHistory();
+    }
+
+    suggestionsList.addEventListener("click", async (event) => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const reply = currentReplies[Number(button.dataset.index)];
+      if (!reply) return;
+
+      if (button.dataset.action === "copy") {
+        await copyText(reply.text);
+        setStatus("Copied reply.");
+      }
+
+      if (button.dataset.action === "favorite") {
+        toggleFavorite(reply);
+      }
+
+      if (button.dataset.action === "used") {
+        markUsed(reply);
+      }
+    });
+
+    function getMemoryItem(type, index) {
+      return type === "favorites" ? appState.favorites[index] : appState.used[index];
+    }
+
+    document.addEventListener("click", async (event) => {
+      const button = event.target.closest("button[data-memory-action]");
+      if (!button) return;
+
+      const type = button.dataset.type;
+      const index = Number(button.dataset.index);
+      const item = getMemoryItem(type, index);
+      if (!item) return;
+
+      if (button.dataset.memoryAction === "copy") {
+        await copyText(item.text);
+        setStatus("Copied reply.");
+      }
+
+      if (button.dataset.memoryAction === "favorite") {
+        appState.favorites.splice(index, 1);
+        writeStorage();
+        renderAll();
+        setStatus("Removed from favorites.");
+      }
+
+      if (button.dataset.memoryAction === "used") {
+        markUsed(item);
+      }
+    });
+
+    generateBtn.addEventListener("click", () => generateReplies("base"));
+    softerBtn.addEventListener("click", () => generateReplies("softer"));
+    humanBtn.addEventListener("click", () => generateReplies("human"));
+    shorterBtn.addEventListener("click", () => generateReplies("shorter"));
+
+    copyAllBtn.addEventListener("click", async () => {
+      if (!currentReplies.length) return;
+      await copyText(currentReplies.map((reply) => reply.text).join("\n\n"));
+      setStatus("Copied all suggestions.");
+    });
+
+    clearFavoritesBtn.addEventListener("click", () => {
+      appState.favorites = [];
+      writeStorage();
+      renderAll();
+      setStatus("Favorites cleared.");
+    });
+
+    clearHistoryBtn.addEventListener("click", () => {
+      appState.used = [];
+      appState.history = [];
+      writeStorage();
+      renderAll();
+      setStatus("History cleared.");
+    });
+
+    tweetInput.addEventListener("input", updateTweetCount);
+
+    populateSelectors();
+    updateTweetCount();
+    renderAll();
+  </script>
+</body>
+</html>
