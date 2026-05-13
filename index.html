@@ -129,6 +129,41 @@
       line-height: 1.55;
     }
 
+    .top-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 2px 0 22px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.045);
+      box-shadow: 0 18px 44px rgba(5, 3, 12, 0.22);
+    }
+
+    .tab-button {
+      flex: 1 1 220px;
+      min-height: 48px;
+      border-color: transparent;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 720;
+    }
+
+    .tab-button[aria-selected="true"] {
+      color: #130d21;
+      background: linear-gradient(135deg, #efe7ff, #bba1ff 55%, #8ed6c8);
+      box-shadow: 0 12px 30px rgba(187, 161, 255, 0.2);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.is-active {
+      display: block;
+    }
+
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.78fr);
@@ -451,6 +486,47 @@
         rgba(255, 255, 255, 0.05);
     }
 
+    .founder-tab {
+      --panel: rgba(20, 28, 42, 0.82);
+      --panel-strong: rgba(25, 35, 52, 0.94);
+      --line: rgba(170, 210, 230, 0.16);
+      --line-strong: rgba(170, 210, 230, 0.26);
+      --muted: #b9c8d6;
+      --soft: #d9edf4;
+      --accent: #94c7ff;
+      --accent-2: #8ed6c8;
+    }
+
+    .founder-tab .panel,
+    .founder-tab .reply-card,
+    .founder-tab .memory-card {
+      box-shadow: 0 22px 58px rgba(2, 8, 18, 0.35);
+    }
+
+    .founder-tab .panel {
+      background:
+        linear-gradient(135deg, rgba(148, 199, 255, 0.055), transparent 42%),
+        var(--panel);
+    }
+
+    .founder-tab .primary {
+      background: linear-gradient(135deg, #ecf7ff, #94c7ff 55%, #8ed6c8);
+    }
+
+    .founder-tab .radar-panel {
+      background:
+        linear-gradient(135deg, rgba(148, 199, 255, 0.12), transparent 34%),
+        linear-gradient(210deg, rgba(142, 214, 200, 0.08), transparent 38%),
+        var(--panel);
+    }
+
+    .cockpit-note {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
     @media (max-width: 900px) {
       .layout {
         grid-template-columns: 1fr;
@@ -517,10 +593,16 @@
       <p class="subtitle">Find softer words for louder timelines.</p>
     </header>
 
-    <div class="layout">
+    <nav class="top-tabs" role="tablist" aria-label="Reply console modes">
+      <button class="tab-button" id="wellnessTabBtn" type="button" role="tab" aria-selected="true" aria-controls="wellnessPanel" data-tab-target="wellnessPanel">Wellness / Yuna</button>
+      <button class="tab-button" id="founderTabBtn" type="button" role="tab" aria-selected="false" aria-controls="founderPanel" data-tab-target="founderPanel">Indie Founder</button>
+    </nav>
+
+    <section class="tab-panel is-active" id="wellnessPanel" role="tabpanel" aria-labelledby="wellnessTabBtn">
+      <div class="layout">
       <section class="panel" aria-labelledby="compose-title">
         <div class="section-head">
-          <h2 id="compose-title">Tweet input</h2>
+          <h2 id="compose-title">Wellness/Yuna tweet input</h2>
         </div>
 
         <label for="tweetInput">Pasted tweet text</label>
@@ -557,7 +639,7 @@
 
       <section class="panel" aria-labelledby="suggestions-title">
         <div class="section-head">
-          <h2 id="suggestions-title">Reply suggestions</h2>
+          <h2 id="suggestions-title">Wellness/Yuna suggestions</h2>
         </div>
         <div class="reply-list" id="suggestionsList">
           <p class="empty">Paste a tweet, choose a category and tone, then generate a soft reply set.</p>
@@ -566,7 +648,7 @@
 
       <section class="panel" aria-labelledby="favorites-title">
         <div class="section-head">
-          <h2 id="favorites-title">Favorites</h2>
+          <h2 id="favorites-title">Wellness/Yuna favorites</h2>
           <div class="section-actions">
             <button class="ghost small danger" id="clearFavoritesBtn" type="button">Clear Favorites</button>
           </div>
@@ -576,7 +658,7 @@
 
       <section class="panel" aria-labelledby="history-title">
         <div class="section-head">
-          <h2 id="history-title">Used/history</h2>
+          <h2 id="history-title">Wellness/Yuna used/history</h2>
           <div class="section-actions">
             <button class="ghost small danger" id="clearHistoryBtn" type="button">Clear History</button>
           </div>
@@ -601,7 +683,99 @@
           </aside>
         </div>
       </section>
-    </div>
+      </div>
+    </section>
+
+    <section class="tab-panel founder-tab" id="founderPanel" role="tabpanel" aria-labelledby="founderTabBtn">
+      <div class="layout">
+        <section class="panel" aria-labelledby="founder-compose-title">
+          <div class="section-head">
+            <div>
+              <h2 id="founder-compose-title">Indie Founder reply cockpit</h2>
+              <p class="cockpit-note">Manual builder replies only. No API, no posting, no automation.</p>
+            </div>
+          </div>
+
+          <label for="founderTweetInput">Pasted builder tweet text</label>
+          <textarea id="founderTweetInput" placeholder="Paste a founder, builder, launch, or build-in-public tweet..." aria-describedby="founderTweetMeta"></textarea>
+          <div class="input-meta" id="founderTweetMeta">
+            <span id="founderTweetCount">0 characters</span>
+            <span>Indie local only</span>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <label for="founderCategorySelect">Founder category</label>
+              <select id="founderCategorySelect" aria-label="Indie Founder category selector"></select>
+            </div>
+            <div>
+              <label for="founderToneSelect">Founder tone</label>
+              <select id="founderToneSelect" aria-label="Indie Founder tone selector"></select>
+            </div>
+          </div>
+
+          <div class="primary-actions">
+            <button class="primary" id="founderGenerateBtn" type="button">Generate 5 founder replies</button>
+            <button class="ghost" id="founderCopyAllBtn" type="button" disabled>Copy All</button>
+          </div>
+
+          <div class="variant-actions" aria-label="Indie Founder reply refinement actions">
+            <button class="ghost small" id="founderShorterBtn" type="button" disabled>Make shorter</button>
+            <button class="ghost small" id="founderHumanBtn" type="button" disabled>Make more human</button>
+            <button class="ghost small" id="founderCasualBtn" type="button" disabled>Make more casual</button>
+          </div>
+
+          <p class="status" id="founderStatus" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel" aria-labelledby="founder-suggestions-title">
+          <div class="section-head">
+            <h2 id="founder-suggestions-title">Indie Founder suggestions</h2>
+          </div>
+          <div class="reply-list" id="founderSuggestionsList">
+            <p class="empty">Paste a builder tweet, choose a category and tone, then generate a founder-native reply set.</p>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="founder-favorites-title">
+          <div class="section-head">
+            <h2 id="founder-favorites-title">Indie Founder favorites</h2>
+            <div class="section-actions">
+              <button class="ghost small danger" id="founderClearFavoritesBtn" type="button">Clear Favorites</button>
+            </div>
+          </div>
+          <div class="memory-list" id="founderFavoritesList"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="founder-history-title">
+          <div class="section-head">
+            <h2 id="founder-history-title">Indie Founder used/history</h2>
+            <div class="section-actions">
+              <button class="ghost small danger" id="founderClearHistoryBtn" type="button">Clear History</button>
+            </div>
+          </div>
+          <div class="memory-list" id="founderHistoryList"></div>
+        </section>
+
+        <section class="panel radar-panel" aria-labelledby="founder-radar-title">
+          <div class="section-head">
+            <div>
+              <h2 id="founder-radar-title">Indie Founder Search Radar</h2>
+              <p class="radar-note">Use Latest tab on X for fresher builder conversations.</p>
+            </div>
+            <p class="eyebrow">Manual discovery only. No X connection.</p>
+          </div>
+
+          <div class="radar-layout">
+            <div class="radar-grid" id="founderSearchRadarList"></div>
+            <aside class="tonight-mode" aria-labelledby="founder-night-title">
+              <h3 id="founder-night-title">Indie Night Shift</h3>
+              <div class="query-list" id="founderNightSearchList"></div>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -1094,12 +1268,300 @@
       "\"dreams feel strange lately\""
     ];
 
+    const founderCategories = [
+      "solo founder",
+      "indie hacker",
+      "build in public",
+      "no users yet",
+      "launch day",
+      "Product Hunt",
+      "app store launch",
+      "coding burnout",
+      "vibe coding",
+      "no-code",
+      "founder loneliness",
+      "revenue anxiety",
+      "SaaS building",
+      "mobile app founder",
+      "shipping update",
+      "creator monetization"
+    ];
+
+    const founderTones = [
+      "supportive founder",
+      "calm builder",
+      "soft indie",
+      "X-native casual",
+      "tiny encouragement",
+      "practical helpful",
+      "quietly rooting",
+      "peer-to-peer"
+    ];
+
+    const founderReplyBank = {
+      "solo founder": {
+        "supportive founder": ["Solo building makes every tiny decision feel bigger. This is real work, even when nobody sees the tabs open."],
+        "calm builder": ["One clear next step is enough today. Solo founders do not need to solve the whole map in one sitting."],
+        "soft indie": ["There is something tender about building alone and still choosing to ship. quietly rooting for this."],
+        "X-native casual": ["yeah solo building is a lot. every small win feels weirdly huge when it is just you in the room."],
+        "tiny encouragement": ["tiny progress still counts, especially when you are the whole team."],
+        "practical helpful": ["Maybe pick one thing that reduces friction for tomorrow. Solo momentum often comes from making the next step easier."],
+        "quietly rooting": ["quietly rooting for this. solo building takes a specific kind of patience."],
+        "peer-to-peer": ["I feel this. Solo founder mode turns every product decision into an internal meeting."]
+      },
+      "indie hacker": {
+        "supportive founder": ["This is the part of indie hacking that looks small from the outside and heavy from the inside. Respect for staying with it."],
+        "calm builder": ["The calm version is often enough: build the next useful thing, learn from the next signal, keep your pace."],
+        "soft indie": ["Indie work has so much quiet faith inside it. Hope this keeps finding its people."],
+        "X-native casual": ["this is very indie hacker coded. tiny bets, weird patience, lots of refreshes."],
+        "tiny encouragement": ["small bets compound. this one counts."],
+        "practical helpful": ["This seems like the kind of update worth turning into one clear lesson for future users too."],
+        "quietly rooting": ["quietly rooting. The handmade internet needs more people who care this much."],
+        "peer-to-peer": ["Same lane, same feelings. The waiting-for-signal part is underrated hard."]
+      },
+      "build in public": {
+        "supportive founder": ["Building in public takes guts because the messy middle is always visible. This is the part nobody sees clearly enough."],
+        "calm builder": ["A steady public build log is enough. You do not have to make every update sound like a breakthrough."],
+        "soft indie": ["This kind of honest build note is useful. It makes the whole thing feel more human."],
+        "X-native casual": ["love these real build updates. not polished, just useful signal."],
+        "tiny encouragement": ["keep showing the small pieces. they add up."],
+        "practical helpful": ["This is a good place to ask one specific question. Public building works best when the ask is tiny."],
+        "quietly rooting": ["quietly rooting for the next update. The consistency is doing more than it looks like."],
+        "peer-to-peer": ["Honestly the consistency is the product sometimes. People notice the steady builders."]
+      },
+      "no users yet": {
+        "supportive founder": ["No users yet is a brutal stage, but it is still a stage. The product is not a verdict on you."],
+        "calm builder": ["The next move can be small: one clearer promise, one sharper user, one real conversation."],
+        "soft indie": ["The quiet before users can feel so personal. Hope you can stay curious instead of crushed by it."],
+        "X-native casual": ["yeah the zero-user phase is humbling. weirdly useful too, but still humbling."],
+        "tiny encouragement": ["one real user can change the whole temperature."],
+        "practical helpful": ["I would look for one person with the exact problem and ask what they tried last. That signal is gold."],
+        "quietly rooting": ["quietly rooting for that first real user. That moment hits different."],
+        "peer-to-peer": ["Been around this feeling. No users yet can make every pixel feel suspicious."]
+      },
+      "launch day": {
+        "supportive founder": ["Launch day is such a strange mix of pride and refreshing. Hope you get to actually feel the milestone for a minute."],
+        "calm builder": ["Whatever the numbers do, shipping changed the state of the project. That part is real."],
+        "soft indie": ["A launch is a little door opening after a lot of quiet work. Hope good people walk through it."],
+        "X-native casual": ["launch day nerves are so real. refresh, breathe, refresh again."],
+        "tiny encouragement": ["you shipped. that matters."],
+        "practical helpful": ["After the launch wave, write down the questions people ask most. That usually points to the next best iteration."],
+        "quietly rooting": ["quietly rooting for this launch. Hope the right early people find it."],
+        "peer-to-peer": ["That launch-day mix of adrenaline and doubt is familiar. Shipping is still the win."]
+      },
+      "Product Hunt": {
+        "supportive founder": ["Product Hunt days can feel loud, but getting the work out there is still meaningful. Hope the right people notice it."],
+        "calm builder": ["The PH spike is only one signal. Useful feedback after the noise is where the next version usually starts."],
+        "soft indie": ["Hope today brings more real curiosity than empty metrics. That is the better kind of launch energy."],
+        "X-native casual": ["PH day is a lot. tabs everywhere, tiny dopamine spikes, strange silence in between."],
+        "tiny encouragement": ["big day. breathe between refreshes."],
+        "practical helpful": ["Save every useful comment today. Tomorrow-you will want the patterns, not just the ranking."],
+        "quietly rooting": ["quietly rooting for the launch. Hope it finds the builders who need it."],
+        "peer-to-peer": ["The leaderboard can get noisy fast. The real win is finding a few people who genuinely care."]
+      },
+      "app store launch": {
+        "supportive founder": ["App store launch is a different kind of vulnerable. So much quiet work behind one little listing."],
+        "calm builder": ["Once it is live, the next calm move is watching where people hesitate and tightening that first minute."],
+        "soft indie": ["There is a tiny magic to seeing your app out in the world. Hope you get to enjoy that part."],
+        "X-native casual": ["app store launch hits different. one listing, a thousand tiny decisions behind it."],
+        "tiny encouragement": ["live in the store is a real milestone."],
+        "practical helpful": ["Screenshots, first sentence, and first session matter a lot here. Small clarity upgrades can move the needle."],
+        "quietly rooting": ["quietly rooting for the app to find its first true fans."],
+        "peer-to-peer": ["That first store version always feels both finished and unfinished. Totally normal."]
+      },
+      "coding burnout": {
+        "supportive founder": ["Shipping while tired is underrated hard. Hope you can protect the builder, not just the build."],
+        "calm builder": ["A tired brain is not a bad brain. It may just need a smaller problem and a clean stopping point."],
+        "soft indie": ["The code can wait for a rested version of you. The product needs that person too."],
+        "X-native casual": ["debugging with a fried brain is a special kind of nonsense. been there."],
+        "tiny encouragement": ["rest is part of the build loop."],
+        "practical helpful": ["Leave yourself one clear note before stopping. Future-you deserves a softer handoff."],
+        "quietly rooting": ["quietly rooting for you to close the laptop before the laptop wins."],
+        "peer-to-peer": ["The hardest bug is sometimes knowing when to stop staring at the bug."]
+      },
+      "vibe coding": {
+        "supportive founder": ["Vibe coding can be messy, but it also gets ideas out of your head fast. The taste still has to lead."],
+        "calm builder": ["The calm move is to let the vibe explore, then let your judgment clean up the edges."],
+        "soft indie": ["There is something fun about making the idea visible before it gets overthought."],
+        "X-native casual": ["vibe coding is fun until the vibes create a second mystery app inside the first one."],
+        "tiny encouragement": ["ship the vibe, then tidy the edges."],
+        "practical helpful": ["After the fast pass, write down what the app is actually supposed to do. That keeps the vibe from wandering."],
+        "quietly rooting": ["quietly rooting for tasteful vibes and fewer surprise regressions."],
+        "peer-to-peer": ["The trick is knowing when the prototype became a product-shaped creature with responsibilities."]
+      },
+      "no-code": {
+        "supportive founder": ["No-code still takes product taste, patience, and real user understanding. The tool does not remove the hard part."],
+        "calm builder": ["A no-code build can be a perfectly valid first version. Clarity beats stack pride."],
+        "soft indie": ["I like when tools let people test an idea without asking permission from complexity first."],
+        "X-native casual": ["no-code discourse is noisy. users mostly care if the thing works."],
+        "tiny encouragement": ["valid build, valid signal."],
+        "practical helpful": ["If the workflow is clear, the stack can stay boring. The user problem is the main event."],
+        "quietly rooting": ["quietly rooting for the useful thing, whatever stack got it there."],
+        "peer-to-peer": ["Honestly, shipping the testable version matters more than winning a stack argument."]
+      },
+      "founder loneliness": {
+        "supportive founder": ["Founder loneliness is real. Carrying the uncertainty alone can make even small choices feel heavier."],
+        "calm builder": ["You are allowed to find a peer before you find the perfect answer. This is easier with another builder nearby."],
+        "soft indie": ["Hope you get one honest founder conversation that does not require performing confidence."],
+        "X-native casual": ["yeah, building alone can make the internet feel crowded and still weirdly quiet."],
+        "tiny encouragement": ["you do not have to hold every unknown alone."],
+        "practical helpful": ["A tiny founder circle can help a lot. Even one weekly check-in changes the texture."],
+        "quietly rooting": ["quietly rooting for you to find your builder people."],
+        "peer-to-peer": ["This is one of the less visible costs of building. The uncertainty gets loud when it has no witness."]
+      },
+      "revenue anxiety": {
+        "supportive founder": ["Revenue anxiety can make every metric feel personal. It is data, not a full identity review."],
+        "calm builder": ["A calmer lens: one offer, one audience, one reason to pay. Then listen hard."],
+        "soft indie": ["Money pressure can make the whole project feel sharper. Hope you can keep your judgment gentle."],
+        "X-native casual": ["revenue brain is wild. one quiet dashboard and suddenly everything feels existential."],
+        "tiny encouragement": ["one honest paying user can change the room."],
+        "practical helpful": ["Try separating traffic, activation, and willingness to pay. The anxiety gets smaller when the question is specific."],
+        "quietly rooting": ["quietly rooting for clearer signal and less dashboard dread."],
+        "peer-to-peer": ["I know this loop. Refreshing does not create revenue, but it sure feels like a ritual."]
+      },
+      "SaaS building": {
+        "supportive founder": ["SaaS building is a lot of invisible plumbing before anything looks impressive. This is still progress."],
+        "calm builder": ["Reliable and boring is underrated in SaaS. A calm product that works is already a strong signal."],
+        "soft indie": ["There is care in the unglamorous parts too. The quiet backend work counts."],
+        "X-native casual": ["SaaS is mostly tiny edge cases wearing a trench coat. respect."],
+        "tiny encouragement": ["boring progress is progress."],
+        "practical helpful": ["If retention matters, the next best question might be what users repeat without thinking."],
+        "quietly rooting": ["quietly rooting for the unsexy parts to compound."],
+        "peer-to-peer": ["Every simple SaaS has a hidden basement of decisions. People rarely see that part."]
+      },
+      "mobile app founder": {
+        "supportive founder": ["Mobile app building has so many little gates. Respect for pushing through the parts users never notice."],
+        "calm builder": ["The first session matters a lot on mobile. One calmer onboarding step can change the feel fast."],
+        "soft indie": ["A good mobile app feels small in the hand but carries so many decisions. Hope yours finds its rhythm."],
+        "X-native casual": ["mobile app founder life is screenshots, edge cases, and app review suspense."],
+        "tiny encouragement": ["small screen, real milestone."],
+        "practical helpful": ["Watch the first tap after install. That moment tells you more than a long feature list."],
+        "quietly rooting": ["quietly rooting for the app to land softly with the right users."],
+        "peer-to-peer": ["The store, the screenshots, the onboarding, the bugs. Mobile makes every detail show up."]
+      },
+      "shipping update": {
+        "supportive founder": ["Good shipping update. It is easy to underestimate how much discipline sits behind a small changelog."],
+        "calm builder": ["A clear shipped note is enough. The work does not need fireworks to be real."],
+        "soft indie": ["This feels like the nice kind of progress: specific, useful, quietly earned."],
+        "X-native casual": ["nice ship. small update, real momentum."],
+        "tiny encouragement": ["shipped is shipped."],
+        "practical helpful": ["This would be even stronger with the user problem it improves. People remember the before and after."],
+        "quietly rooting": ["quietly rooting for the next small ship too."],
+        "peer-to-peer": ["The consistency behind these updates is the impressive part."]
+      },
+      "creator monetization": {
+        "supportive founder": ["Creator monetization is tricky because the work is personal and the business is real. Both parts deserve care."],
+        "calm builder": ["The cleanest offer usually respects the audience and the creator. That balance is hard but worth it."],
+        "soft indie": ["Hope this becomes a way to support the work without making the work feel less yours."],
+        "X-native casual": ["monetizing creative work is such a weird emotional spreadsheet."],
+        "tiny encouragement": ["getting paid for the work can be gentle too."],
+        "practical helpful": ["A simple paid layer that saves time or creates closeness is often easier to understand than a huge bundle."],
+        "quietly rooting": ["quietly rooting for revenue that does not flatten the creative part."],
+        "peer-to-peer": ["The hard bit is making the offer clear without making the relationship feel transactional."]
+      }
+    };
+
+    const founderContextualReplies = [
+      {
+        words: ["solo", "alone", "only founder"],
+        category: "solo founder",
+        replies: [
+          "solo building makes every small win feel bigger. quietly rooting for this.",
+          "It is a lot to be the whole team and still keep the product moving."
+        ]
+      },
+      {
+        words: ["launch", "launched", "launching", "product hunt"],
+        category: "launch day",
+        replies: [
+          "you shipped. Whatever happens next, the project is in the world now.",
+          "Launch days are a weird blend of pride and refresh anxiety. Hope the right people find it."
+        ]
+      },
+      {
+        words: ["no users", "zero users", "first user", "users yet"],
+        category: "no users yet",
+        replies: [
+          "that first user hits different. Hope the next signal is a real one.",
+          "The no-users-yet stage is loud in its own way. Still not a verdict."
+        ]
+      },
+      {
+        words: ["tired", "burnout", "burned out", "exhausted", "debugging"],
+        category: "coding burnout",
+        replies: [
+          "shipping while tired is underrated hard. The builder needs maintenance too.",
+          "A clean stop point can be the most useful feature tonight."
+        ]
+      },
+      {
+        words: ["mrr", "revenue", "customer", "stripe", "payment", "paid"],
+        category: "revenue anxiety",
+        replies: [
+          "money signal can make everything feel intense. Still, one real payment is a real clue.",
+          "Revenue makes the dashboard louder, but it also gives you something concrete to learn from."
+        ]
+      },
+      {
+        words: ["app store", "review", "rejected", "mobile app"],
+        category: "mobile app founder",
+        replies: [
+          "app review suspense is its own founder side quest. hope it clears soon.",
+          "Mobile makes every little gate feel bigger. Still a real milestone."
+        ]
+      },
+      {
+        words: ["vibe coding", "ai built", "cursor", "lovable"],
+        category: "vibe coding",
+        replies: [
+          "vibe coding gets the idea moving fast. taste still does the steering.",
+          "The fun part is getting it alive. The founder part is deciding what it should become."
+        ]
+      }
+    ];
+
+    const founderSearchPresets = [
+      { category: "solo founder", queries: ["\"solo founder\" -filter:links", "\"working on my startup\" -filter:links"] },
+      { category: "indie hacker", queries: ["\"indie hacker\" -filter:links", "\"finally shipped\" -filter:links"] },
+      { category: "build in public", queries: ["\"build in public\" -filter:links", "\"building in public\" -filter:links"] },
+      { category: "no users yet", queries: ["\"no users yet\" -filter:links", "\"first user\" -filter:links"] },
+      { category: "launch day", queries: ["\"launching today\" -filter:links", "\"I made an app\" -filter:links"] },
+      { category: "Product Hunt", queries: ["\"Product Hunt\" \"launched\" -filter:links"] },
+      { category: "app store launch", queries: ["\"app store launch\" -filter:links", "\"waiting for app review\" -filter:links", "\"rejected by app store\" -filter:links"] },
+      { category: "coding burnout", queries: ["\"coding burnout\" -filter:links"] },
+      { category: "vibe coding", queries: ["\"vibe coding\" -filter:links"] },
+      { category: "no-code", queries: ["\"no-code founder\" -filter:links"] },
+      { category: "revenue anxiety", queries: ["\"first paying customer\" -filter:links", "\"MRR\" \"solo founder\" -filter:links", "\"Stripe\" \"first payment\" -filter:links"] },
+      { category: "SaaS building", queries: ["\"SaaS\" \"launched\" -filter:links", "\"building my app\" -filter:links"] },
+      { category: "mobile app founder", queries: ["\"mobile app\" \"founder\" -filter:links"] },
+      { category: "creator monetization", queries: ["\"creator monetization\" -filter:links"] }
+    ];
+
+    const founderNightSearches = [
+      "\"late night shipping\" -filter:links",
+      "\"debugging at night\" -filter:links",
+      "\"waiting for app review\" -filter:links",
+      "\"can't sleep\" \"startup\" -filter:links",
+      "\"almost gave up\" \"building\" -filter:links",
+      "\"still building\" -filter:links",
+      "\"small win\" \"founder\" -filter:links",
+      "\"finally fixed the bug\" -filter:links"
+    ];
+
     const storageKeys = {
       favorites: "yunaReplyFavorites",
       used: "yunaReplyUsed",
       history: "yunaReplyHistory"
     };
 
+    const founderStorageKeys = {
+      favorites: "yunaFounderReplyFavorites",
+      used: "yunaFounderReplyUsed",
+      history: "yunaFounderReplyHistory"
+    };
+
+    const tabButtons = document.querySelectorAll(".tab-button");
+    const tabPanels = document.querySelectorAll(".tab-panel");
     const tweetInput = document.getElementById("tweetInput");
     const tweetCount = document.getElementById("tweetCount");
     const categorySelect = document.getElementById("categorySelect");
@@ -1117,6 +1579,23 @@
     const tonightSearchList = document.getElementById("tonightSearchList");
     const clearFavoritesBtn = document.getElementById("clearFavoritesBtn");
     const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+    const founderTweetInput = document.getElementById("founderTweetInput");
+    const founderTweetCount = document.getElementById("founderTweetCount");
+    const founderCategorySelect = document.getElementById("founderCategorySelect");
+    const founderToneSelect = document.getElementById("founderToneSelect");
+    const founderGenerateBtn = document.getElementById("founderGenerateBtn");
+    const founderCopyAllBtn = document.getElementById("founderCopyAllBtn");
+    const founderShorterBtn = document.getElementById("founderShorterBtn");
+    const founderHumanBtn = document.getElementById("founderHumanBtn");
+    const founderCasualBtn = document.getElementById("founderCasualBtn");
+    const founderStatusEl = document.getElementById("founderStatus");
+    const founderSuggestionsList = document.getElementById("founderSuggestionsList");
+    const founderFavoritesList = document.getElementById("founderFavoritesList");
+    const founderHistoryList = document.getElementById("founderHistoryList");
+    const founderSearchRadarList = document.getElementById("founderSearchRadarList");
+    const founderNightSearchList = document.getElementById("founderNightSearchList");
+    const founderClearFavoritesBtn = document.getElementById("founderClearFavoritesBtn");
+    const founderClearHistoryBtn = document.getElementById("founderClearHistoryBtn");
 
     let currentReplies = [];
     let currentVariant = "base";
@@ -1124,6 +1603,13 @@
       favorites: readStorage(storageKeys.favorites, []),
       used: readStorage(storageKeys.used, []),
       history: readStorage(storageKeys.history, [])
+    };
+    let founderCurrentReplies = [];
+    let founderCurrentVariant = "base";
+    let founderState = {
+      favorites: readStorage(founderStorageKeys.favorites, []),
+      used: readStorage(founderStorageKeys.used, []),
+      history: readStorage(founderStorageKeys.history, [])
     };
 
     function readStorage(key, fallback) {
@@ -1139,6 +1625,12 @@
       localStorage.setItem(storageKeys.favorites, JSON.stringify(appState.favorites.slice(0, 80)));
       localStorage.setItem(storageKeys.used, JSON.stringify(appState.used.slice(0, 120)));
       localStorage.setItem(storageKeys.history, JSON.stringify(appState.history.slice(0, 40)));
+    }
+
+    function writeFounderStorage() {
+      localStorage.setItem(founderStorageKeys.favorites, JSON.stringify(founderState.favorites.slice(0, 80)));
+      localStorage.setItem(founderStorageKeys.used, JSON.stringify(founderState.used.slice(0, 120)));
+      localStorage.setItem(founderStorageKeys.history, JSON.stringify(founderState.history.slice(0, 40)));
     }
 
     function escapeHtml(value) {
@@ -1163,13 +1655,35 @@
       toneSelect.value = "warm human";
     }
 
+    function populateFounderSelectors() {
+      founderCategorySelect.innerHTML = founderCategories.map((category) => (
+        `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+      )).join("");
+
+      founderToneSelect.innerHTML = founderTones.map((tone) => (
+        `<option value="${escapeHtml(tone)}">${escapeHtml(tone)}</option>`
+      )).join("");
+
+      founderCategorySelect.value = "solo founder";
+      founderToneSelect.value = "peer-to-peer";
+    }
+
     function updateTweetCount() {
       const count = tweetInput.value.length;
       tweetCount.textContent = `${count} ${count === 1 ? "character" : "characters"}`;
     }
 
+    function updateFounderTweetCount() {
+      const count = founderTweetInput.value.length;
+      founderTweetCount.textContent = `${count} ${count === 1 ? "character" : "characters"}`;
+    }
+
     function setStatus(message) {
       statusEl.textContent = message;
+    }
+
+    function setFounderStatus(message) {
+      founderStatusEl.textContent = message;
     }
 
     function containsAny(text, words) {
@@ -1266,11 +1780,119 @@
       return candidates;
     }
 
+    function detectFounderKeywordCategories(tweetText) {
+      const lower = tweetText.toLowerCase();
+      const matches = new Set();
+
+      founderContextualReplies.forEach((entry) => {
+        if (containsAny(lower, entry.words)) {
+          matches.add(entry.category);
+        }
+      });
+
+      if (containsAny(lower, ["build in public", "building in public", "public update"])) {
+        matches.add("build in public");
+      }
+
+      if (containsAny(lower, ["product hunt", "ph launch", "upvote"])) {
+        matches.add("Product Hunt");
+      }
+
+      if (containsAny(lower, ["no-code", "nocode", "bubble", "framer"])) {
+        matches.add("no-code");
+      }
+
+      if (containsAny(lower, ["saas", "subscription", "churn", "retention"])) {
+        matches.add("SaaS building");
+      }
+
+      if (containsAny(lower, ["creator", "newsletter", "course", "paid community"])) {
+        matches.add("creator monetization");
+      }
+
+      if (containsAny(lower, ["ship", "shipped", "shipping", "update", "changelog"])) {
+        matches.add("shipping update");
+      }
+
+      return Array.from(matches);
+    }
+
+    function buildFounderCandidateReplies(tweetText, category, tone, variant) {
+      const lower = tweetText.toLowerCase();
+      const keywordCategories = detectFounderKeywordCategories(tweetText);
+      const effectiveTone = variant === "human"
+        ? "peer-to-peer"
+        : variant === "casual"
+          ? "X-native casual"
+          : variant === "shorter"
+            ? "tiny encouragement"
+            : tone;
+
+      const candidates = [];
+
+      function addGroup(groupCategory, groupTone, score) {
+        const group = founderReplyBank[groupCategory] && founderReplyBank[groupCategory][groupTone];
+        if (!group) return;
+        group.forEach((text) => {
+          candidates.push({
+            text,
+            category: groupCategory,
+            tone: groupTone,
+            score
+          });
+        });
+      }
+
+      addGroup(category, effectiveTone, 15);
+      if (effectiveTone !== tone) addGroup(category, tone, 10);
+
+      founderTones.forEach((availableTone) => {
+        if (availableTone !== effectiveTone && availableTone !== tone) {
+          addGroup(category, availableTone, 6);
+        }
+      });
+
+      keywordCategories.forEach((keywordCategory) => {
+        addGroup(keywordCategory, effectiveTone, keywordCategory === category ? 9 : 12);
+        addGroup(keywordCategory, tone, keywordCategory === category ? 7 : 9);
+      });
+
+      founderContextualReplies.forEach((entry) => {
+        if (containsAny(lower, entry.words)) {
+          entry.replies.forEach((text) => {
+            candidates.push({
+              text,
+              category: entry.category,
+              tone: "context",
+              score: entry.category === category ? 14 : 11
+            });
+          });
+        }
+      });
+
+      if (keywordCategories.length === 0) {
+        addGroup("shipping update", effectiveTone, 4);
+        addGroup("solo founder", effectiveTone, 4);
+      }
+
+      return candidates;
+    }
+
     function recentTextSet() {
       const recent = new Set();
       currentReplies.forEach((reply) => recent.add(reply.text));
       appState.used.slice(0, 30).forEach((item) => recent.add(item.text));
       appState.history.slice(0, 12).forEach((run) => {
+        (run.replies || []).forEach((text) => recent.add(text));
+      });
+      return recent;
+    }
+
+    function recentFounderTextSet() {
+      const recent = new Set();
+      founderCurrentReplies.forEach((reply) => recent.add(reply.text));
+      founderState.used.slice(0, 30).forEach((item) => recent.add(item.text));
+      founderState.history.slice(0, 12).forEach((run) => {
         (run.replies || []).forEach((text) => recent.add(text));
       });
       return recent;
@@ -1292,6 +1914,34 @@
       const seen = new Set();
       const recent = recentTextSet();
       const maxLength = variant === "shorter" ? 155 : 220;
+      const unique = [];
+
+      candidates.forEach((candidate) => {
+        const text = variant === "shorter" ? makeShorter(candidate.text) : trimToLimit(candidate.text, 220);
+        if (!text || seen.has(text) || text.length > 220) return;
+        seen.add(text);
+        unique.push({
+          ...candidate,
+          text,
+          score: candidate.score
+            + Math.random() * 4
+            - (recent.has(text) ? 5 : 0)
+            - (text.length > maxLength ? 1.5 : 0)
+        });
+      });
+
+      unique.sort((a, b) => b.score - a.score);
+      return unique.slice(0, 5).map((item) => ({
+        text: item.text,
+        category: item.category,
+        tone: item.tone
+      }));
+    }
+
+    function pickFounderReplies(candidates, variant) {
+      const seen = new Set();
+      const recent = recentFounderTextSet();
+      const maxLength = variant === "shorter" ? 150 : 220;
       const unique = [];
 
       candidates.forEach((candidate) => {
@@ -1348,6 +1998,38 @@
       setStatus(variant === "base" ? "5 replies ready." : "Reply set refreshed.");
     }
 
+    function generateFounderReplies(variant = "base") {
+      const tweetText = founderTweetInput.value.trim();
+      const category = founderCategorySelect.value;
+      const tone = founderToneSelect.value;
+
+      if (!tweetText) {
+        setFounderStatus("Paste a builder tweet first, then generate replies.");
+        founderTweetInput.focus();
+        return;
+      }
+
+      founderCurrentVariant = variant;
+      const candidates = buildFounderCandidateReplies(tweetText, category, tone, variant);
+      founderCurrentReplies = pickFounderReplies(candidates, variant);
+
+      founderState.history.unshift({
+        id: window.crypto && typeof window.crypto.randomUUID === "function"
+          ? window.crypto.randomUUID()
+          : `${Date.now()}-${Math.random()}`,
+        tweet: tweetText.slice(0, 280),
+        category,
+        tone,
+        variant,
+        replies: founderCurrentReplies.map((reply) => reply.text),
+        createdAt: new Date().toISOString()
+      });
+
+      writeFounderStorage();
+      renderFounderAll();
+      setFounderStatus(variant === "base" ? "5 founder replies ready." : "Founder reply set refreshed.");
+    }
+
     function soundsPromotional(text) {
       const lower = text.toLowerCase();
       const promoPhrases = [
@@ -1390,6 +2072,14 @@
       return appState.used.some((item) => item.text === text);
     }
 
+    function isFounderFavorite(text) {
+      return founderState.favorites.some((item) => item.text === text);
+    }
+
+    function isFounderUsed(text) {
+      return founderState.used.some((item) => item.text === text);
+    }
+
     function toggleFavorite(reply) {
       if (isFavorite(reply.text)) {
         appState.favorites = appState.favorites.filter((item) => item.text !== reply.text);
@@ -1417,6 +2107,35 @@
       writeStorage();
       renderAll();
       setStatus("Marked as used.");
+    }
+
+    function toggleFounderFavorite(reply) {
+      if (isFounderFavorite(reply.text)) {
+        founderState.favorites = founderState.favorites.filter((item) => item.text !== reply.text);
+        setFounderStatus("Removed from Indie Founder favorites.");
+      } else {
+        founderState.favorites.unshift({
+          ...reply,
+          sourceTweet: founderTweetInput.value.trim().slice(0, 280),
+          createdAt: new Date().toISOString()
+        });
+        setFounderStatus("Saved to Indie Founder favorites.");
+      }
+      writeFounderStorage();
+      renderFounderAll();
+    }
+
+    function markFounderUsed(reply) {
+      if (!isFounderUsed(reply.text)) {
+        founderState.used.unshift({
+          ...reply,
+          sourceTweet: founderTweetInput.value.trim().slice(0, 280),
+          createdAt: new Date().toISOString()
+        });
+      }
+      writeFounderStorage();
+      renderFounderAll();
+      setFounderStatus("Marked as used.");
     }
 
     function formatDate(value) {
@@ -1475,18 +2194,61 @@
       `;
     }
 
+    function founderReplyCard(reply, index) {
+      const promo = soundsPromotional(reply.text);
+      const favorited = isFounderFavorite(reply.text);
+      const used = isFounderUsed(reply.text);
+      const safetyLabel = promo ? "Check salesy tone" : "No sales signal";
+
+      return `
+        <article class="reply-card">
+          <p class="reply-text">${escapeHtml(reply.text)}</p>
+          <div class="reply-meta">
+            <span class="pill">${reply.text.length}/220</span>
+            <span class="pill">${escapeHtml(reply.category)}</span>
+            <span class="pill">${escapeHtml(reply.tone)}</span>
+            <span class="pill ${promo ? "warn" : "safe"}">${safetyLabel}</span>
+            ${used ? '<span class="pill safe">Used</span>' : ''}
+          </div>
+          <div class="reply-actions">
+            <button class="small" type="button" data-founder-action="copy" data-index="${index}">Copy</button>
+            <button class="small" type="button" data-founder-action="favorite" data-index="${index}">${favorited ? "Favorited" : "Favorite"}</button>
+            <button class="small" type="button" data-founder-action="used" data-index="${index}">${used ? "Used" : "Mark as Used"}</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function founderMemoryCard(item, type, index) {
+      return `
+        <article class="memory-card">
+          <p class="memory-text">${escapeHtml(item.text)}</p>
+          <div class="memory-meta">
+            <span class="pill">${escapeHtml(item.category || "saved")}</span>
+            <span class="pill">${escapeHtml(item.tone || "tone")}</span>
+            <span class="pill">${formatDate(item.createdAt)}</span>
+          </div>
+          <div class="memory-actions">
+            <button class="small" type="button" data-founder-memory-action="copy" data-type="${type}" data-index="${index}">Copy</button>
+            ${type === "favorites" ? `<button class="small" type="button" data-founder-memory-action="favorite" data-type="${type}" data-index="${index}">Remove</button>` : ""}
+            ${type === "favorites" ? `<button class="small" type="button" data-founder-memory-action="used" data-type="${type}" data-index="${index}">Mark as Used</button>` : ""}
+          </div>
+        </article>
+      `;
+    }
+
     function buildXSearchUrl(query) {
       return `https://x.com/search?q=${encodeURIComponent(query)}`;
     }
 
-    function queryCard(query, category) {
+    function queryCard(query, category, scope = "wellness") {
       const encodedQuery = encodeURIComponent(query);
       return `
         <article class="query-card">
           <p class="query-text">${escapeHtml(query)}</p>
           <div class="query-actions">
-            <button class="small" type="button" data-radar-action="copy" data-query="${encodedQuery}" aria-label="Copy ${escapeHtml(category)} search query">Copy query</button>
-            <button class="small" type="button" data-radar-action="open" data-query="${encodedQuery}" aria-label="Open ${escapeHtml(category)} search on X">Open in X</button>
+            <button class="small" type="button" data-radar-action="copy" data-radar-scope="${scope}" data-query="${encodedQuery}" aria-label="Copy ${escapeHtml(category)} search query">Copy query</button>
+            <button class="small" type="button" data-radar-action="open" data-radar-scope="${scope}" data-query="${encodedQuery}" aria-label="Open ${escapeHtml(category)} search on X">Open in X</button>
           </div>
         </article>
       `;
@@ -1504,6 +2266,21 @@
 
       tonightSearchList.innerHTML = tonightSearches
         .map((query) => queryCard(query, "Tonight mode"))
+        .join("");
+    }
+
+    function renderFounderSearchRadar() {
+      founderSearchRadarList.innerHTML = founderSearchPresets.map((preset) => `
+        <section class="radar-category" aria-label="${escapeHtml(preset.category)} founder search presets">
+          <h3>${escapeHtml(preset.category)}</h3>
+          <div class="query-list">
+            ${preset.queries.map((query) => queryCard(query, preset.category, "founder")).join("")}
+          </div>
+        </section>
+      `).join("");
+
+      founderNightSearchList.innerHTML = founderNightSearches
+        .map((query) => queryCard(query, "Indie Night Shift", "founder"))
         .join("");
     }
 
@@ -1552,11 +2329,63 @@
         : '<p class="empty">Used replies and recent generations will appear here.</p>';
     }
 
+    function renderFounderSuggestions() {
+      if (!founderCurrentReplies.length) {
+        founderSuggestionsList.innerHTML = '<p class="empty">Paste a builder tweet, choose a category and tone, then generate a founder-native reply set.</p>';
+      } else {
+        founderSuggestionsList.innerHTML = founderCurrentReplies.map(founderReplyCard).join("");
+      }
+
+      const hasReplies = founderCurrentReplies.length > 0;
+      founderCopyAllBtn.disabled = !hasReplies;
+      founderShorterBtn.disabled = !hasReplies;
+      founderHumanBtn.disabled = !hasReplies;
+      founderCasualBtn.disabled = !hasReplies;
+    }
+
+    function renderFounderFavorites() {
+      founderClearFavoritesBtn.disabled = founderState.favorites.length === 0;
+      founderFavoritesList.innerHTML = founderState.favorites.length
+        ? founderState.favorites.slice(0, 12).map((item, index) => founderMemoryCard(item, "favorites", index)).join("")
+        : '<p class="empty">Indie Founder favorites will stay separate on this browser.</p>';
+    }
+
+    function renderFounderHistory() {
+      founderClearHistoryBtn.disabled = founderState.used.length === 0 && founderState.history.length === 0;
+
+      const usedCards = founderState.used.slice(0, 8).map((item, index) => founderMemoryCard(item, "used", index));
+      const runCards = founderState.history.slice(0, 5).map((run) => {
+        const replies = (run.replies || []).slice(0, 2).map((reply) => `<span class="muted">${escapeHtml(reply)}</span>`).join("<br>");
+        return `
+          <article class="memory-card">
+            <p class="memory-text">${escapeHtml(run.tweet || "Recent founder generation")}</p>
+            <div class="memory-meta">
+              <span class="pill">${escapeHtml(run.category || "category")}</span>
+              <span class="pill">${escapeHtml(run.tone || "tone")}</span>
+              <span class="pill">${formatDate(run.createdAt)}</span>
+            </div>
+            <div class="history-run">${replies}</div>
+          </article>
+        `;
+      });
+
+      founderHistoryList.innerHTML = usedCards.length || runCards.length
+        ? [...usedCards, ...runCards].join("")
+        : '<p class="empty">Indie Founder used replies and recent generations will appear here.</p>';
+    }
+
     function renderAll() {
       renderSuggestions();
       renderFavorites();
       renderHistory();
       renderSearchRadar();
+    }
+
+    function renderFounderAll() {
+      renderFounderSuggestions();
+      renderFounderFavorites();
+      renderFounderHistory();
+      renderFounderSearchRadar();
     }
 
     suggestionsList.addEventListener("click", async (event) => {
@@ -1579,24 +2408,82 @@
       }
     });
 
+    founderSuggestionsList.addEventListener("click", async (event) => {
+      const button = event.target.closest("button[data-founder-action]");
+      if (!button) return;
+      const reply = founderCurrentReplies[Number(button.dataset.index)];
+      if (!reply) return;
+
+      if (button.dataset.founderAction === "copy") {
+        await copyText(reply.text);
+        setFounderStatus("Copied founder reply.");
+      }
+
+      if (button.dataset.founderAction === "favorite") {
+        toggleFounderFavorite(reply);
+      }
+
+      if (button.dataset.founderAction === "used") {
+        markFounderUsed(reply);
+      }
+    });
+
     function getMemoryItem(type, index) {
       return type === "favorites" ? appState.favorites[index] : appState.used[index];
+    }
+
+    function getFounderMemoryItem(type, index) {
+      return type === "favorites" ? founderState.favorites[index] : founderState.used[index];
     }
 
     document.addEventListener("click", async (event) => {
       const radarButton = event.target.closest("button[data-radar-action]");
       if (radarButton) {
         const query = decodeURIComponent(radarButton.dataset.query || "");
+        const scope = radarButton.dataset.radarScope || "wellness";
         if (!query) return;
 
         if (radarButton.dataset.radarAction === "copy") {
           await copyText(query);
-          setStatus("Search query copied.");
+          if (scope === "founder") {
+            setFounderStatus("Founder search query copied.");
+          } else {
+            setStatus("Search query copied.");
+          }
         }
 
         if (radarButton.dataset.radarAction === "open") {
           window.open(buildXSearchUrl(query), "_blank", "noopener,noreferrer");
-          setStatus("Opened X search in a new tab.");
+          if (scope === "founder") {
+            setFounderStatus("Opened founder X search in a new tab.");
+          } else {
+            setStatus("Opened X search in a new tab.");
+          }
+        }
+        return;
+      }
+
+      const founderMemoryButton = event.target.closest("button[data-founder-memory-action]");
+      if (founderMemoryButton) {
+        const type = founderMemoryButton.dataset.type;
+        const index = Number(founderMemoryButton.dataset.index);
+        const item = getFounderMemoryItem(type, index);
+        if (!item) return;
+
+        if (founderMemoryButton.dataset.founderMemoryAction === "copy") {
+          await copyText(item.text);
+          setFounderStatus("Copied founder reply.");
+        }
+
+        if (founderMemoryButton.dataset.founderMemoryAction === "favorite") {
+          founderState.favorites.splice(index, 1);
+          writeFounderStorage();
+          renderFounderAll();
+          setFounderStatus("Removed from Indie Founder favorites.");
+        }
+
+        if (founderMemoryButton.dataset.founderMemoryAction === "used") {
+          markFounderUsed(item);
         }
         return;
       }
@@ -1626,15 +2513,38 @@
       }
     });
 
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const targetId = button.dataset.tabTarget;
+        tabButtons.forEach((tabButton) => {
+          tabButton.setAttribute("aria-selected", String(tabButton === button));
+        });
+        tabPanels.forEach((panel) => {
+          panel.classList.toggle("is-active", panel.id === targetId);
+        });
+      });
+    });
+
     generateBtn.addEventListener("click", () => generateReplies("base"));
     softerBtn.addEventListener("click", () => generateReplies("softer"));
     humanBtn.addEventListener("click", () => generateReplies("human"));
     shorterBtn.addEventListener("click", () => generateReplies("shorter"));
 
+    founderGenerateBtn.addEventListener("click", () => generateFounderReplies("base"));
+    founderShorterBtn.addEventListener("click", () => generateFounderReplies("shorter"));
+    founderHumanBtn.addEventListener("click", () => generateFounderReplies("human"));
+    founderCasualBtn.addEventListener("click", () => generateFounderReplies("casual"));
+
     copyAllBtn.addEventListener("click", async () => {
       if (!currentReplies.length) return;
       await copyText(currentReplies.map((reply) => reply.text).join("\n\n"));
       setStatus("Copied all suggestions.");
+    });
+
+    founderCopyAllBtn.addEventListener("click", async () => {
+      if (!founderCurrentReplies.length) return;
+      await copyText(founderCurrentReplies.map((reply) => reply.text).join("\n\n"));
+      setFounderStatus("Copied all founder suggestions.");
     });
 
     clearFavoritesBtn.addEventListener("click", () => {
@@ -1652,11 +2562,30 @@
       setStatus("History cleared.");
     });
 
+    founderClearFavoritesBtn.addEventListener("click", () => {
+      founderState.favorites = [];
+      writeFounderStorage();
+      renderFounderAll();
+      setFounderStatus("Indie Founder favorites cleared.");
+    });
+
+    founderClearHistoryBtn.addEventListener("click", () => {
+      founderState.used = [];
+      founderState.history = [];
+      writeFounderStorage();
+      renderFounderAll();
+      setFounderStatus("Indie Founder history cleared.");
+    });
+
     tweetInput.addEventListener("input", updateTweetCount);
+    founderTweetInput.addEventListener("input", updateFounderTweetCount);
 
     populateSelectors();
+    populateFounderSelectors();
     updateTweetCount();
+    updateFounderTweetCount();
     renderAll();
+    renderFounderAll();
   </script>
 </body>
 </html>
