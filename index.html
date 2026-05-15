@@ -670,7 +670,7 @@
         <div class="section-head">
           <div>
             <h2 id="radar-title">Search Radar</h2>
-            <p class="radar-note">Use Latest tab on X for fresher conversations.</p>
+            <p class="radar-note">Open in X uses Latest automatically. Date filters refresh when the app opens.</p>
           </div>
           <p class="eyebrow">Manual discovery only. No API. No automation.</p>
         </div>
@@ -761,7 +761,7 @@
           <div class="section-head">
             <div>
               <h2 id="founder-radar-title">Indie Founder Search Radar</h2>
-              <p class="radar-note">Use Latest tab on X for fresher builder conversations.</p>
+              <p class="radar-note">Open in X uses Latest automatically. Date filters refresh when the app opens.</p>
             </div>
             <p class="eyebrow">Manual discovery only. No X connection.</p>
           </div>
@@ -1168,104 +1168,69 @@
       {
         category: "can't sleep",
         queries: [
-          "\"can't sleep\" -filter:links",
-          "\"trying to sleep\" -filter:links"
+          "(\"can't sleep\" OR insomnia OR \"wide awake\") since:{since7} -filter:links",
+          "(\"trying to sleep\" OR \"can't relax tonight\") since:{since7} -filter:links"
         ]
       },
       {
         category: "overthinking",
         queries: [
-          "\"overthinking tonight\" -filter:links",
-          "\"mind racing tonight\" -filter:links"
-        ]
-      },
-      {
-        category: "burnout",
-        queries: [
-          "\"burned out\" -filter:links",
-          "\"too tired to keep going\" -filter:links"
-        ]
-      },
-      {
-        category: "loneliness",
-        queries: [
-          "\"wish life was quieter\"",
-          "\"feel so alone tonight\" -filter:links"
-        ]
-      },
-      {
-        category: "anxiety",
-        queries: [
-          "\"can't relax tonight\"",
-          "\"need peace\" -filter:links"
+          "(\"overthinking at night\" OR \"racing thoughts\" OR \"can't shut my brain\") since:{since7}",
+          "(\"late night\" OR 2am OR 3am) (overthinking OR insomnia OR breath OR calm) since:{since7} -filter:links"
         ]
       },
       {
         category: "soft internet",
         queries: [
-          "\"need softer spaces online\"",
-          "\"internet feels too loud\" -filter:links"
+          "(\"calm tech\" OR \"soft internet\" OR \"slow tech\" OR \"gentle tech\" OR \"digital calm\") since:{since14}",
+          "(\"app fatigue\" OR \"internet feels too loud\") (calm OR sleep OR meditation) since:{since14}"
         ]
       },
       {
         category: "meditation",
         queries: [
-          "\"meditation helped me\"",
-          "\"looking for meditation\""
+          "(\"meditation app\" OR \"tried meditation app\") (calm OR sleep OR tonight) since:{since14}",
+          "(\"looking for meditation\" OR \"meditation helped me\") since:{since14} -filter:links"
         ]
       },
       {
         category: "need calm",
         queries: [
-          "\"need a calm app\"",
-          "\"need calm\" -filter:links"
+          "(\"need peace\" OR \"need calm\" OR \"need a calm app\") since:{since7} -filter:links",
+          "(\"trying to breathe through it\" OR \"breathing exercises\") since:{since14} -filter:links"
         ]
       },
       {
-        category: "mantra",
+        category: "loneliness",
         queries: [
-          "\"gentle mantra\" -filter:links",
-          "\"repeat to myself\" \"breathe\""
+          "(\"feel so alone tonight\" OR \"wish life was quieter\") since:{since7} -filter:links",
+          "(\"late night thoughts\" OR \"night thoughts\") (alone OR lonely OR quiet) since:{since7}"
         ]
       },
       {
-        category: "journey",
+        category: "gentle ai",
         queries: [
-          "\"healing journey\"",
-          "\"learning to be gentle with myself\""
+          "(\"gentle ai\" OR \"ai companion\") (calm OR sleep OR meditation) since:{since14}",
+          "(\"one time\" OR \"no ads\") (app OR meditation OR calm) since:{since14}"
         ]
       },
       {
-        category: "breathe",
+        category: "dream / myth",
         queries: [
-          "\"trying to breathe through it\"",
-          "\"breathing exercises\""
-        ]
-      },
-      {
-        category: "myth",
-        queries: [
-          "\"myths and stories\"",
-          "\"old stories\" \"healing\""
-        ]
-      },
-      {
-        category: "dream",
-        queries: [
-          "\"dreams feel strange lately\"",
-          "\"night thoughts\""
+          "(\"dreams feel strange lately\" OR \"night thoughts\") since:{since7}",
+          "(\"hidden room\" OR mythology OR mantra OR ambient) (app OR meditation OR sleep) since:{since14}"
         ]
       }
     ];
 
     const tonightSearches = [
-      "\"can't sleep\" -filter:links",
-      "\"overthinking tonight\" -filter:links",
-      "\"mind racing tonight\" -filter:links",
-      "\"can't relax tonight\"",
-      "\"trying to sleep\"",
-      "\"night thoughts\"",
-      "\"dreams feel strange lately\""
+      "(\"can't sleep\" OR insomnia OR \"wide awake\") since:{since7} -filter:links",
+      "(\"overthinking at night\" OR \"racing thoughts\" OR \"can't shut my brain\") since:{since7}",
+      "(\"late night\" OR 2am OR 3am) (overthinking OR insomnia OR breath OR calm) since:{since7} -filter:links",
+      "(\"trying to sleep\" OR \"can't relax tonight\") since:{since7} -filter:links",
+      "(\"feel so alone tonight\" OR \"wish life was quieter\") since:{since7} -filter:links",
+      "(\"dreams feel strange lately\" OR \"night thoughts\") since:{since7}",
+      "(\"need peace\" OR \"need calm\") since:{since7} -filter:links"
     ];
 
     const founderCategories = [
@@ -1521,31 +1486,28 @@
     ];
 
     const founderSearchPresets = [
-      { category: "solo founder", queries: ["\"solo founder\" -filter:links", "\"working on my startup\" -filter:links"] },
-      { category: "indie hacker", queries: ["\"indie hacker\" -filter:links", "\"finally shipped\" -filter:links"] },
-      { category: "build in public", queries: ["\"build in public\" -filter:links", "\"building in public\" -filter:links"] },
-      { category: "no users yet", queries: ["\"no users yet\" -filter:links", "\"first user\" -filter:links"] },
-      { category: "launch day", queries: ["\"launching today\" -filter:links", "\"I made an app\" -filter:links"] },
-      { category: "Product Hunt", queries: ["\"Product Hunt\" \"launched\" -filter:links"] },
-      { category: "app store launch", queries: ["\"app store launch\" -filter:links", "\"waiting for app review\" -filter:links", "\"rejected by app store\" -filter:links"] },
-      { category: "coding burnout", queries: ["\"coding burnout\" -filter:links"] },
-      { category: "vibe coding", queries: ["\"vibe coding\" -filter:links"] },
-      { category: "no-code", queries: ["\"no-code founder\" -filter:links"] },
-      { category: "revenue anxiety", queries: ["\"first paying customer\" -filter:links", "\"MRR\" \"solo founder\" -filter:links", "\"Stripe\" \"first payment\" -filter:links"] },
-      { category: "SaaS building", queries: ["\"SaaS\" \"launched\" -filter:links", "\"building my app\" -filter:links"] },
-      { category: "mobile app founder", queries: ["\"mobile app\" \"founder\" -filter:links"] },
-      { category: "creator monetization", queries: ["\"creator monetization\" -filter:links"] }
+      { category: "solo founder", queries: ["(\"solo founder\" OR \"building solo\" OR \"solo builder\") (app OR indie) since:{since7}", "(\"indie founder\" OR \"solo app\") since:{since7} -filter:links"] },
+      { category: "build in public", queries: ["(\"build in public\" OR \"building in public\") since:{since7} -filter:links", "(\"finally shipped\" OR \"just shipped\") since:{since7} -filter:links"] },
+      { category: "no users yet", queries: ["(\"no users yet\" OR \"zero users\") since:{since7} -filter:links", "(\"first user\" OR \"first paying customer\") since:{since14} -filter:links"] },
+      { category: "launch day", queries: ["(\"launching today\" OR \"I made an app\") since:{since7} -filter:links", "(\"Product Hunt\" \"launched\") since:{since14} -filter:links"] },
+      { category: "app store launch", queries: ["(\"app store launch\" OR \"app store release\" OR \"live on app store\" OR \"just shipped\") since:{since7}", "(\"waiting for app review\" OR \"rejected by app store\") since:{since14} -filter:links"] },
+      { category: "late build", queries: ["(\"late night\" OR 2am OR 3am) (build OR shipping OR coding OR rendering OR \"working on\") since:{since7}", "(\"late night shipping\" OR \"debugging at night\") since:{since7} -filter:links"] },
+      { category: "no-code / vibe coding", queries: ["(\"no-code\" OR nocode OR \"no code\") (build OR shipping OR app) since:{since7}", "\"vibe coding\" since:{since14} -filter:links"] },
+      { category: "SaaS / revenue", queries: ["(\"MRR\" \"solo founder\" OR \"Stripe\" \"first payment\") since:{since14} -filter:links", "(\"SaaS\" \"launched\" OR \"working on my startup\") since:{since14} -filter:links"] },
+      { category: "mobile app founder", queries: ["(\"mobile app\" \"founder\" OR \"building my app\") since:{since7} -filter:links", "(\"app store launch\" OR \"app store release\") (solo OR indie) since:{since14}"] },
+      { category: "creator monetization", queries: ["\"creator monetization\" since:{since14} -filter:links", "(\"one time\" OR \"no ads\") (app OR creator OR indie) since:{since14}"] },
+      { category: "Yuna crossover", queries: ["(\"meditation app\" OR calm) (solo OR indie OR founder) since:{since14}", "(\"gentle ai\" OR \"ai companion\") (calm OR sleep OR meditation) since:{since14}"] }
     ];
 
     const founderNightSearches = [
-      "\"late night shipping\" -filter:links",
-      "\"debugging at night\" -filter:links",
-      "\"waiting for app review\" -filter:links",
-      "\"can't sleep\" \"startup\" -filter:links",
-      "\"almost gave up\" \"building\" -filter:links",
-      "\"still building\" -filter:links",
-      "\"small win\" \"founder\" -filter:links",
-      "\"finally fixed the bug\" -filter:links"
+      "\"late night shipping\" since:{since7} -filter:links",
+      "\"debugging at night\" since:{since7} -filter:links",
+      "\"waiting for app review\" since:{since7} -filter:links",
+      "\"can't sleep\" \"startup\" since:{since7} -filter:links",
+      "\"almost gave up\" \"building\" since:{since14} -filter:links",
+      "\"still building\" since:{since7} -filter:links",
+      "\"small win\" \"founder\" since:{since14} -filter:links",
+      "\"finally fixed the bug\" since:{since7} -filter:links"
     ];
 
     const replyEngineRules = {
@@ -2397,15 +2359,32 @@
       `;
     }
 
+    function formatSearchDate(daysBack) {
+      const date = new Date();
+      date.setDate(date.getDate() - daysBack);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function resolveSearchQuery(query) {
+      return query
+        .replaceAll("{since7}", formatSearchDate(7))
+        .replaceAll("{since14}", formatSearchDate(14));
+    }
+
     function buildXSearchUrl(query) {
-      return `https://x.com/search?q=${encodeURIComponent(query)}`;
+      const resolvedQuery = resolveSearchQuery(query);
+      return `https://x.com/search?q=${encodeURIComponent(resolvedQuery)}&f=live`;
     }
 
     function queryCard(query, category, scope = "wellness") {
-      const encodedQuery = encodeURIComponent(query);
+      const resolvedQuery = resolveSearchQuery(query);
+      const encodedQuery = encodeURIComponent(resolvedQuery);
       return `
         <article class="query-card">
-          <p class="query-text">${escapeHtml(query)}</p>
+          <p class="query-text">${escapeHtml(resolvedQuery)}</p>
           <div class="query-actions">
             <button class="small" type="button" data-radar-action="copy" data-radar-scope="${scope}" data-query="${encodedQuery}" aria-label="Copy ${escapeHtml(category)} search query">Copy query</button>
             <button class="small" type="button" data-radar-action="open" data-radar-scope="${scope}" data-query="${encodedQuery}" aria-label="Open ${escapeHtml(category)} search on X">Open in X</button>

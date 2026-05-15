@@ -21,6 +21,6 @@ Generated sets are shaped as: safest, warmer, slightly witty, mentor-aware, and 
 
 Open `index.html` directly in a browser. It works offline and stores history, favorites, and used replies in localStorage on the same browser.
 
-The Search Radar sections include local preset X search queries for manual discovery. Use the copy button or open a search in X, then review and reply manually.
+The Search Radar sections include local preset X search queries for manual discovery. Date filters refresh automatically when the app opens, and Open in X uses X's Latest view. Use the copy button or open a search in X, then review and reply manually.
 
 No build step, server, npm install, backend, external dependency, or API key is needed.
