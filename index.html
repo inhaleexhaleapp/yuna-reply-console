@@ -1548,6 +1548,46 @@
       "\"finally fixed the bug\" -filter:links"
     ];
 
+    const replyEngineRules = {
+      preferredMax: 180,
+      replyOrder: ["safest", "warmer", "slightly witty", "mentor-aware", "ultra-short"],
+      avoidWords: [
+        "authenticity",
+        "community",
+        "compound",
+        "crushing it",
+        "ecosystem",
+        "engagement",
+        "friction",
+        "growth hack",
+        "insight",
+        "meaningful connections",
+        "nervous system",
+        "sanctuary",
+        "signal",
+        "this hits different",
+        "transparency"
+      ],
+      bannedPhrases: [
+        "10x",
+        "check my app",
+        "dm me",
+        "download my app",
+        "grind harder",
+        "great insight",
+        "love this perspective",
+        "valuable content"
+      ]
+    };
+
+    const replyOpeners = {
+      safest: ["fair honestly.", "yeah this part.", "felt this."],
+      warmer: ["felt this honestly.", "yeah, this is very real.", "quietly been thinking the same."],
+      witty: ["fair. the internet makes this weirder than it should be.", "yeah. tiny internet math, somehow emotional.", "honestly, this is the weird little part."],
+      mentor: ["respect this.", "fair honestly.", "i’ve learned this the slow way too."],
+      ultra: ["this is very real.", "yeah this part.", "felt this one."]
+    };
+
     const storageKeys = {
       favorites: "yunaReplyFavorites",
       used: "yunaReplyUsed",
@@ -1904,13 +1944,127 @@
       return `${clipped}.`;
     }
 
+    function sentenceCaseToLowercaseBias(text) {
+      if (!text) return text;
+      return text.replace(/^([A-Z])/, (match) => match.toLowerCase());
+    }
+
+    function removeAiCadence(text) {
+      let cleaned = text
+        .replace(/\bThis resonates deeply\.?\s*/gi, "felt this. ")
+        .replace(/\bYour authenticity is inspiring\.?\s*/gi, "respect this. ")
+        .replace(/\bGreat insight!?\s*/gi, "fair honestly. ")
+        .replace(/\bKeep going!?\s*/gi, "quietly rooting for this. ")
+        .replace(/\bLove this perspective\.?\s*/gi, "felt this. ")
+        .replace(/\bValuable content\.?\s*/gi, "this is useful. ")
+        .replace(/\bmeaningful community connections\b/gi, "real replies")
+        .replace(/\bmeaningful connections\b/gi, "real replies")
+        .replace(/\bnervous systems\b/gi, "people")
+        .replace(/\bnervous system\b/gi, "body")
+        .replace(/\becosystem\b/gi, "space")
+        .replace(/\bsanctuary\b/gi, "quiet place")
+        .replace(/\btransparency\b/gi, "honesty")
+        .replace(/\bauthenticity\b/gi, "honesty")
+        .replace(/\bfriction\b/gi, "rough edge")
+        .replace(/\bsignal\b/gi, "sign")
+        .replace(/\bcompound\b/gi, "add up")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      replyEngineRules.bannedPhrases.forEach((phrase) => {
+        cleaned = cleaned.replace(new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), "");
+      });
+
+      return cleaned.replace(/\s+/g, " ").trim();
+    }
+
+    function isRareYunaContext(category, tweetText) {
+      const lower = `${category} ${tweetText}`.toLowerCase();
+      return containsAny(lower, [
+        "sleep",
+        "ambient",
+        "lonely",
+        "loneliness",
+        "quiet",
+        "myth",
+        "dream",
+        "night",
+        "calm",
+        "meditation"
+      ]);
+    }
+
+    function humanizeReply(text, mode, context) {
+      let cleaned = removeAiCadence(text);
+      const lower = cleaned.toLowerCase();
+
+      if (mode === "ultra-short") {
+        const options = context === "founder"
+          ? ["yeah this part.", "this is very real.", "tiny progress still counts.", "felt this one."]
+          : ["this is very real.", "yeah this part.", "felt this one.", "fair honestly."];
+        return options[Math.floor(Math.random() * options.length)];
+      }
+
+      if (mode === "safest" && !/^(fair honestly|felt this|yeah|respect this|this is)/i.test(cleaned)) {
+        cleaned = `${replyOpeners.safest[Math.floor(Math.random() * replyOpeners.safest.length)]} ${cleaned}`;
+      }
+
+      if (mode === "warmer" && !/^(felt this|yeah|quietly|i get|i know)/i.test(cleaned)) {
+        cleaned = `${replyOpeners.warmer[Math.floor(Math.random() * replyOpeners.warmer.length)]} ${cleaned}`;
+      }
+
+      if (mode === "slightly witty" && context === "founder" && !lower.includes("weird")) {
+        cleaned = `${replyOpeners.witty[Math.floor(Math.random() * replyOpeners.witty.length)]} ${cleaned}`;
+      }
+
+      if (mode === "mentor-aware" && !/^(respect this|fair honestly|i’ve learned)/i.test(cleaned)) {
+        cleaned = `${replyOpeners.mentor[Math.floor(Math.random() * replyOpeners.mentor.length)]} ${cleaned}`;
+      }
+
+      cleaned = cleaned
+        .replace(/\bI\b/g, "i")
+        .replace(/\bI’m\b/g, "i’m")
+        .replace(/\bI’ve\b/g, "i’ve")
+        .replace(/\bHope\b/g, "hope")
+        .replace(/\bMaybe\b/g, "maybe")
+        .replace(/\bRespect\b/g, "respect")
+        .replace(/\bThat\b/g, "that")
+        .replace(/\bThis\b/g, "this")
+        .replace(/\. (A|After|Been|Building|Every|Hope|It|Low|Mobile|No|One|People|Product|SaaS|Screenshots|Solo|The|There|This|Try|Whatever|You)\b/g, (match) => match.toLowerCase());
+
+      cleaned = sentenceCaseToLowercaseBias(cleaned);
+      return trimToLimit(cleaned, mode === "shorter" ? 145 : replyEngineRules.preferredMax);
+    }
+
+    function applyReplyEngineShape(items, variant, context, tweetText) {
+      const modes = variant === "shorter"
+        ? ["ultra-short", "safest", "warmer", "slightly witty", "mentor-aware"]
+        : replyEngineRules.replyOrder;
+      const shaped = [];
+      const seen = new Set();
+
+      items.forEach((item, index) => {
+        const mode = modes[index] || "safest";
+        const text = humanizeReply(item.text, mode, context, tweetText);
+        if (!text || seen.has(text.toLowerCase())) return;
+        seen.add(text.toLowerCase());
+        shaped.push({
+          ...item,
+          text,
+          mode
+        });
+      });
+
+      return shaped;
+    }
+
     function makeShorter(text) {
       if (text.length <= 138) return text;
       const sentence = text.split(/[.!?]/).map((part) => part.trim()).find(Boolean);
       return trimToLimit(sentence ? `${sentence}.` : text, 138);
     }
 
-    function pickReplies(candidates, variant) {
+    function pickReplies(candidates, variant, tweetText) {
       const seen = new Set();
       const recent = recentTextSet();
       const maxLength = variant === "shorter" ? 155 : 220;
@@ -1931,14 +2085,16 @@
       });
 
       unique.sort((a, b) => b.score - a.score);
-      return unique.slice(0, 5).map((item) => ({
+      const picked = unique.slice(0, 5).map((item) => ({
         text: item.text,
         category: item.category,
         tone: item.tone
       }));
+
+      return applyReplyEngineShape(picked, variant, "wellness", tweetText);
     }
 
-    function pickFounderReplies(candidates, variant) {
+    function pickFounderReplies(candidates, variant, tweetText) {
       const seen = new Set();
       const recent = recentFounderTextSet();
       const maxLength = variant === "shorter" ? 150 : 220;
@@ -1959,11 +2115,13 @@
       });
 
       unique.sort((a, b) => b.score - a.score);
-      return unique.slice(0, 5).map((item) => ({
+      const picked = unique.slice(0, 5).map((item) => ({
         text: item.text,
         category: item.category,
         tone: item.tone
       }));
+
+      return applyReplyEngineShape(picked, variant, "founder", tweetText);
     }
 
     function generateReplies(variant = "base") {
@@ -1979,7 +2137,7 @@
 
       currentVariant = variant;
       const candidates = buildCandidateReplies(tweetText, category, tone, variant);
-      currentReplies = pickReplies(candidates, variant);
+      currentReplies = pickReplies(candidates, variant, tweetText);
 
       appState.history.unshift({
         id: window.crypto && typeof window.crypto.randomUUID === "function"
@@ -2011,7 +2169,7 @@
 
       founderCurrentVariant = variant;
       const candidates = buildFounderCandidateReplies(tweetText, category, tone, variant);
-      founderCurrentReplies = pickFounderReplies(candidates, variant);
+      founderCurrentReplies = pickFounderReplies(candidates, variant, tweetText);
 
       founderState.history.unshift({
         id: window.crypto && typeof window.crypto.randomUUID === "function"
@@ -2162,6 +2320,7 @@
           <p class="reply-text">${escapeHtml(reply.text)}</p>
           <div class="reply-meta">
             <span class="pill">${reply.text.length}/220</span>
+            ${reply.mode ? `<span class="pill">${escapeHtml(reply.mode)}</span>` : ""}
             <span class="pill">${escapeHtml(reply.category)}</span>
             <span class="pill">${escapeHtml(reply.tone)}</span>
             <span class="pill ${promo ? "warn" : "safe"}">${safetyLabel}</span>
@@ -2205,6 +2364,7 @@
           <p class="reply-text">${escapeHtml(reply.text)}</p>
           <div class="reply-meta">
             <span class="pill">${reply.text.length}/220</span>
+            ${reply.mode ? `<span class="pill">${escapeHtml(reply.mode)}</span>` : ""}
             <span class="pill">${escapeHtml(reply.category)}</span>
             <span class="pill">${escapeHtml(reply.tone)}</span>
             <span class="pill ${promo ? "warn" : "safe"}">${safetyLabel}</span>
