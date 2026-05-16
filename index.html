@@ -1643,6 +1643,8 @@
       "peer-to-peer"
     ];
 
+    const founderProjectUrl = "https://inhaleexhale.app";
+
     const founderReplyBank = {
       "solo founder": {
         "supportive founder": ["Solo building makes every tiny decision feel bigger. This is real work, even when nobody sees the tabs open."],
@@ -1863,14 +1865,52 @@
       "building today",
       "drop in the replies",
       "drop below",
+      "drop your project",
+      "drop your project url",
+      "drop your link",
+      "drop the link",
+      "drop your product",
       "what did you ship",
+      "what are you shipping",
+      "shipping right now",
       "what are you working on",
+      "what are you working on today",
       "show me what you are building",
       "show me what you're building",
-      "drop your product",
+      "show me what you're working on",
+      "share your project",
+      "share your project link",
+      "project link below",
+      "project url below",
+      "link below",
+      "weekend builders",
+      "support each other",
       "what are you launching",
       "what did you build",
       "reply with what"
+    ];
+
+    const projectLinkPromptWords = [
+      "project url",
+      "project link",
+      "drop your link",
+      "drop the link",
+      "drop your project url",
+      "drop your project link",
+      "drop your product",
+      "share your project link",
+      "share your project url",
+      "link below",
+      "url below",
+      "drive some traffic"
+    ];
+
+    const founderProjectLinkReplies = [
+      `building Inhale Exhale, a calm app world for sleep, mantras, myths, ambient sounds, and Yuna: ${founderProjectUrl}`,
+      `sharing my calm little app world here: ${founderProjectUrl} — soft sleep sounds, mantras, myths, and the ongoing distribution boss fight 😅`,
+      `i’m building Inhale Exhale. calm tech, sleep sounds, myths, Yuna, and founder battlefield energy: ${founderProjectUrl}`,
+      `my project is Inhale Exhale, a quieter meditation/sleep app ecosystem. link because this thread asked nicely: ${founderProjectUrl}`,
+      `built the calm thing, now trying to help the internet notice it without turning into a marketing villain 😂 ${founderProjectUrl}`
     ];
 
     const founderContextualReplies = [
@@ -1949,7 +1989,7 @@
     const founderSearchPresets = [
       { category: "solo founder", queries: ["(\"solo founder\" OR \"building solo\" OR \"solo builder\") (app OR indie) since:{since7}", "(\"indie founder\" OR \"solo app\") since:{since7} -filter:links"] },
       { category: "build in public", queries: ["(\"build in public\" OR \"building in public\") since:{since7} -filter:links", "(\"finally shipped\" OR \"just shipped\") since:{since7} -filter:links"] },
-      { category: "builder prompts", queries: ["(\"what are you building today\" OR \"what are you working on today\") since:{since7} -filter:links", "(\"what are you building\" OR \"drop in the replies\" OR \"drop your product\" OR \"what did you ship\") since:{since7} -filter:links"] },
+      { category: "builder prompts", queries: ["(\"drop your project\" OR \"drop your project URL\" OR \"drop your link\") since:{since7} -filter:links", "(\"share your project link\" OR \"project link below\" OR \"link below\") since:{since7} -filter:links", "(\"what are you shipping right now\" OR \"what are you building\" OR \"what are you working on today\") since:{since7} -filter:links", "(\"weekend builders\" OR \"solo founders\" OR \"support each other\") (project OR link OR building) since:{since7} -filter:links"] },
       { category: "no users yet", queries: ["(\"no users yet\" OR \"zero users\") since:{since7} -filter:links", "(\"first user\" OR \"first paying customer\") since:{since14} -filter:links"] },
       { category: "launch day", queries: ["(\"launching today\" OR \"I made an app\") since:{since7} -filter:links", "(\"Product Hunt\" \"launched\") since:{since14} -filter:links"] },
       { category: "app store launch", queries: ["(\"app store launch\" OR \"app store release\" OR \"live on app store\" OR \"just shipped\") since:{since7}", "(\"waiting for app review\" OR \"rejected by app store\") since:{since14} -filter:links"] },
@@ -2602,6 +2642,17 @@
           });
         }
       });
+
+      if (containsAny(lower, projectLinkPromptWords)) {
+        founderProjectLinkReplies.forEach((text) => {
+          candidates.push({
+            text,
+            category: "builder prompts",
+            tone: "project link",
+            score: 18
+          });
+        });
+      }
 
       if (keywordCategories.length === 0) {
         addGroup("shipping update", effectiveTone, 4);
