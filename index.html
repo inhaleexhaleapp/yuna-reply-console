@@ -974,6 +974,42 @@
             <button class="ghost" id="gravityImportBtn" type="button">Import Lists</button>
           </div>
         </section>
+
+        <section class="panel full-span" aria-labelledby="account-notes-title">
+          <div class="section-head">
+            <div>
+              <h2 id="account-notes-title">Account notes</h2>
+              <p class="cockpit-note">A local social memory for handles that feel worth remembering.</p>
+            </div>
+            <div class="section-actions">
+              <button class="ghost small danger" id="gravityClearAccountNotesBtn" type="button">Clear Notes</button>
+            </div>
+          </div>
+          <div class="field-row">
+            <div>
+              <label for="gravityAccountNoteHandleInput">Handle</label>
+              <input class="metric-input" id="gravityAccountNoteHandleInput" type="text" placeholder="@quietbuilder">
+            </div>
+            <div>
+              <label for="gravityAccountNoteStatusSelect">Memory status</label>
+              <select id="gravityAccountNoteStatusSelect" aria-label="Account note status">
+                <option value="watch again">watch again</option>
+                <option value="good small room">good small room</option>
+                <option value="mutual potential">mutual potential</option>
+                <option value="too big / noisy">too big / noisy</option>
+                <option value="skip for now">skip for now</option>
+              </select>
+            </div>
+          </div>
+          <label for="gravityAccountNoteVibeInput">Vibe / cluster</label>
+          <input class="metric-input" id="gravityAccountNoteVibeInput" type="text" placeholder="calm tech, cozy internet, ambient builder">
+          <label for="gravityAccountNoteText">Private note</label>
+          <textarea class="import-export" id="gravityAccountNoteText" placeholder="Why this account matters, how the reply culture feels, what to remember next time..."></textarea>
+          <div class="primary-actions">
+            <button class="primary" id="gravitySaveAccountNoteBtn" type="button">Save account note</button>
+          </div>
+          <div class="gravity-list" id="gravityAccountNotesView"></div>
+        </section>
       </div>
     </section>
 
@@ -1092,6 +1128,27 @@
               <select id="founderToneSelect" aria-label="Indie Founder tone selector"></select>
             </div>
           </div>
+
+          <div class="field-row">
+            <div>
+              <label for="founderLinkModeSelect">Link mode</label>
+              <select id="founderLinkModeSelect" aria-label="Founder reply link mode">
+                <option value="auto">Auto link if asked</option>
+                <option value="none">No link</option>
+                <option value="include">Include link</option>
+              </select>
+            </div>
+            <div>
+              <label for="founderFormatSelect">Reply format</label>
+              <select id="founderFormatSelect" aria-label="Founder reply format">
+                <option value="text">Text</option>
+                <option value="playful">Playful text</option>
+                <option value="meme">Meme caption</option>
+                <option value="gif">GIF cue</option>
+              </select>
+            </div>
+          </div>
+          <p class="cockpit-note">Human texture controls: links only when useful; meme/GIF modes are cues for manual posting.</p>
 
           <div class="primary-actions">
             <button class="primary" id="founderGenerateBtn" type="button">Generate 5 founder replies</button>
@@ -1913,6 +1970,27 @@
       `built the calm thing, now trying to help the internet notice it without turning into a marketing villain 😂 ${founderProjectUrl}`
     ];
 
+    const founderFormatReplies = {
+      playful: [
+        "building calm tools and entering the visibility arena with one screenshot and unreasonable hope 😂",
+        "today’s build is app polish plus distribution courage. very normal founder cardio 😅",
+        "working on Inhale Exhale. soft product, dramatic marketing side quest, many tabs open.",
+        "building the calm thing while the founder soundtrack is clearly boss fight music."
+      ],
+      meme: [
+        "meme caption: when the app is calm but the distribution plan is doing parkour.",
+        "meme caption: solo founder enters the marketing arena with one screenshot and no shield.",
+        "meme caption: the product is soft, the launch dashboard is not.",
+        "meme caption: me explaining calm tech while fighting the visibility boss."
+      ],
+      gif: [
+        "gif cue: tired founder entering final boss room. reply: building calm tools; distribution arc continues 😅",
+        "gif cue: tiny hero walking into a huge arena. reply: app polish today, visibility battle ongoing.",
+        "gif cue: dramatic movie walk. reply: building Inhale Exhale and trying to be perceived online 😂",
+        "gif cue: calm music over battlefield footage. reply: the app is peaceful; the founder quest is not."
+      ]
+    };
+
     const founderContextualReplies = [
       {
         words: builderPromptWords,
@@ -2107,12 +2185,14 @@
     const founderStorageKeys = {
       favorites: "yunaFounderReplyFavorites",
       used: "yunaFounderReplyUsed",
-      history: "yunaFounderReplyHistory"
+      history: "yunaFounderReplyHistory",
+      settings: "yunaFounderReplySettings"
     };
 
     const gravityStorageKeys = {
       lists: "yunaGravityLists",
-      sessions: "yunaGravitySessions"
+      sessions: "yunaGravitySessions",
+      accountNotes: "yunaGravityAccountNotes"
     };
 
     const tabButtons = document.querySelectorAll(".tab-button");
@@ -2161,6 +2241,13 @@
     const gravityImportExport = document.getElementById("gravityImportExport");
     const gravityExportBtn = document.getElementById("gravityExportBtn");
     const gravityImportBtn = document.getElementById("gravityImportBtn");
+    const gravityAccountNoteHandleInput = document.getElementById("gravityAccountNoteHandleInput");
+    const gravityAccountNoteStatusSelect = document.getElementById("gravityAccountNoteStatusSelect");
+    const gravityAccountNoteVibeInput = document.getElementById("gravityAccountNoteVibeInput");
+    const gravityAccountNoteText = document.getElementById("gravityAccountNoteText");
+    const gravitySaveAccountNoteBtn = document.getElementById("gravitySaveAccountNoteBtn");
+    const gravityClearAccountNotesBtn = document.getElementById("gravityClearAccountNotesBtn");
+    const gravityAccountNotesView = document.getElementById("gravityAccountNotesView");
     const tweetInput = document.getElementById("tweetInput");
     const tweetCount = document.getElementById("tweetCount");
     const categorySelect = document.getElementById("categorySelect");
@@ -2182,6 +2269,8 @@
     const founderTweetCount = document.getElementById("founderTweetCount");
     const founderCategorySelect = document.getElementById("founderCategorySelect");
     const founderToneSelect = document.getElementById("founderToneSelect");
+    const founderLinkModeSelect = document.getElementById("founderLinkModeSelect");
+    const founderFormatSelect = document.getElementById("founderFormatSelect");
     const founderGenerateBtn = document.getElementById("founderGenerateBtn");
     const founderCopyAllBtn = document.getElementById("founderCopyAllBtn");
     const founderShorterBtn = document.getElementById("founderShorterBtn");
@@ -2208,13 +2297,15 @@
     let founderState = {
       favorites: readStorage(founderStorageKeys.favorites, []),
       used: readStorage(founderStorageKeys.used, []),
-      history: readStorage(founderStorageKeys.history, [])
+      history: readStorage(founderStorageKeys.history, []),
+      settings: readStorage(founderStorageKeys.settings, { linkMode: "auto", format: "text" })
     };
     let gravityCurrentScore = null;
     let gravityCurrentReplies = [];
     let gravityState = {
       lists: readStorage(gravityStorageKeys.lists, {}),
-      sessions: readStorage(gravityStorageKeys.sessions, [])
+      sessions: readStorage(gravityStorageKeys.sessions, []),
+      accountNotes: readStorage(gravityStorageKeys.accountNotes, [])
     };
 
     function readStorage(key, fallback) {
@@ -2236,11 +2327,13 @@
       localStorage.setItem(founderStorageKeys.favorites, JSON.stringify(founderState.favorites.slice(0, 80)));
       localStorage.setItem(founderStorageKeys.used, JSON.stringify(founderState.used.slice(0, 120)));
       localStorage.setItem(founderStorageKeys.history, JSON.stringify(founderState.history.slice(0, 40)));
+      localStorage.setItem(founderStorageKeys.settings, JSON.stringify(founderState.settings));
     }
 
     function writeGravityStorage() {
       localStorage.setItem(gravityStorageKeys.lists, JSON.stringify(gravityState.lists));
       localStorage.setItem(gravityStorageKeys.sessions, JSON.stringify(gravityState.sessions.slice(0, 40)));
+      localStorage.setItem(gravityStorageKeys.accountNotes, JSON.stringify(gravityState.accountNotes.slice(0, 120)));
     }
 
     function escapeHtml(value) {
@@ -2276,6 +2369,8 @@
 
       founderCategorySelect.value = "solo founder";
       founderToneSelect.value = "peer-to-peer";
+      founderLinkModeSelect.value = founderState.settings.linkMode || "auto";
+      founderFormatSelect.value = founderState.settings.format || "text";
     }
 
     function ensureGravityLists() {
@@ -2590,7 +2685,53 @@
       return Array.from(matches);
     }
 
-    function buildFounderCandidateReplies(tweetText, category, tone, variant) {
+    function currentFounderSettings() {
+      return {
+        linkMode: founderLinkModeSelect.value || "auto",
+        format: founderFormatSelect.value || "text"
+      };
+    }
+
+    function saveFounderSettings() {
+      founderState.settings = currentFounderSettings();
+      writeFounderStorage();
+    }
+
+    function shouldIncludeFounderProjectLink(tweetText, linkMode) {
+      if (linkMode === "none") return false;
+      if (linkMode === "include") return true;
+      return containsAny(tweetText.toLowerCase(), projectLinkPromptWords);
+    }
+
+    function addFounderTextureCandidates(candidates, tweetText, category, settings) {
+      const lower = tweetText.toLowerCase();
+      const isBuilderPrompt = category === "builder prompts" || containsAny(lower, builderPromptWords);
+      if (!isBuilderPrompt) return;
+
+      if (settings.format !== "text" && founderFormatReplies[settings.format]) {
+        founderFormatReplies[settings.format].forEach((text) => {
+          candidates.push({
+            text,
+            category: "builder prompts",
+            tone: settings.format,
+            score: 20
+          });
+        });
+      }
+
+      if (shouldIncludeFounderProjectLink(tweetText, settings.linkMode)) {
+        founderProjectLinkReplies.forEach((text) => {
+          candidates.push({
+            text,
+            category: "builder prompts",
+            tone: "project link",
+            score: settings.linkMode === "include" ? 19 : 18
+          });
+        });
+      }
+    }
+
+    function buildFounderCandidateReplies(tweetText, category, tone, variant, settings = currentFounderSettings()) {
       const lower = tweetText.toLowerCase();
       const keywordCategories = detectFounderKeywordCategories(tweetText);
       const effectiveTone = variant === "human"
@@ -2643,16 +2784,7 @@
         }
       });
 
-      if (containsAny(lower, projectLinkPromptWords)) {
-        founderProjectLinkReplies.forEach((text) => {
-          candidates.push({
-            text,
-            category: "builder prompts",
-            tone: "project link",
-            score: 18
-          });
-        });
-      }
+      addFounderTextureCandidates(candidates, tweetText, category, settings);
 
       if (keywordCategories.length === 0) {
         addGroup("shipping update", effectiveTone, 4);
@@ -2745,7 +2877,10 @@
     function humanizeReply(text, mode, context, tweetText = "") {
       let cleaned = removeAiCadence(text);
       const lower = cleaned.toLowerCase();
-      const builderPromptAnswer = context === "founder" && isBuilderPromptTweet(tweetText);
+      const builderPromptAnswer = context === "founder" && (
+        isBuilderPromptTweet(tweetText) ||
+        /^(meme caption|gif cue|building|working|today|built|my project|sharing|i’m building|still building|app polish|shipping small softness)/i.test(cleaned)
+      );
 
       if (mode === "ultra-short") {
         if (builderPromptAnswer) {
@@ -2926,7 +3061,9 @@
       }
 
       founderCurrentVariant = variant;
-      const candidates = buildFounderCandidateReplies(tweetText, category, tone, variant);
+      const settings = currentFounderSettings();
+      founderState.settings = settings;
+      const candidates = buildFounderCandidateReplies(tweetText, category, tone, variant, settings);
       founderCurrentReplies = pickFounderReplies(candidates, variant, tweetText);
 
       founderState.history.unshift({
@@ -2937,6 +3074,8 @@
         category,
         tone,
         variant,
+        linkMode: settings.linkMode,
+        format: settings.format,
         replies: founderCurrentReplies.map((reply) => reply.text),
         createdAt: new Date().toISOString()
       });
@@ -3308,12 +3447,27 @@
         : '<p class="empty">Saved radar sessions will appear here.</p>';
     }
 
+    function renderGravityAccountNotes() {
+      gravityClearAccountNotesBtn.disabled = gravityState.accountNotes.length === 0;
+      gravityAccountNotesView.innerHTML = gravityState.accountNotes.length
+        ? gravityState.accountNotes.slice(0, 12).map((note) => `
+          <article class="gravity-item">
+            <h3>${escapeHtml(note.handle)} ${note.score !== null && note.score !== undefined ? `<span class="pill">${note.score}</span>` : ""}</h3>
+            <p>${escapeHtml(note.status)} · ${escapeHtml(note.vibe || "no cluster")} · ${formatDate(note.createdAt)}</p>
+            <p>${escapeHtml(note.text || "No private note yet.")}</p>
+            ${note.replyCulture !== null && note.replyCulture !== undefined ? `<p>reply culture ${escapeHtml(String(note.replyCulture))} · ${escapeHtml(note.list || "no list")}</p>` : ""}
+          </article>
+        `).join("")
+        : '<p class="empty">Account notes stay local on this browser.</p>';
+    }
+
     function renderGravityAll() {
       syncGravityRangeLabels();
       renderGravityScore();
       renderGravityReplies();
       renderGravityLists();
       renderGravitySessions();
+      renderGravityAccountNotes();
     }
 
     function scoreGravityThread() {
@@ -3321,6 +3475,12 @@
       const result = scoreGravityCandidate(candidate);
       gravityCurrentScore = { candidate, result };
       gravityCurrentReplies = [];
+      if (!gravityAccountNoteHandleInput.value.trim()) {
+        gravityAccountNoteHandleInput.value = candidate.handle;
+      }
+      if (!gravityAccountNoteVibeInput.value.trim() && candidate.tags.length) {
+        gravityAccountNoteVibeInput.value = candidate.tags.slice(0, 3).join(", ");
+      }
       renderGravityAll();
       setGravityStatus(result.score >= 70 ? "Recommended gravity well." : result.score >= 50 ? "Watch this thread before replying." : "Skip this thread tonight.");
     }
@@ -3377,6 +3537,35 @@
       writeGravityStorage();
       renderGravitySessions();
       setGravityStatus("Radar session saved.");
+    }
+
+    function saveGravityAccountNote() {
+      const snapshot = currentGravitySnapshot();
+      const handle = gravityAccountNoteHandleInput.value.trim() || snapshot?.handle || gravityHandleInput.value.trim();
+      if (!handle) {
+        setGravityStatus("Add a handle before saving an account note.");
+        gravityAccountNoteHandleInput.focus();
+        return;
+      }
+
+      const note = {
+        id: window.crypto && typeof window.crypto.randomUUID === "function" ? window.crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+        handle,
+        status: gravityAccountNoteStatusSelect.value || "watch again",
+        vibe: gravityAccountNoteVibeInput.value.trim() || (snapshot?.tags || checkedGravityTags()).slice(0, 3).join(", "),
+        text: gravityAccountNoteText.value.trim(),
+        score: snapshot?.score ?? null,
+        replyCulture: gravityCurrentScore?.result.breakdown["reply culture"] ?? null,
+        list: gravityListSelect.value || "",
+        url: snapshot?.url || gravityUrlInput.value.trim(),
+        createdAt: new Date().toISOString()
+      };
+
+      gravityState.accountNotes = gravityState.accountNotes.filter((item) => item.handle.toLowerCase() !== handle.toLowerCase());
+      gravityState.accountNotes.unshift(note);
+      writeGravityStorage();
+      renderGravityAccountNotes();
+      setGravityStatus(`Saved account note for ${handle}.`);
     }
 
     function addGravityListGroup() {
@@ -3664,11 +3853,18 @@
     gravityAddCandidateBtn.addEventListener("click", addGravityCandidateToList);
     gravityAddListBtn.addEventListener("click", addGravityListGroup);
     gravitySaveSessionBtn.addEventListener("click", saveGravitySession);
+    gravitySaveAccountNoteBtn.addEventListener("click", saveGravityAccountNote);
     gravityClearSessionsBtn.addEventListener("click", () => {
       gravityState.sessions = [];
       writeGravityStorage();
       renderGravitySessions();
       setGravityStatus("Radar sessions cleared.");
+    });
+    gravityClearAccountNotesBtn.addEventListener("click", () => {
+      gravityState.accountNotes = [];
+      writeGravityStorage();
+      renderGravityAccountNotes();
+      setGravityStatus("Account notes cleared.");
     });
     gravityExportBtn.addEventListener("click", exportGravityLists);
     gravityImportBtn.addEventListener("click", importGravityLists);
@@ -3688,6 +3884,8 @@
     founderShorterBtn.addEventListener("click", () => generateFounderReplies("shorter"));
     founderHumanBtn.addEventListener("click", () => generateFounderReplies("human"));
     founderCasualBtn.addEventListener("click", () => generateFounderReplies("casual"));
+    founderLinkModeSelect.addEventListener("change", saveFounderSettings);
+    founderFormatSelect.addEventListener("change", saveFounderSettings);
 
     copyAllBtn.addEventListener("click", async () => {
       if (!currentReplies.length) return;

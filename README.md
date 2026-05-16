@@ -14,11 +14,15 @@ It does not connect to X, use the X API, post, like, follow, DM, or automate any
 
 The Indie Founder tab also includes builder prompt replies for common X threads like "what are you building today?" so the creator can answer naturally without sounding salesy. These include lightly funny, emoji-friendly founder replies for distribution pain, app polishing, and public-building fatigue. Project links are only suggested for prompts that explicitly ask for a link or URL.
 
+Human Texture Controls let Indie Founder replies switch between text, playful text, meme caption, and GIF cue modes. Link mode can be set to no link, auto link if asked, or include link.
+
 ## Social Gravity Mapping
 
 The console now prioritizes finding where to exist online before generating replies. The Gravity Map is built around the question: "where should I emotionally exist online tonight?" It scores candidate threads from 0-100 using niche relevance, account quality, reply culture, visibility opportunity, freshness, and aesthetic alignment.
 
 Threads under 50 should be skipped. Threads over 70 are recommended gravity wells. Candidate accounts can be saved into local radar lists such as CalmTech, AmbientCreators, CozyInternet, DreamyUI, SlowInternet, IndieWellness, MythologyAndCalm, and GentleAI.
+
+Account notes create a private local memory for handles, vibe clusters, reply culture impressions, and whether an account is worth watching again.
 
 ## Reply Engine Style
 
