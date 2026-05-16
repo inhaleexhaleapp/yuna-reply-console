@@ -20,6 +20,8 @@ Human Texture Controls let Indie Founder replies switch between text, playful te
 
 The console now prioritizes finding where to exist online before generating replies. The Gravity Map is built around the question: "where should I emotionally exist online tonight?" It scores candidate threads from 0-100 using niche relevance, account quality, reply culture, visibility opportunity, freshness, and aesthetic alignment.
 
+On launch, the console asks for a session intention. Map only and Looking keep reply generation at 0 unless deliberately bypassed. Reply soft allows 3 reply generations, and Full allows 5. Sessions expire after 6 hours and are archived locally.
+
 Threads under 50 should be skipped. Threads over 70 are recommended gravity wells. Candidate accounts can be saved into local radar lists such as CalmTech, AmbientCreators, CozyInternet, DreamyUI, SlowInternet, IndieWellness, MythologyAndCalm, and GentleAI.
 
 Account notes create a private local memory for handles, vibe clusters, reply culture impressions, and whether an account is worth watching again.

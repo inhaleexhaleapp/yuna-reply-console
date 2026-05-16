@@ -100,6 +100,101 @@
       padding: 28px 0 26px;
     }
 
+    .hero-topline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .session-badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      width: max-content;
+      max-width: 100%;
+      padding: 7px 8px 7px 10px;
+      border: 1px solid rgba(187, 161, 255, 0.28);
+      border-radius: 8px;
+      color: #eee7ff;
+      background: rgba(255, 255, 255, 0.065);
+      box-shadow: 0 12px 32px rgba(5, 3, 12, 0.18);
+      font-size: 0.82rem;
+      line-height: 1.35;
+      backdrop-filter: blur(18px);
+    }
+
+    .session-badge[hidden],
+    .session-modal[hidden] {
+      display: none;
+    }
+
+    .session-badge button {
+      min-height: 28px;
+      padding: 0 8px;
+      border-color: rgba(223, 209, 255, 0.18);
+      color: var(--muted);
+      font-size: 0.78rem;
+      background: rgba(16, 12, 29, 0.45);
+    }
+
+    .session-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(8, 6, 16, 0.68);
+      backdrop-filter: blur(22px);
+    }
+
+    .session-dialog {
+      width: min(720px, 100%);
+      padding: 22px;
+      border: 1px solid rgba(223, 209, 255, 0.2);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(187, 161, 255, 0.12), transparent 38%),
+        linear-gradient(225deg, rgba(142, 214, 200, 0.09), transparent 44%),
+        rgba(31, 24, 49, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .session-dialog h2 {
+      margin-top: 0;
+      font-size: clamp(1.5rem, 3vw, 2.35rem);
+    }
+
+    .session-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .session-option {
+      display: grid;
+      gap: 7px;
+      min-height: 118px;
+      padding: 14px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.055);
+      backdrop-filter: blur(16px);
+    }
+
+    .session-option strong {
+      color: var(--text);
+      font-size: 0.98rem;
+    }
+
+    .session-option span {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.42;
+    }
+
     .eyebrow {
       width: max-content;
       max-width: 100%;
@@ -779,16 +874,52 @@
       .check-grid {
         grid-template-columns: 1fr;
       }
+
+      .session-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <main class="app">
     <header class="hero">
-      <p class="eyebrow">Manual replies only. No automation. No X connection.</p>
+      <div class="hero-topline">
+        <p class="eyebrow">Manual replies only. No automation. No X connection.</p>
+        <div class="session-badge" id="sessionBadge" hidden>
+          <span id="sessionBadgeText"></span>
+          <button id="endSessionBtn" type="button">end</button>
+        </div>
+      </div>
       <h1>Yuna Reply Console</h1>
       <p class="subtitle">Find softer words for louder timelines.</p>
     </header>
+
+    <div class="session-modal" id="sessionModal" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle" hidden>
+      <section class="session-dialog">
+        <p class="eyebrow">Session intention</p>
+        <h2 id="sessionModalTitle">How do you want to exist online tonight?</h2>
+        <p class="cockpit-note">Choose a soft limit for this session. It is a mindful pause, not a lock.</p>
+        <div class="session-grid">
+          <button class="session-option" type="button" data-session-intention="map-only">
+            <strong>🗺 Map only</strong>
+            <span>Score threads and accounts. No reply generation unless you deliberately bypass.</span>
+          </button>
+          <button class="session-option" type="button" data-session-intention="reply-soft">
+            <strong>🕯 Reply soft</strong>
+            <span>Up to 3 reply generations for a small, careful session.</span>
+          </button>
+          <button class="session-option" type="button" data-session-intention="full">
+            <strong>🌊 Full</strong>
+            <span>Up to 5 reply generations when you are intentionally working.</span>
+          </button>
+          <button class="session-option" type="button" data-session-intention="looking">
+            <strong>👀 Looking</strong>
+            <span>Browse memory, notes, and radar lists. No reply generation unless you choose to bypass.</span>
+          </button>
+        </div>
+      </section>
+    </div>
 
     <nav class="top-tabs" role="tablist" aria-label="Reply console modes">
       <button class="tab-button" id="gravityTabBtn" type="button" role="tab" aria-selected="true" aria-controls="gravityPanel" data-tab-target="gravityPanel">Gravity Map</button>
@@ -2195,8 +2326,46 @@
       accountNotes: "yunaGravityAccountNotes"
     };
 
+    const sessionStorageKeys = {
+      current: "yuna_session_current",
+      history: "yuna_session_history"
+    };
+
+    const sessionIntentions = {
+      "map-only": {
+        emoji: "🗺",
+        label: "Map only",
+        replyLimit: 0,
+        description: "Map and score only."
+      },
+      "reply-soft": {
+        emoji: "🕯",
+        label: "Reply soft",
+        replyLimit: 3,
+        description: "A small reply session."
+      },
+      "full": {
+        emoji: "🌊",
+        label: "Full",
+        replyLimit: 5,
+        description: "A full intentional session."
+      },
+      "looking": {
+        emoji: "👀",
+        label: "Looking",
+        replyLimit: 0,
+        description: "Browse memory only."
+      }
+    };
+
+    const sessionMaxAgeMs = 6 * 60 * 60 * 1000;
+
     const tabButtons = document.querySelectorAll(".tab-button");
     const tabPanels = document.querySelectorAll(".tab-panel");
+    const sessionModal = document.getElementById("sessionModal");
+    const sessionBadge = document.getElementById("sessionBadge");
+    const sessionBadgeText = document.getElementById("sessionBadgeText");
+    const endSessionBtn = document.getElementById("endSessionBtn");
     const gravityModeSelect = document.getElementById("gravityModeSelect");
     const gravityRelationshipSelect = document.getElementById("gravityRelationshipSelect");
     const gravityThreadText = document.getElementById("gravityThreadText");
@@ -2307,6 +2476,8 @@
       sessions: readStorage(gravityStorageKeys.sessions, []),
       accountNotes: readStorage(gravityStorageKeys.accountNotes, [])
     };
+    let sessionState = null;
+    let sessionHistory = [];
 
     function readStorage(key, fallback) {
       try {
@@ -2337,12 +2508,142 @@
     }
 
     function escapeHtml(value) {
-      return value
+      return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    function writeSessionStorage() {
+      if (sessionState) {
+        localStorage.setItem(sessionStorageKeys.current, JSON.stringify(sessionState));
+      } else {
+        localStorage.removeItem(sessionStorageKeys.current);
+      }
+      localStorage.setItem(sessionStorageKeys.history, JSON.stringify(sessionHistory.slice(0, 30)));
+    }
+
+    function sessionStartedAtMs(session) {
+      const started = Date.parse(session?.startedAt || "");
+      return Number.isFinite(started) ? started : 0;
+    }
+
+    function isSessionExpired(session) {
+      return !session || Date.now() - sessionStartedAtMs(session) > sessionMaxAgeMs;
+    }
+
+    function archiveSession(session, reason) {
+      if (!session) return;
+      sessionHistory.unshift({
+        ...session,
+        archivedAt: new Date().toISOString(),
+        endReason: reason
+      });
+      sessionHistory = sessionHistory.slice(0, 30);
+    }
+
+    function renderSessionBadge() {
+      if (!sessionState) {
+        sessionBadge.hidden = true;
+        sessionBadgeText.textContent = "";
+        return;
+      }
+
+      const intention = sessionIntentions[sessionState.intention] || sessionIntentions["looking"];
+      const count = `${sessionState.replyCount || 0}/${sessionState.replyLimit}`;
+      const bypass = sessionState.bypassedLimit ? " · bypassed" : "";
+      sessionBadge.hidden = false;
+      sessionBadgeText.innerHTML = `${escapeHtml(intention.emoji)} ${escapeHtml(intention.label)} · ${escapeHtml(count)}${escapeHtml(bypass)}`;
+    }
+
+    function showSessionModal() {
+      sessionModal.hidden = false;
+    }
+
+    function hideSessionModal() {
+      sessionModal.hidden = true;
+    }
+
+    function hydrateSessionState() {
+      sessionHistory = readStorage(sessionStorageKeys.history, []);
+      const savedSession = readStorage(sessionStorageKeys.current, null);
+
+      if (savedSession && isSessionExpired(savedSession)) {
+        archiveSession(savedSession, "expired");
+        sessionState = null;
+        writeSessionStorage();
+      } else {
+        sessionState = savedSession;
+      }
+
+      renderSessionBadge();
+      if (!sessionState) {
+        showSessionModal();
+      }
+    }
+
+    function startSession(intentionKey) {
+      const intention = sessionIntentions[intentionKey] || sessionIntentions["looking"];
+      sessionState = {
+        id: window.crypto && typeof window.crypto.randomUUID === "function"
+          ? window.crypto.randomUUID()
+          : `${Date.now()}-${Math.random()}`,
+        intention: intentionKey,
+        replyLimit: intention.replyLimit,
+        replyCount: 0,
+        bypassedLimit: false,
+        startedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      hideSessionModal();
+      writeSessionStorage();
+      renderSessionBadge();
+    }
+
+    function endCurrentSession(reason = "ended") {
+      if (sessionState) {
+        archiveSession(sessionState, reason);
+      }
+      sessionState = null;
+      writeSessionStorage();
+      renderSessionBadge();
+      showSessionModal();
+    }
+
+    function ensureActiveSessionForReply(statusSetter) {
+      if (sessionState && isSessionExpired(sessionState)) {
+        endCurrentSession("expired");
+      }
+
+      if (!sessionState) {
+        showSessionModal();
+        statusSetter("Choose a session intention before generating replies.");
+        return false;
+      }
+
+      if ((sessionState.replyCount || 0) >= sessionState.replyLimit) {
+        const intention = sessionIntentions[sessionState.intention] || sessionIntentions["looking"];
+        const confirmed = window.confirm(
+          `${intention.label} is at ${sessionState.replyCount || 0}/${sessionState.replyLimit}. Generate replies anyway?`
+        );
+        if (!confirmed) {
+          statusSetter("Reply generation paused by session intention.");
+          return false;
+        }
+        sessionState.bypassedLimit = true;
+      }
+
+      return true;
+    }
+
+    function recordReplyGeneration() {
+      if (!sessionState) return;
+      sessionState.replyCount = (sessionState.replyCount || 0) + 1;
+      sessionState.updatedAt = new Date().toISOString();
+      writeSessionStorage();
+      renderSessionBadge();
     }
 
     function populateSelectors() {
@@ -3028,9 +3329,12 @@
         return;
       }
 
+      if (!ensureActiveSessionForReply(setStatus)) return;
+
       currentVariant = variant;
       const candidates = buildCandidateReplies(tweetText, category, tone, variant);
       currentReplies = pickReplies(candidates, variant, tweetText);
+      recordReplyGeneration();
 
       appState.history.unshift({
         id: window.crypto && typeof window.crypto.randomUUID === "function"
@@ -3060,11 +3364,14 @@
         return;
       }
 
+      if (!ensureActiveSessionForReply(setFounderStatus)) return;
+
       founderCurrentVariant = variant;
       const settings = currentFounderSettings();
       founderState.settings = settings;
       const candidates = buildFounderCandidateReplies(tweetText, category, tone, variant, settings);
       founderCurrentReplies = pickFounderReplies(candidates, variant, tweetText);
+      recordReplyGeneration();
 
       founderState.history.unshift({
         id: window.crypto && typeof window.crypto.randomUUID === "function"
@@ -3487,6 +3794,7 @@
 
     function generateGravityReplies() {
       if (!gravityCurrentScore || gravityCurrentScore.result.score < 50) return;
+      if (!ensureActiveSessionForReply(setGravityStatus)) return;
       const { candidate } = gravityCurrentScore;
       const baseContext = `${candidate.text} ${candidate.mode} ${candidate.tags.join(" ")}`.toLowerCase();
       const founderish = containsAny(baseContext, ["founder", "builder", "app", "shipping", "saas", "startup"]);
@@ -3502,6 +3810,7 @@
         mode,
         relationship: candidate.relationship
       }));
+      recordReplyGeneration();
       renderGravityReplies();
       setGravityStatus("Secondary replies ready.");
     }
@@ -3848,6 +4157,16 @@
       });
     });
 
+    sessionModal.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-session-intention]");
+      if (!button) return;
+      startSession(button.dataset.sessionIntention);
+    });
+
+    endSessionBtn.addEventListener("click", () => {
+      endCurrentSession("ended");
+    });
+
     gravityScoreBtn.addEventListener("click", scoreGravityThread);
     gravityGenerateRepliesBtn.addEventListener("click", generateGravityReplies);
     gravityAddCandidateBtn.addEventListener("click", addGravityCandidateToList);
@@ -3952,6 +4271,7 @@
     populateGravityControls();
     populateSelectors();
     populateFounderSelectors();
+    hydrateSessionState();
     renderGravityAll();
     updateTweetCount();
     updateFounderTweetCount();
