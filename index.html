@@ -1677,36 +1677,53 @@
       "builder prompts": {
         "supportive founder": [
           "building Inhale Exhale, a calm little app world for sleep, mantras, myths, and softer phone time. today is mostly polish and distribution panic.",
-          "working on Yuna Reply Console now. it started as a reply helper and accidentally became a tiny social media cockpit."
+          "working on Yuna Reply Console now. it started as a reply helper and accidentally became a tiny social media cockpit.",
+          "building calm tools and trying to survive the part where the product exists but the world has not received the memo yet 😅",
+          "today’s mission: keep improving Inhale Exhale and pretend distribution is not the final boss."
         ],
         "calm builder": [
           "slowly building Inhale Exhale. the product is calm, the founder is negotiating with distribution.",
-          "today is less glamorous: tightening small details, checking the flow, trying to make the internet feel a little less loud."
+          "today is less glamorous: tightening small details, checking the flow, trying to make the internet feel a little less loud.",
+          "building the calm app, then walking straight into the marketing battlefield with a tiny cup of courage.",
+          "mostly polishing the quiet parts today. very peaceful product, mildly dramatic founder."
         ],
         "soft indie": [
           "building a quiet meditation and sleep app ecosystem with ambient sounds, myths, and a soft AI companion. very small team, very many tabs.",
-          "making calm tech in the least calm way possible: alone, late, and with too many notes open."
+          "making calm tech in the least calm way possible: alone, late, and with too many notes open.",
+          "today i’m adding softness to the app and trying not to get emotionally defeated by distribution. balanced founder diet.",
+          "building tiny calm rooms for people’s phones. meanwhile the founder is somewhere in act three of the launch movie."
         ],
         "X-native casual": [
           "a calm app ecosystem. today’s feature is convincing myself distribution is also a feature.",
           "built the thing. now doing the ancient founder ritual of making strangers aware it exists.",
-          "working on the app and the part after the app, which rudely turns out to also be work."
+          "working on the app and the part after the app, which rudely turns out to also be work.",
+          "this is Sparta but for App Store screenshots and tiny marketing courage 😂",
+          "today’s build: calm app polish. today’s boss fight: getting literally anyone to notice.",
+          "currently in the founder scene where the product is done-ish and the distribution soundtrack gets intense."
         ],
         "tiny encouragement": [
           "tiny calm app things. distribution arc continues.",
-          "shipping small softness today. marketing courage pending."
+          "shipping small softness today. marketing courage pending.",
+          "small app win, tiny battle cry 🫡",
+          "still building. slightly dramatic, but building."
         ],
         "practical helpful": [
           "working on Inhale Exhale and testing calmer ways to find the right people without turning it into growth-hack soup.",
-          "today’s build is mostly making the manual social workflow cleaner: find the right thread, then reply like a person."
+          "today’s build is mostly making the manual social workflow cleaner: find the right thread, then reply like a person.",
+          "today i’m improving the app and the manual discovery flow around it. less spam cannon, more finding the right rooms.",
+          "building the product and the calmer distribution system around it. turns out both need UX."
         ],
         "quietly rooting": [
           "quietly building Inhale Exhale. sleep sounds, mantras, myths, Yuna, and a lot of tiny founder doubt in between.",
-          "building calm tools and trying to get better at the uncomfortable part: letting people know they exist."
+          "building calm tools and trying to get better at the uncomfortable part: letting people know they exist.",
+          "building the soft app, then gently entering the arena of being perceived online 😅",
+          "quietly working on Inhale Exhale today. the app is soft, the founder quest log is not."
         ],
         "peer-to-peer": [
           "i’m building Inhale Exhale. the app side is alive; now i’m wrestling the weird boss fight called distribution.",
-          "mostly building a calmer app world and learning that shipping is only half the quest. rude discovery honestly."
+          "mostly building a calmer app world and learning that shipping is only half the quest. rude discovery honestly.",
+          "working on calm tech while learning that marketing is basically a side quest with emotional damage.",
+          "building Inhale Exhale and Yuna stuff. product work is peaceful; getting seen on the internet is the battlefield part 😂"
         ]
       },
       "no users yet": {
@@ -1841,15 +1858,34 @@
       }
     };
 
+    const builderPromptWords = [
+      "what are you building",
+      "building today",
+      "drop in the replies",
+      "drop below",
+      "what did you ship",
+      "what are you working on",
+      "show me what you are building",
+      "show me what you're building",
+      "drop your product",
+      "what are you launching",
+      "what did you build",
+      "reply with what"
+    ];
+
     const founderContextualReplies = [
       {
-        words: ["what are you building", "building today", "drop in the replies", "drop below", "what did you ship", "what are you working on", "show me what you are building", "show me what you're building"],
+        words: builderPromptWords,
         category: "builder prompts",
         replies: [
           "building Inhale Exhale, a calm app world for sleep, mantras, myths, and Yuna. today’s boss fight is distribution, naturally.",
           "built the calm thing. now doing the very peaceful founder activity of trying to tell people it exists.",
           "working on Yuna Reply Console. it was supposed to help with replies and became a tiny social media cockpit by accident.",
-          "today: polishing calm app details and pretending distribution is not a whole second product."
+          "today: polishing calm app details and pretending distribution is not a whole second product.",
+          "welcome to the founder arena: app polish, screenshots, and trying to be perceived online 😂",
+          "working on Inhale Exhale. soft app, dramatic founder battlefield, very normal Saturday energy.",
+          "building calm tools. currently in the movie scene where the hero realizes distribution is also part of the quest 😅",
+          "today’s build is app polish plus tiny public courage. not glamorous, but the battle continues 🫡"
         ]
       },
       {
@@ -1913,7 +1949,7 @@
     const founderSearchPresets = [
       { category: "solo founder", queries: ["(\"solo founder\" OR \"building solo\" OR \"solo builder\") (app OR indie) since:{since7}", "(\"indie founder\" OR \"solo app\") since:{since7} -filter:links"] },
       { category: "build in public", queries: ["(\"build in public\" OR \"building in public\") since:{since7} -filter:links", "(\"finally shipped\" OR \"just shipped\") since:{since7} -filter:links"] },
-      { category: "builder prompts", queries: ["\"what are you building today\" since:{since7} -filter:links", "(\"what are you building\" OR \"drop in the replies\" OR \"what did you ship\") since:{since7} -filter:links"] },
+      { category: "builder prompts", queries: ["(\"what are you building today\" OR \"what are you working on today\") since:{since7} -filter:links", "(\"what are you building\" OR \"drop in the replies\" OR \"drop your product\" OR \"what did you ship\") since:{since7} -filter:links"] },
       { category: "no users yet", queries: ["(\"no users yet\" OR \"zero users\") since:{since7} -filter:links", "(\"first user\" OR \"first paying customer\") since:{since14} -filter:links"] },
       { category: "launch day", queries: ["(\"launching today\" OR \"I made an app\") since:{since7} -filter:links", "(\"Product Hunt\" \"launched\") since:{since14} -filter:links"] },
       { category: "app store launch", queries: ["(\"app store launch\" OR \"app store release\" OR \"live on app store\" OR \"just shipped\") since:{since7}", "(\"waiting for app review\" OR \"rejected by app store\") since:{since14} -filter:links"] },
@@ -2651,30 +2687,44 @@
       ]);
     }
 
-    function humanizeReply(text, mode, context) {
+    function isBuilderPromptTweet(tweetText) {
+      return containsAny(tweetText.toLowerCase(), builderPromptWords);
+    }
+
+    function humanizeReply(text, mode, context, tweetText = "") {
       let cleaned = removeAiCadence(text);
       const lower = cleaned.toLowerCase();
+      const builderPromptAnswer = context === "founder" && isBuilderPromptTweet(tweetText);
 
       if (mode === "ultra-short") {
+        if (builderPromptAnswer) {
+          const options = [
+            "building calm tools. distribution arc continues 😅",
+            "app polish today. founder battlefield tomorrow. probably both.",
+            "shipping small softness and fighting the visibility boss 🫡",
+            "still building. slightly dramatic, but building."
+          ];
+          return options[Math.floor(Math.random() * options.length)];
+        }
         const options = context === "founder"
           ? ["yeah this part.", "this is very real.", "tiny progress still counts.", "felt this one."]
           : ["this is very real.", "yeah this part.", "felt this one.", "fair honestly."];
         return options[Math.floor(Math.random() * options.length)];
       }
 
-      if (mode === "safest" && !/^(fair honestly|felt this|yeah|respect this|this is)/i.test(cleaned)) {
+      if (!builderPromptAnswer && mode === "safest" && !/^(fair honestly|felt this|yeah|respect this|this is)/i.test(cleaned)) {
         cleaned = `${replyOpeners.safest[Math.floor(Math.random() * replyOpeners.safest.length)]} ${cleaned}`;
       }
 
-      if (mode === "warmer" && !/^(felt this|yeah|quietly|i get|i know)/i.test(cleaned)) {
+      if (!builderPromptAnswer && mode === "warmer" && !/^(felt this|yeah|quietly|i get|i know)/i.test(cleaned)) {
         cleaned = `${replyOpeners.warmer[Math.floor(Math.random() * replyOpeners.warmer.length)]} ${cleaned}`;
       }
 
-      if (mode === "slightly witty" && context === "founder" && !lower.includes("weird")) {
+      if (!builderPromptAnswer && mode === "slightly witty" && context === "founder" && !lower.includes("weird")) {
         cleaned = `${replyOpeners.witty[Math.floor(Math.random() * replyOpeners.witty.length)]} ${cleaned}`;
       }
 
-      if (mode === "mentor-aware" && !/^(respect this|fair honestly|i’ve learned)/i.test(cleaned)) {
+      if (!builderPromptAnswer && mode === "mentor-aware" && !/^(respect this|fair honestly|i’ve learned)/i.test(cleaned)) {
         cleaned = `${replyOpeners.mentor[Math.floor(Math.random() * replyOpeners.mentor.length)]} ${cleaned}`;
       }
 

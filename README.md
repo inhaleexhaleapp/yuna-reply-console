@@ -12,7 +12,7 @@ It does not connect to X, use the X API, post, like, follow, DM, or automate any
 - Wellness / Yuna: the original soft wellness reply assistant, Search Radar, Tonight mode, favorites, used replies, and local history.
 - Indie Founder: a separate builder-focused reply assistant for indie hackers, solo founders, no-code creators, app developers, and product makers. It has its own input, categories, tones, Search Radar, Indie Night Shift, favorites, used replies, and local history.
 
-The Indie Founder tab also includes builder prompt replies for common X threads like "what are you building today?" so the creator can answer naturally without sounding salesy.
+The Indie Founder tab also includes builder prompt replies for common X threads like "what are you building today?" so the creator can answer naturally without sounding salesy. These include lightly funny, emoji-friendly founder replies for distribution pain, app polishing, and public-building fatigue.
 
 ## Social Gravity Mapping
 
