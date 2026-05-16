@@ -1616,6 +1616,7 @@
       "solo founder",
       "indie hacker",
       "build in public",
+      "builder prompts",
       "no users yet",
       "launch day",
       "Product Hunt",
@@ -1672,6 +1673,41 @@
         "practical helpful": ["This is a good place to ask one specific question. Public building works best when the ask is tiny."],
         "quietly rooting": ["quietly rooting for the next update. The consistency is doing more than it looks like."],
         "peer-to-peer": ["Honestly the consistency is the product sometimes. People notice the steady builders."]
+      },
+      "builder prompts": {
+        "supportive founder": [
+          "building Inhale Exhale, a calm little app world for sleep, mantras, myths, and softer phone time. today is mostly polish and distribution panic.",
+          "working on Yuna Reply Console now. it started as a reply helper and accidentally became a tiny social media cockpit."
+        ],
+        "calm builder": [
+          "slowly building Inhale Exhale. the product is calm, the founder is negotiating with distribution.",
+          "today is less glamorous: tightening small details, checking the flow, trying to make the internet feel a little less loud."
+        ],
+        "soft indie": [
+          "building a quiet meditation and sleep app ecosystem with ambient sounds, myths, and a soft AI companion. very small team, very many tabs.",
+          "making calm tech in the least calm way possible: alone, late, and with too many notes open."
+        ],
+        "X-native casual": [
+          "a calm app ecosystem. today’s feature is convincing myself distribution is also a feature.",
+          "built the thing. now doing the ancient founder ritual of making strangers aware it exists.",
+          "working on the app and the part after the app, which rudely turns out to also be work."
+        ],
+        "tiny encouragement": [
+          "tiny calm app things. distribution arc continues.",
+          "shipping small softness today. marketing courage pending."
+        ],
+        "practical helpful": [
+          "working on Inhale Exhale and testing calmer ways to find the right people without turning it into growth-hack soup.",
+          "today’s build is mostly making the manual social workflow cleaner: find the right thread, then reply like a person."
+        ],
+        "quietly rooting": [
+          "quietly building Inhale Exhale. sleep sounds, mantras, myths, Yuna, and a lot of tiny founder doubt in between.",
+          "building calm tools and trying to get better at the uncomfortable part: letting people know they exist."
+        ],
+        "peer-to-peer": [
+          "i’m building Inhale Exhale. the app side is alive; now i’m wrestling the weird boss fight called distribution.",
+          "mostly building a calmer app world and learning that shipping is only half the quest. rude discovery honestly."
+        ]
       },
       "no users yet": {
         "supportive founder": ["No users yet is a brutal stage, but it is still a stage. The product is not a verdict on you."],
@@ -1807,6 +1843,16 @@
 
     const founderContextualReplies = [
       {
+        words: ["what are you building", "building today", "drop in the replies", "drop below", "what did you ship", "what are you working on", "show me what you are building", "show me what you're building"],
+        category: "builder prompts",
+        replies: [
+          "building Inhale Exhale, a calm app world for sleep, mantras, myths, and Yuna. today’s boss fight is distribution, naturally.",
+          "built the calm thing. now doing the very peaceful founder activity of trying to tell people it exists.",
+          "working on Yuna Reply Console. it was supposed to help with replies and became a tiny social media cockpit by accident.",
+          "today: polishing calm app details and pretending distribution is not a whole second product."
+        ]
+      },
+      {
         words: ["solo", "alone", "only founder"],
         category: "solo founder",
         replies: [
@@ -1867,6 +1913,7 @@
     const founderSearchPresets = [
       { category: "solo founder", queries: ["(\"solo founder\" OR \"building solo\" OR \"solo builder\") (app OR indie) since:{since7}", "(\"indie founder\" OR \"solo app\") since:{since7} -filter:links"] },
       { category: "build in public", queries: ["(\"build in public\" OR \"building in public\") since:{since7} -filter:links", "(\"finally shipped\" OR \"just shipped\") since:{since7} -filter:links"] },
+      { category: "builder prompts", queries: ["\"what are you building today\" since:{since7} -filter:links", "(\"what are you building\" OR \"drop in the replies\" OR \"what did you ship\") since:{since7} -filter:links"] },
       { category: "no users yet", queries: ["(\"no users yet\" OR \"zero users\") since:{since7} -filter:links", "(\"first user\" OR \"first paying customer\") since:{since14} -filter:links"] },
       { category: "launch day", queries: ["(\"launching today\" OR \"I made an app\") since:{since7} -filter:links", "(\"Product Hunt\" \"launched\") since:{since14} -filter:links"] },
       { category: "app store launch", queries: ["(\"app store launch\" OR \"app store release\" OR \"live on app store\" OR \"just shipped\") since:{since7}", "(\"waiting for app review\" OR \"rejected by app store\") since:{since14} -filter:links"] },
