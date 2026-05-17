@@ -6,6 +6,8 @@ Yuna Reply Console is a small local-first social gravity console for manually fi
 
 It does not connect to X, use the X API, post, like, follow, DM, or automate anything. Paste a tweet, choose a category and tone, generate suggestions, copy one, and post manually.
 
+API-free and local-first. Yuna only opens doors: X search URLs, profile links, post links, scoring helpers, reply drafts, and local notes. You decide where to enter, what to copy, and what to post.
+
 ## Tabs
 
 - Gravity Map: the primary workspace for scoring thread opportunity, reply culture, aesthetic match, freshness, account quality, and list fit before replying.

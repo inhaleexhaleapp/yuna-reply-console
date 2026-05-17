@@ -152,6 +152,20 @@
       background: rgba(16, 12, 29, 0.45);
     }
 
+    .trust-badge {
+      width: max-content;
+      max-width: 100%;
+      margin: 0;
+      padding: 7px 10px;
+      border: 1px solid rgba(142, 214, 200, 0.2);
+      border-radius: 8px;
+      color: rgba(238, 231, 255, 0.82);
+      background: rgba(255, 255, 255, 0.045);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      backdrop-filter: blur(16px);
+    }
+
     .signature-whisper {
       width: max-content;
       max-width: 100%;
@@ -953,6 +967,7 @@
     <header class="hero">
       <div class="hero-topline">
         <p class="eyebrow">Manual replies only. No automation. No X connection.</p>
+        <p class="trust-badge" title="API-free and local-first. Yuna only opens doors; you decide where to enter.">No API. No auto-replies. No bots. Just better doors into human conversations.</p>
         <div class="session-badge" id="sessionBadge" hidden>
           <span id="sessionBadgeText"></span>
           <button id="endSessionBtn" type="button">end</button>
@@ -1147,8 +1162,8 @@
             </div>
           </details>
           <div class="variant-actions" aria-label="Gravity quick actions">
-            <button class="ghost small" id="gravityOpenThreadBtn" type="button" disabled>Open thread</button>
-            <button class="ghost small" id="gravityOpenProfileBtn" type="button" disabled>Open profile</button>
+            <button class="ghost small" id="gravityOpenThreadBtn" type="button" title="Opens the pasted X post link only. No API, no posting, no automation." disabled>Open thread</button>
+            <button class="ghost small" id="gravityOpenProfileBtn" type="button" title="Opens the X profile URL only. Notes and scoring stay local." disabled>Open profile</button>
             <button class="ghost small" id="gravityCopyHandleBtn" type="button" disabled>Copy handle</button>
             <button class="ghost small" id="gravitySaveCalmTechBtn" type="button" disabled>Save calm-tech</button>
             <button class="ghost small" id="gravitySaveFrequencyBtn" type="button" disabled>Save mantra/frequency</button>
@@ -4378,8 +4393,8 @@
         <article class="query-card">
           <p class="query-text">${escapeHtml(resolvedQuery)}</p>
           <div class="query-actions">
-            <button class="small" type="button" data-radar-action="copy" data-radar-scope="${scope}" data-query="${encodedQuery}" aria-label="Copy ${escapeHtml(category)} search query">Copy query</button>
-            <button class="small" type="button" data-radar-action="open" data-radar-scope="${scope}" data-query="${encodedQuery}" aria-label="Open ${escapeHtml(category)} search on X">Open in X</button>
+            <button class="small" type="button" data-radar-action="copy" data-radar-scope="${scope}" data-query="${encodedQuery}" aria-label="Copy ${escapeHtml(category)} search query" title="Copies the search text only. Nothing is sent anywhere.">Copy query</button>
+            <button class="small" type="button" data-radar-action="open" data-radar-scope="${scope}" data-query="${encodedQuery}" aria-label="Open ${escapeHtml(category)} search on X" title="Opens an X search URL in a new tab. Yuna does not connect to X or read results.">Open in X</button>
           </div>
         </article>
       `;
