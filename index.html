@@ -2017,7 +2017,17 @@
       "tiny encouragement",
       "practical helpful",
       "quietly rooting",
-      "peer-to-peer"
+      "peer-to-peer",
+      "ambient founder",
+      "tired solo founder",
+      "calm-tech builder",
+      "low-energy late-night reply",
+      "casual indie hacker",
+      "slightly witty builder",
+      "mentor-aware respect mode",
+      "micro-update mode",
+      "same-boat reciprocity mode",
+      "exhausted shipping mode"
     ];
 
     const founderProjectUrl = "https://inhaleexhale.app";
@@ -2240,6 +2250,7 @@
     const builderPromptWords = [
       "what are you building",
       "building today",
+      "drop your startup",
       "drop in the replies",
       "drop below",
       "drop your project",
@@ -2247,9 +2258,11 @@
       "drop your link",
       "drop the link",
       "drop your product",
+      "promote your project",
       "what did you ship",
       "what are you shipping",
       "shipping right now",
+      "share your saas",
       "what are you working on",
       "what are you working on today",
       "show me what you are building",
@@ -2261,9 +2274,12 @@
       "project url below",
       "link below",
       "weekend builders",
+      "weekend build thread",
       "support each other",
       "what are you launching",
       "what did you build",
+      "who is still awake coding",
+      "who's still awake coding",
       "reply with what"
     ];
 
@@ -2283,11 +2299,11 @@
     ];
 
     const founderProjectLinkReplies = [
-      `building Inhale Exhale, a calm app world for sleep, mantras, myths, ambient sounds, and Yuna: ${founderProjectUrl}`,
-      `sharing my calm little app world here: ${founderProjectUrl} — soft sleep sounds, mantras, myths, and the ongoing distribution boss fight 😅`,
-      `i’m building Inhale Exhale. calm tech, sleep sounds, myths, Yuna, and founder battlefield energy: ${founderProjectUrl}`,
-      `my project is Inhale Exhale, a quieter meditation/sleep app ecosystem. link because this thread asked nicely: ${founderProjectUrl}`,
-      `built the calm thing, now trying to help the internet notice it without turning into a marketing villain 😂 ${founderProjectUrl}`
+      `building a small calm audio thing for sleep/mantras/myths. still figuring distribution out lol ${founderProjectUrl}`,
+      `trying to make sleep sounds less artificial. tiny app world, very real founder tabs: ${founderProjectUrl}`,
+      `my project is Inhale Exhale. not another productivity app, thankfully. ${founderProjectUrl}`,
+      `late night ambient experiments + a calm app around them. link since this thread asked: ${founderProjectUrl}`,
+      `helps me stop doomscrolling at least. building it into a small calm app world: ${founderProjectUrl}`
     ];
 
     const founderFormatReplies = {
@@ -2311,19 +2327,153 @@
       ]
     };
 
+    const founderModeReplies = {
+      "ambient founder": [
+        "building a small calm audio thing. mostly late night layers and tiny fixes rn.",
+        "trying to make sleep sounds less artificial. weirdly hard, worth it though.",
+        "late night ambient experiments today. the app is calmer than the founder, obviously.",
+        "not another productivity app. just trying to make the phone feel less loud."
+      ],
+      "tired solo founder": [
+        "solo today. again at 3am, because apparently that is the schedule now.",
+        "small wins. one fix, three new questions, classic.",
+        "still figuring this out. the product is moving, the founder is buffering.",
+        "good enough for tonight. future me can judge it with coffee."
+      ],
+      "calm-tech builder": [
+        "building calm tech without turning it into guru soup. harder than expected.",
+        "trying to make the app quieter, not more addictive. tiny distinction, big rabbit hole.",
+        "helps me stop doomscrolling at least. calling that early user research lol.",
+        "small calm tool, many uncalm tabs."
+      ],
+      "low-energy late-night reply": [
+        "yeah. late night builder tax.",
+        "same boat. brain stopped sprinting for like 4 minutes.",
+        "felt this. too tired to phrase it better.",
+        "this is very real. unfortunately."
+      ],
+      "casual indie hacker": [
+        "lol yeah. tiny ship, tiny panic.",
+        "idk, feels like half the job is explaining the thing exists.",
+        "same boat. shipping is easier than being perceived.",
+        "founder math is weird. one small fix can eat the whole night."
+      ],
+      "slightly witty builder": [
+        "finally got this working and immediately found the next thing broken. tradition.",
+        "the rabbit hole has a basement, apparently.",
+        "late night builder tax has been paid.",
+        "good enough for tonight is a valid product management strategy."
+      ],
+      "mentor-aware respect mode": [
+        "respect this. especially the part where you kept it specific.",
+        "fair. this is the kind of note that saves another builder a little time.",
+        "respect the honesty here. no need to wrap it in founder theater.",
+        "yeah, this is useful because it is not trying to sound huge."
+      ],
+      "micro-update mode": [
+        "shipped a tiny fix. tiny, but real.",
+        "small update today. nothing dramatic, it just works better now.",
+        "finally got this working. not glamorous. still counts.",
+        "one small win and only a mild new rabbit hole."
+      ],
+      "same-boat reciprocity mode": [
+        "same boat. still figuring this out too.",
+        "yeah same. tiny progress, weird amount of feelings.",
+        "felt this. building alone makes every reply feel louder.",
+        "same here. product work is one thing, distribution is another creature."
+      ],
+      "exhausted shipping mode": [
+        "shipping while tired is such a specific sport.",
+        "good enough for tonight. ship it, sleep maybe.",
+        "tiny fix shipped. brain has left the meeting.",
+        "this is the part where the changelog looks small and the effort was not."
+      ]
+    };
+
+    const founderArchetypeReplies = {
+      "drop prompt": [
+        "building a small calm audio thing. still figuring out how to explain it without sounding like an app store paragraph lol",
+        "trying to make sleep sounds less artificial. tiny product, large distribution side quest.",
+        "not another productivity app. more like: stop doomscrolling, breathe, maybe sleep.",
+        "working on Inhale Exhale. calm app, messy founder tabs, good enough for tonight."
+      ],
+      "what building": [
+        "today? small fixes, ambient experiments, and pretending distribution is not its own product.",
+        "building calm audio stuff. also the part where i learn to be visible online, unfortunately.",
+        "app polish and one tiny social media cockpit. idk how that became my day but here we are.",
+        "sleep sounds, little UI fixes, and the ongoing war against artificial calm."
+      ],
+      "shipping": [
+        "shipped a tiny fix. not dramatic. it just bothered me enough.",
+        "finally got this working. naturally it revealed the next thing.",
+        "small win today. good enough for tonight.",
+        "tiny ship. still counts, even if the changelog looks extremely unimpressed."
+      ],
+      "build public": [
+        "building in public is mostly posting the parts i would rather pretend were smoother.",
+        "trying to keep the updates real. no fake launch fireworks today.",
+        "small update, small doubt, small win. very founder-coded.",
+        "still showing the messy middle. probably useful. slightly uncomfortable."
+      ],
+      "late coding": [
+        "still awake. late night builder tax has been paid.",
+        "debugging at night is how normal bugs become psychological events.",
+        "same boat. brain stopped sprinting but the bug did not.",
+        "good enough for tonight is starting to sound wise, which is suspicious."
+      ],
+      "promo": [
+        "building a small calm app. trying to mention it without turning into a marketing villain.",
+        "tiny calm audio thing. sleep, ambient, mantras. distribution remains the boss fight.",
+        "working on something that helps me stop doomscrolling at least. that was the first user story lol.",
+        "calm app, soft sounds, very uncalm founder learning how visibility works."
+      ]
+    };
+
     const founderContextualReplies = [
       {
         words: builderPromptWords,
         category: "builder prompts",
+        score: 22,
         replies: [
-          "building Inhale Exhale, a calm app world for sleep, mantras, myths, and Yuna. today’s boss fight is distribution, naturally.",
-          "built the calm thing. now doing the very peaceful founder activity of trying to tell people it exists.",
-          "working on Yuna Reply Console. it was supposed to help with replies and became a tiny social media cockpit by accident.",
-          "today: polishing calm app details and pretending distribution is not a whole second product.",
-          "welcome to the founder arena: app polish, screenshots, and trying to be perceived online 😂",
-          "working on Inhale Exhale. soft app, dramatic founder battlefield, very normal Saturday energy.",
-          "building calm tools. currently in the movie scene where the hero realizes distribution is also part of the quest 😅",
-          "today’s build is app polish plus tiny public courage. not glamorous, but the battle continues 🫡"
+          "building a small calm audio thing. still figuring out the distribution part lol",
+          "trying to make sleep sounds less artificial. tiny product, too many tabs.",
+          "working on Yuna Reply Console. it was a reply helper and somehow became a social cockpit.",
+          "today: app polish, tiny fixes, and the visibility side quest.",
+          "small calm app work. founder battlefield remains active 😂",
+          "not another productivity app. mostly sleep sounds, ambient experiments, and a lot of notes."
+        ]
+      },
+      {
+        words: ["who is still awake coding", "who's still awake coding", "3am", "2am", "late night", "debugging at night", "still awake coding"],
+        category: "coding burnout",
+        score: 24,
+        replies: [
+          "still awake. late night builder tax has been paid.",
+          "debugging at night is how normal bugs become psychological events.",
+          "same boat. brain stopped sprinting but the bug did not.",
+          "good enough for tonight is starting to look like strategy."
+        ]
+      },
+      {
+        words: ["what did you ship", "what are you shipping", "finally shipped", "shipped today", "small win", "weekend build thread"],
+        category: "shipping update",
+        score: 20,
+        replies: [
+          "shipped a tiny fix. tiny, but real.",
+          "finally got this working. naturally it revealed the next thing.",
+          "small win today. good enough for tonight.",
+          "tiny ship. still counts."
+        ]
+      },
+      {
+        words: ["same boat", "anyone else", "solo founder", "building solo", "indie founder"],
+        category: "solo founder",
+        score: 19,
+        replies: [
+          "same boat. still figuring this out too.",
+          "yeah same. tiny progress, weird amount of feelings.",
+          "building alone makes every small reply feel louder.",
+          "solo founder math is strange. one small win can carry the day."
         ]
       },
       {
@@ -3128,6 +3278,7 @@
         [["ai companion", "gentle ai", "ai friend", "yuna"], "AI companion"],
         [["cozy internet", "soft internet", "slow tech", "calm tech", "quiet internet"], "cozy/calm tech"],
         [["replying back", "mutuals", "thread feels alive", "people know each other", "same people", "regulars"], "recurring people"],
+        [["what did you ship", "building in public", "weekend builders", "small win", "shipping update"], "reciprocal founder room"],
         [["made this", "building", "solo founder", "indie"], "low ego builder"]
       ];
 
@@ -3139,7 +3290,8 @@
         [["download now", "install now", "free trial", "limited time", "link in bio", "dm me"], "obvious promotion"],
         [["unlock your potential", "transform your life", "deeply resonate", "ancient wisdom reveals"], "polished AI/corporate tone"],
         [["corporate wellness", "enterprise mindfulness", "b2b wellness", "yoga magazine"], "corporate wellness"],
-        [["ai-generated", "ai generated", "generated image", "cosmic aura", "spiritual image"], "AI spiritual image spam"]
+        [["ai-generated", "ai generated", "generated image", "cosmic aura", "spiritual image"], "AI spiritual image spam"],
+        [["drive some traffic", "promote your project", "hype each other", "follow everyone", "everyone drop"], "founder engagement bait"]
       ];
 
       boostChecks.forEach(([words, label]) => {
@@ -3432,6 +3584,93 @@
       return containsAny(tweetText.toLowerCase(), projectLinkPromptWords);
     }
 
+    function detectFounderThreadArchetypes(tweetText) {
+      const lower = tweetText.toLowerCase();
+      const matches = new Set();
+      if (containsAny(lower, ["drop your startup", "drop your project", "drop your link", "share your saas", "promote your project"])) matches.add("drop prompt");
+      if (containsAny(lower, ["what are you building", "what are you working on", "building today"])) matches.add("what building");
+      if (containsAny(lower, ["what did you ship", "what are you shipping", "finally shipped", "shipped today", "shipping right now"])) matches.add("shipping");
+      if (containsAny(lower, ["build in public", "building in public", "weekend build thread"])) matches.add("build public");
+      if (containsAny(lower, ["who is still awake coding", "who's still awake coding", "3am", "2am", "debugging at night", "late night"])) matches.add("late coding");
+      if (containsAny(lower, ["promote your project", "drive some traffic", "hype each other", "support each other"])) matches.add("promo");
+      return Array.from(matches);
+    }
+
+    function analyzeFounderThreadGravity(tweetText, category) {
+      const lower = tweetText.toLowerCase();
+      const archetypes = detectFounderThreadArchetypes(tweetText);
+      const broadPrompt = containsAny(lower, ["drop your startup", "drop your project", "drop your link", "promote your project", "drive some traffic", "hype each other"]);
+      const noisyBait = containsAny(lower, ["drive some traffic", "hype each other", "everyone drop", "promote yourself", "boost your", "follow everyone", "repost"]);
+      const founderRelevant = containsAny(lower, ["founder", "builder", "startup", "indie", "saas", "app", "product", "ship", "launched", "no-code", "cursor", "stripe", "mrr"]);
+      const ecosystemAligned = containsAny(lower, ["mobile app", "calm", "sleep", "ambient", "ai companion", "wellness", "meditation", "audio", "creator"]);
+      const reciprocal = containsAny(lower, ["i'll check", "i will check", "feedback", "small founders", "weekend builders", "what did you ship", "what are you building", "replying to", "support each other"]);
+      const specificAsk = containsAny(lower, ["what did you ship", "what are you building", "what are you working on", "who is still awake coding", "weekend build thread"]);
+      const followerSize = containsAny(lower, ["small accounts", "under 1k", "under 5k", "tiny accounts"]) ? 72 : containsAny(lower, ["100k", "viral", "big accounts"]) ? 26 : 50;
+      const replyDensity = reciprocal ? 72 : broadPrompt ? 38 : 55;
+      const founderRelevance = founderRelevant ? 74 : category === "builder prompts" ? 56 : 34;
+      const ecosystem = ecosystemAligned ? 70 : 42;
+      const threadQuality = specificAsk ? 76 : broadPrompt ? 36 : 54;
+      const signalNoise = boundedScore(70 - (noisyBait ? 36 : 0) - (broadPrompt ? 14 : 0) + (specificAsk ? 18 : 0) + (ecosystemAligned ? 8 : 0));
+      const reciprocalPotential = boundedScore((replyDensity * 0.55) + (followerSize * 0.2) + (threadQuality * 0.25));
+      const score = boundedScore(
+        followerSize * 0.1 +
+        replyDensity * 0.18 +
+        founderRelevance * 0.24 +
+        ecosystem * 0.12 +
+        reciprocalPotential * 0.18 +
+        threadQuality * 0.1 +
+        signalNoise * 0.08
+      );
+      const skip = score < 38 || (noisyBait && broadPrompt && !specificAsk);
+      const reason = skip
+        ? "too broad/noisy for a small account to be seen"
+        : score >= 62
+          ? "good enough founder signal"
+          : "watch for reciprocal replies before spending energy";
+      return {
+        score,
+        skip,
+        reason,
+        archetypes,
+        followerSize,
+        replyDensity,
+        founderRelevance,
+        ecosystem,
+        reciprocalPotential,
+        threadQuality,
+        signalNoise
+      };
+    }
+
+    function addFounderArchetypeCandidates(candidates, tweetText, settings) {
+      detectFounderThreadArchetypes(tweetText).forEach((archetype) => {
+        (founderArchetypeReplies[archetype] || []).forEach((text) => {
+          candidates.push({
+            text,
+            category: "builder prompts",
+            tone: archetype,
+            score: archetype === "late coding" ? 25 : archetype === "shipping" ? 23 : archetype === "promo" ? 17 : 22
+          });
+        });
+      });
+
+      if (shouldIncludeFounderProjectLink(tweetText, settings.linkMode)) {
+        [
+          "building a small calm audio thing.",
+          "trying to make sleep sounds less artificial.",
+          "late night ambient experiments today.",
+          "not another productivity app."
+        ].forEach((text) => {
+          candidates.push({
+            text,
+            category: "builder prompts",
+            tone: "subtle self-promo",
+            score: 16
+          });
+        });
+      }
+    }
+
     function addFounderTextureCandidates(candidates, tweetText, category, settings) {
       const lower = tweetText.toLowerCase();
       const isBuilderPrompt = category === "builder prompts" || containsAny(lower, builderPromptWords);
@@ -3449,7 +3688,7 @@
       }
 
       if (shouldIncludeFounderProjectLink(tweetText, settings.linkMode)) {
-        founderProjectLinkReplies.forEach((text) => {
+      founderProjectLinkReplies.forEach((text) => {
           candidates.push({
             text,
             category: "builder prompts",
@@ -3464,17 +3703,17 @@
       const lower = tweetText.toLowerCase();
       const keywordCategories = detectFounderKeywordCategories(tweetText);
       const effectiveTone = variant === "human"
-        ? "peer-to-peer"
+        ? "same-boat reciprocity mode"
         : variant === "casual"
-          ? "X-native casual"
+          ? "casual indie hacker"
           : variant === "shorter"
-            ? "tiny encouragement"
+            ? "micro-update mode"
             : tone;
 
       const candidates = [];
 
       function addGroup(groupCategory, groupTone, score) {
-        const group = founderReplyBank[groupCategory] && founderReplyBank[groupCategory][groupTone];
+        const group = (founderReplyBank[groupCategory] && founderReplyBank[groupCategory][groupTone]) || founderModeReplies[groupTone];
         if (!group) return;
         group.forEach((text) => {
           candidates.push({
@@ -3507,12 +3746,13 @@
               text,
               category: entry.category,
               tone: "context",
-              score: entry.category === category ? 14 : 11
+              score: entry.score || (entry.category === category ? 14 : 11)
             });
           });
         }
       });
 
+      addFounderArchetypeCandidates(candidates, tweetText, settings);
       addFounderTextureCandidates(candidates, tweetText, category, settings);
 
       if (keywordCategories.length === 0) {
@@ -3567,7 +3807,12 @@
         .replace(/\bnervous systems\b/gi, "people")
         .replace(/\bnervous system\b/gi, "body")
         .replace(/\becosystem\b/gi, "space")
+        .replace(/\bdigital sanctuary\b/gi, "small app")
         .replace(/\bsanctuary\b/gi, "quiet place")
+        .replace(/\bemotional wisdom\b/gi, "honest note")
+        .replace(/\bbeautifully crafted\b/gi, "specific")
+        .replace(/\bcinematic\b/gi, "late")
+        .replace(/\bmeaningful\b/gi, "real")
         .replace(/\btransparency\b/gi, "honesty")
         .replace(/\bauthenticity\b/gi, "honesty")
         .replace(/\bfriction\b/gi, "rough edge")
@@ -3614,6 +3859,54 @@
       return containsAny(tweetText.toLowerCase(), builderPromptWords);
     }
 
+    function isFounderPromptLike(tweetText) {
+      const lower = tweetText.toLowerCase();
+      return isBuilderPromptTweet(tweetText) || containsAny(lower, [
+        "drop your startup",
+        "share your saas",
+        "promote your project",
+        "what did you ship",
+        "weekend build thread",
+        "who is still awake coding"
+      ]);
+    }
+
+    function addFounderHumanVariance(text, mode, tweetText) {
+      const promptLike = isFounderPromptLike(tweetText);
+      let cleaned = text
+        .replace(/\bquietly rooting for this\.?\s*/gi, "rooting for this. ")
+        .replace(/\bHope\b/g, "hope")
+        .replace(/\bThis is the part\b/gi, "this part")
+        .replace(/\bIt is a lot\b/gi, "it is a lot")
+        .replace(/\bThe product\b/g, "the product")
+        .replace(/\bThe founder\b/g, "the founder")
+        .replace(/\bThe build\b/g, "the build")
+        .replace(/\bThe internet\b/g, "the internet");
+
+      if (promptLike || ["ultra-short", "slightly witty", "safest"].includes(mode)) {
+        cleaned = cleaned
+          .replace(/\bdistribution is also part of the quest\b/gi, "distribution is also work, annoyingly")
+          .replace(/\bthe right early people\b/gi, "the right few people")
+          .replace(/\bthe project is in the world now\b/gi, "it exists now")
+          .replace(/\bwithout turning it into\b/gi, "without making it")
+          .replace(/\bHope this keeps finding its people\b/gi, "hope it finds a few real people")
+          .replace(/\bThis is real work\b/gi, "this is real work")
+          .replace(/\bmeaningful\b/gi, "real");
+      }
+
+      const shouldAddTexture = promptLike && cleaned.length < 150 && Math.random() < 0.28;
+      if (shouldAddTexture && !/\b(lol|idk|3am|same boat|good enough for tonight)\b/i.test(cleaned)) {
+        const endings = [" lol", " idk", " again at 3am", " good enough for tonight"];
+        cleaned = `${cleaned.replace(/[.!?]$/, "")}${endings[Math.floor(Math.random() * endings.length)]}`;
+      }
+
+      if (promptLike && cleaned.length > 170) {
+        cleaned = makeShorter(cleaned);
+      }
+
+      return cleaned;
+    }
+
     function humanizeReply(text, mode, context, tweetText = "") {
       let cleaned = removeAiCadence(text);
       const lower = cleaned.toLowerCase();
@@ -3625,10 +3918,10 @@
       if (mode === "ultra-short") {
         if (builderPromptAnswer) {
           const options = [
-            "building calm tools. distribution arc continues 😅",
-            "app polish today. founder battlefield tomorrow. probably both.",
-            "shipping small softness and fighting the visibility boss 🫡",
-            "still building. slightly dramatic, but building."
+            "small calm audio thing. distribution arc continues 😅",
+            "app polish today. visibility tax also due.",
+            "shipped a tiny fix. good enough for tonight.",
+            "still building. slightly tired, but building."
           ];
           return options[Math.floor(Math.random() * options.length)];
         }
@@ -3665,8 +3958,13 @@
         .replace(/\bThis\b/g, "this")
         .replace(/\. (A|After|Been|Building|Every|Hope|It|Low|Mobile|No|One|People|Product|SaaS|Screenshots|Solo|The|There|This|Try|Whatever|You)\b/g, (match) => match.toLowerCase());
 
+      if (context === "founder") {
+        cleaned = addFounderHumanVariance(cleaned, mode, tweetText);
+      }
+
       cleaned = sentenceCaseToLowercaseBias(cleaned);
-      return trimToLimit(cleaned, mode === "shorter" ? 145 : replyEngineRules.preferredMax);
+      const founderLimit = isFounderPromptLike(tweetText) ? 170 : replyEngineRules.preferredMax;
+      return trimToLimit(cleaned, mode === "shorter" ? 145 : context === "founder" ? founderLimit : replyEngineRules.preferredMax);
     }
 
     function applyReplyEngineShape(items, variant, context, tweetText) {
@@ -3730,12 +4028,14 @@
     function pickFounderReplies(candidates, variant, tweetText) {
       const seen = new Set();
       const recent = recentFounderTextSet();
-      const maxLength = variant === "shorter" ? 150 : 220;
+      const promptLike = isFounderPromptLike(tweetText);
+      const maxLength = variant === "shorter" ? 145 : promptLike ? 165 : 210;
       const unique = [];
 
       candidates.forEach((candidate) => {
-        const text = variant === "shorter" ? makeShorter(candidate.text) : trimToLimit(candidate.text, 220);
+        const text = variant === "shorter" || promptLike ? makeShorter(candidate.text) : trimToLimit(candidate.text, 220);
         if (!text || seen.has(text) || text.length > 220) return;
+        const polishedPenalty = containsAny(text.toLowerCase(), ["beautifully", "meaningful", "cinematic", "sanctuary", "nervous system", "emotional wisdom"]) ? 6 : 0;
         seen.add(text);
         unique.push({
           ...candidate,
@@ -3743,7 +4043,8 @@
           score: candidate.score
             + Math.random() * 4
             - (recent.has(text) ? 5 : 0)
-            - (text.length > maxLength ? 1.5 : 0)
+            - (text.length > maxLength ? 3 : 0)
+            - polishedPenalty
         });
       });
 
@@ -3808,6 +4109,14 @@
       founderCurrentVariant = variant;
       const settings = currentFounderSettings();
       founderState.settings = settings;
+      const threadGravity = analyzeFounderThreadGravity(tweetText, category);
+      if (threadGravity.skip) {
+        founderCurrentReplies = [];
+        writeFounderStorage();
+        renderFounderAll();
+        setFounderStatus(`SKIP THREAD · ${threadGravity.reason}. signal ${threadGravity.score}/100.`);
+        return;
+      }
       const candidates = buildFounderCandidateReplies(tweetText, category, tone, variant, settings);
       founderCurrentReplies = pickFounderReplies(candidates, variant, tweetText);
       recordReplyGeneration();
@@ -3822,13 +4131,14 @@
         variant,
         linkMode: settings.linkMode,
         format: settings.format,
+        threadGravity,
         replies: founderCurrentReplies.map((reply) => reply.text),
         createdAt: new Date().toISOString()
       });
 
       writeFounderStorage();
       renderFounderAll();
-      setFounderStatus(variant === "base" ? "5 founder replies ready." : "Founder reply set refreshed.");
+      setFounderStatus(`${variant === "base" ? "5 founder replies ready" : "Founder reply set refreshed"} · signal ${threadGravity.score}/100 · ${threadGravity.reason}.`);
     }
 
     function soundsPromotional(text) {
