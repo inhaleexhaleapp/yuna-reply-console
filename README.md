@@ -46,4 +46,15 @@ Open `index.html` directly in a browser. It works offline and stores history, fa
 
 The Search Radar sections include local preset X search queries for manual discovery. Date filters refresh automatically when the app opens, and Open in X uses X's Latest view. Use the copy button or open a search in X, then review and reply manually.
 
+## Shortcut Launch Modes
+
+iOS Shortcuts can open the local console with a mode parameter to prepare the right view without searching, fetching, posting, or automating anything.
+
+- `/?mode=tonight`
+- `/?mode=founder`
+- `/?mode=wellness`
+- `/?mode=gravity`
+
+These modes only switch tabs, show a small local status pill, adjust microcopy, and prioritize local radar presets.
+
 No build step, server, npm install, backend, external dependency, or API key is needed.

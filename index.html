@@ -166,6 +166,18 @@
       backdrop-filter: blur(16px);
     }
 
+    .launch-mode-pill {
+      border-color: rgba(187, 161, 255, 0.34);
+      color: #f3edff;
+      background:
+        linear-gradient(135deg, rgba(187, 161, 255, 0.12), rgba(142, 214, 200, 0.07)),
+        rgba(255, 255, 255, 0.05);
+    }
+
+    .launch-mode-pill[hidden] {
+      display: none;
+    }
+
     .signature-whisper {
       width: max-content;
       max-width: 100%;
@@ -563,6 +575,11 @@
     .radar-category {
       min-height: 100%;
       padding: 12px;
+    }
+
+    .shortcut-highlight {
+      border-color: rgba(154, 216, 199, 0.36);
+      box-shadow: 0 18px 42px rgba(6, 4, 16, 0.2), 0 0 30px rgba(154, 216, 199, 0.055);
     }
 
     .radar-category h3,
@@ -968,6 +985,7 @@
       <div class="hero-topline">
         <p class="eyebrow">Manual replies only. No automation. No X connection.</p>
         <p class="trust-badge" title="API-free and local-first. Yuna only opens doors; you decide where to enter.">No API. No auto-replies. No bots. Just better doors into human conversations.</p>
+        <p class="trust-badge launch-mode-pill" id="launchModePill" hidden></p>
         <div class="session-badge" id="sessionBadge" hidden>
           <span id="sessionBadgeText"></span>
           <button id="endSessionBtn" type="button">end</button>
@@ -2791,6 +2809,7 @@
     const sessionBadgeText = document.getElementById("sessionBadgeText");
     const endSessionBtn = document.getElementById("endSessionBtn");
     const yunaWhisper = document.getElementById("yunaWhisper");
+    const launchModePill = document.getElementById("launchModePill");
     const gravityModeSelect = document.getElementById("gravityModeSelect");
     const gravityRelationshipSelect = document.getElementById("gravityRelationshipSelect");
     const gravityThreadText = document.getElementById("gravityThreadText");
@@ -2908,6 +2927,7 @@
       history: readStorage(founderStorageKeys.history, []),
       settings: readStorage(founderStorageKeys.settings, { linkMode: "auto", format: "text" })
     };
+    let activeLaunchMode = readShortcutLaunchMode();
     let gravityCurrentScore = null;
     let gravityCurrentReplies = [];
     let gravityState = {
@@ -2924,6 +2944,16 @@
         return saved ? JSON.parse(saved) : fallback;
       } catch (error) {
         return fallback;
+      }
+    }
+
+    function readShortcutLaunchMode() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const mode = (params.get("mode") || "").toLowerCase().trim();
+        return ["tonight", "founder", "wellness", "gravity"].includes(mode) ? mode : "";
+      } catch (error) {
+        return "";
       }
     }
 
@@ -4381,6 +4411,46 @@
         .replaceAll("{since14}", formatSearchDate(14));
     }
 
+    function prioritizePresets(presets, priorityNames) {
+      const priorities = new Map(priorityNames.map((name, index) => [name.toLowerCase(), index]));
+      return [...presets].sort((a, b) => {
+        const aRank = priorities.has(a.category.toLowerCase()) ? priorities.get(a.category.toLowerCase()) : 100;
+        const bRank = priorities.has(b.category.toLowerCase()) ? priorities.get(b.category.toLowerCase()) : 100;
+        return aRank - bRank;
+      });
+    }
+
+    function wellnessPresetsForLaunchMode() {
+      if (activeLaunchMode === "tonight") {
+        return prioritizePresets(searchPresets, ["Late Night Calm", "Ambient Sleep Culture", "Calm Tech Radar", "Emotionally Alive Rooms", "432Hz / Frequency Culture"]);
+      }
+      if (activeLaunchMode === "wellness") {
+        return prioritizePresets(searchPresets, ["Emotionally Alive Rooms", "Mantra Culture", "Ambient Sleep Culture", "432Hz / Frequency Culture", "Myth + Calm"]);
+      }
+      return searchPresets;
+    }
+
+    function founderPresetsForLaunchMode() {
+      if (activeLaunchMode === "tonight") {
+        return prioritizePresets(founderSearchPresets, ["builder prompts", "build in public", "shipping", "mobile app founder"]);
+      }
+      if (activeLaunchMode === "founder") {
+        return prioritizePresets(founderSearchPresets, ["builder prompts", "solo founder", "build in public", "shipping", "SaaS / revenue"]);
+      }
+      return founderSearchPresets;
+    }
+
+    function isShortcutHighlight(category, scope = "wellness") {
+      if (!activeLaunchMode) return false;
+      const lower = category.toLowerCase();
+      if (activeLaunchMode === "tonight") {
+        return containsAny(lower, ["tonight", "late night", "ambient", "calm tech", "builder prompts", "night shift", "founder"]);
+      }
+      if (activeLaunchMode === "founder") return scope === "founder";
+      if (activeLaunchMode === "wellness") return scope === "wellness" && containsAny(lower, ["wellness", "emotionally", "mantra", "ambient", "calm", "432hz", "myth"]);
+      return false;
+    }
+
     function buildXSearchUrl(query) {
       const resolvedQuery = resolveSearchQuery(query);
       return `https://x.com/search?q=${encodeURIComponent(resolvedQuery)}&f=live`;
@@ -4401,8 +4471,8 @@
     }
 
     function renderSearchRadar() {
-      searchRadarList.innerHTML = searchPresets.map((preset) => `
-        <section class="radar-category" aria-label="${escapeHtml(preset.category)} search presets">
+      searchRadarList.innerHTML = wellnessPresetsForLaunchMode().map((preset) => `
+        <section class="radar-category ${isShortcutHighlight(preset.category) ? "shortcut-highlight" : ""}" aria-label="${escapeHtml(preset.category)} search presets">
           <h3>${escapeHtml(preset.category)}</h3>
           <div class="query-list">
             ${preset.queries.map((query) => queryCard(query, preset.category)).join("")}
@@ -4416,8 +4486,8 @@
     }
 
     function renderFounderSearchRadar() {
-      founderSearchRadarList.innerHTML = founderSearchPresets.map((preset) => `
-        <section class="radar-category" aria-label="${escapeHtml(preset.category)} founder search presets">
+      founderSearchRadarList.innerHTML = founderPresetsForLaunchMode().map((preset) => `
+        <section class="radar-category ${isShortcutHighlight(preset.category, "founder") ? "shortcut-highlight" : ""}" aria-label="${escapeHtml(preset.category)} founder search presets">
           <h3>${escapeHtml(preset.category)}</h3>
           <div class="query-list">
             ${preset.queries.map((query) => queryCard(query, preset.category, "founder")).join("")}
@@ -4599,15 +4669,59 @@
 
     function applyYunaSignatureLayer() {
       const hour = new Date().getHours();
-      const isTonight = hour < 5 || hour >= 23;
+      const isTonight = activeLaunchMode === "tonight" || hour < 5 || hour >= 23;
       if (isTonight) {
         document.body.classList.add("yuna-night-mode");
-        yunaWhisper.textContent = tonightWhispers[hour % tonightWhispers.length];
-        yunaWhisper.title = "Tonight Mode · window rain mode";
+        yunaWhisper.textContent = activeLaunchMode === "tonight"
+          ? "open a few doors, choose gently."
+          : tonightWhispers[hour % tonightWhispers.length];
+        yunaWhisper.title = "Tonight Mode · shortcut-safe local UI";
         return;
       }
       yunaWhisper.textContent = signatureWhispers[hour % signatureWhispers.length];
       yunaWhisper.title = "Yuna signature layer";
+    }
+
+    function switchToTab(targetId) {
+      tabButtons.forEach((tabButton) => {
+        tabButton.setAttribute("aria-selected", String(tabButton.dataset.tabTarget === targetId));
+      });
+      tabPanels.forEach((panel) => {
+        panel.classList.toggle("is-active", panel.id === targetId);
+      });
+    }
+
+    function applyShortcutLaunchMode() {
+      if (!activeLaunchMode) return;
+      const modeConfig = {
+        tonight: {
+          label: "Tonight Mode · opened by shortcut",
+          tab: "gravityPanel",
+          whisper: "late-night rooms are probably awake."
+        },
+        founder: {
+          label: "Founder Mode · opened by shortcut",
+          tab: "founderPanel",
+          whisper: "look for small threads with real replies."
+        },
+        wellness: {
+          label: "Wellness / Yuna · opened by shortcut",
+          tab: "wellnessPanel",
+          whisper: "open a few doors, choose gently."
+        },
+        gravity: {
+          label: "Gravity Map · opened by shortcut",
+          tab: "gravityPanel",
+          whisper: "not every thread deserves your energy."
+        }
+      }[activeLaunchMode];
+      if (!modeConfig) return;
+      launchModePill.hidden = false;
+      launchModePill.textContent = modeConfig.label;
+      launchModePill.title = "Shortcut launch mode. No API, no auto-search, no posting.";
+      switchToTab(modeConfig.tab);
+      yunaWhisper.textContent = modeConfig.whisper;
+      yunaWhisper.title = "Shortcut launch microcopy";
     }
 
     function gravityStatusLine(result) {
@@ -5037,13 +5151,7 @@
 
     tabButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        const targetId = button.dataset.tabTarget;
-        tabButtons.forEach((tabButton) => {
-          tabButton.setAttribute("aria-selected", String(tabButton === button));
-        });
-        tabPanels.forEach((panel) => {
-          panel.classList.toggle("is-active", panel.id === targetId);
-        });
+        switchToTab(button.dataset.tabTarget);
       });
     });
 
@@ -5195,6 +5303,7 @@
     populateSelectors();
     populateFounderSelectors();
     applyYunaSignatureLayer();
+    applyShortcutLaunchMode();
     hydrateSessionState();
     renderGravityAll();
     updateTweetCount();
