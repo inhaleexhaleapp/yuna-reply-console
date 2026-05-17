@@ -42,6 +42,19 @@
         linear-gradient(90deg, rgba(142, 214, 200, 0.09), rgba(187, 161, 255, 0.1));
     }
 
+    body.yuna-night-mode {
+      --accent: #c9b5ff;
+      --accent-2: #a7d8cf;
+      background:
+        linear-gradient(140deg, rgba(15, 12, 31, 0.99) 0%, rgba(35, 24, 57, 0.97) 48%, rgba(9, 18, 35, 0.99) 100%),
+        linear-gradient(90deg, rgba(142, 214, 200, 0.12), rgba(187, 161, 255, 0.13));
+    }
+
+    body.yuna-night-mode .panel,
+    body.yuna-night-mode .session-badge {
+      box-shadow: 0 22px 70px rgba(5, 3, 12, 0.42), 0 0 34px rgba(187, 161, 255, 0.055);
+    }
+
     body::before {
       position: fixed;
       inset: 0;
@@ -137,6 +150,16 @@
       color: var(--muted);
       font-size: 0.78rem;
       background: rgba(16, 12, 29, 0.45);
+    }
+
+    .signature-whisper {
+      width: max-content;
+      max-width: 100%;
+      margin: -2px 0 0;
+      color: rgba(229, 214, 255, 0.58);
+      font-size: 0.78rem;
+      line-height: 1.45;
+      letter-spacing: 0.01em;
     }
 
     .session-modal {
@@ -770,6 +793,50 @@
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
     }
 
+    .risk-row .bar-fill {
+      background: linear-gradient(90deg, rgba(255, 170, 166, 0.95), rgba(255, 211, 150, 0.9));
+    }
+
+    .quote-warning {
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid rgba(255, 170, 166, 0.34);
+      border-radius: 8px;
+      color: #ffd9d6;
+      background: rgba(255, 140, 130, 0.075);
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .soft-room-panel {
+      margin-top: 10px;
+      border: 1px solid rgba(187, 161, 255, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.035);
+      overflow: hidden;
+    }
+
+    .soft-room-panel summary {
+      padding: 10px 12px;
+      color: rgba(229, 228, 255, 0.7);
+      cursor: pointer;
+      font-size: 0.82rem;
+      list-style-position: inside;
+    }
+
+    .soft-room-meta {
+      display: grid;
+      gap: 8px;
+      padding: 0 12px 12px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .soft-room-meta p {
+      margin: 0;
+    }
+
     .gravity-list {
       display: grid;
       gap: 10px;
@@ -893,6 +960,7 @@
       </div>
       <h1>Yuna Reply Console</h1>
       <p class="subtitle">Find softer words for louder timelines.</p>
+      <p class="signature-whisper" id="yunaWhisper" title="Yuna signature layer">quiet internet energy.</p>
     </header>
 
     <div class="session-modal" id="sessionModal" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle" hidden>
@@ -981,8 +1049,29 @@
 
           <div class="metric-grid">
             <div>
-              <label for="gravityHoursInput">Hours since post</label>
+              <label for="gravityHoursInput" title="Late Night Density: fresher rooms and night-active threads carry more gravity.">Hours since post</label>
               <input class="metric-input" id="gravityHoursInput" type="number" min="0" step="0.5" value="2">
+            </div>
+            <div>
+              <label for="gravityRecurringUsersInput" title="Familiar Faces: people who appear again and make a room feel known.">Recurring users count</label>
+              <input class="metric-input" id="gravityRecurringUsersInput" type="number" min="0" step="1" value="0">
+            </div>
+            <div>
+              <label for="gravityEmotionalDepthRange" title="Emotional Echo: personal, lived-in replies beat empty affirmation loops.">Emotional depth score</label>
+              <div class="range-row">
+                <input id="gravityEmotionalDepthRange" type="range" min="0" max="100" value="55">
+                <span class="pill" id="gravityEmotionalDepthValue">55</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <div>
+              <label for="gravityToneMatchRange" title="Human Warmth: how naturally this room fits your calm-tech voice.">Emotional tone match</label>
+              <div class="range-row">
+                <input id="gravityToneMatchRange" type="range" min="0" max="100" value="60">
+                <span class="pill" id="gravityToneMatchValue">60</span>
+              </div>
             </div>
             <div>
               <label for="gravityFollowerMin">Follower range min</label>
@@ -1002,14 +1091,14 @@
 
           <div class="score-grid">
             <div>
-              <label for="gravityNicheRange">Niche relevance</label>
+              <label for="gravityNicheRange" title="Calm-Tech Match: how close this thread is to your quiet internet world.">Niche relevance</label>
               <div class="range-row">
                 <input id="gravityNicheRange" type="range" min="0" max="100" value="70">
                 <span class="pill" id="gravityNicheValue">70</span>
               </div>
             </div>
             <div>
-              <label for="gravityAestheticRange">Aesthetic alignment</label>
+              <label for="gravityAestheticRange" title="Window Rain Score: atmosphere, visuals, ambient texture, and soft-room feeling.">Aesthetic alignment</label>
               <div class="range-row">
                 <input id="gravityAestheticRange" type="range" min="0" max="100" value="70">
                 <span class="pill" id="gravityAestheticValue">70</span>
@@ -1025,6 +1114,7 @@
             <label class="check-item"><input id="gravityAuthorReplies" type="checkbox" checked> author replies actively</label>
             <label class="check-item"><input id="gravityBackAndForth" type="checkbox" checked> back-and-forth conversations</label>
             <label class="check-item"><input id="gravityRealHumans" type="checkbox" checked> real humans talking</label>
+            <label class="check-item"><input id="gravityLateNightActive" type="checkbox"> late-night active room</label>
             <label class="check-item"><input id="gravityOriginalMedia" type="checkbox"> original media or strong visual identity</label>
             <label class="check-item"><input id="gravityNonPolitical" type="checkbox" checked> non-political / no news chaos</label>
             <label class="check-item"><input id="gravityNoBotHeavy" type="checkbox" checked> not bot-heavy / not reply black hole</label>
@@ -1040,7 +1130,7 @@
 
         <section class="panel" aria-labelledby="gravity-score-title">
           <div class="section-head">
-            <h2 id="gravity-score-title">Gravity score</h2>
+            <h2 id="gravity-score-title" title="Quiet Gravity: a soft read on whether this room is worth your presence.">Quiet Gravity</h2>
           </div>
           <div class="score-card">
             <div class="score-value" id="gravityScoreValue">--</div>
@@ -1048,6 +1138,14 @@
           </div>
           <div class="score-grid" id="gravityBreakdown"></div>
           <div class="history-run" id="gravityWhy">The console is now a map first, reply tool second.</div>
+          <div class="quote-warning" id="gravityQuoteWarning" hidden></div>
+          <details class="soft-room-panel" id="softRoomsPanel">
+            <summary title="A quiet meta panel for Yuna's internal room language.">soft rooms</summary>
+            <div class="soft-room-meta" id="softRoomsMeta">
+              <p>some rooms feel alive immediately.</p>
+              <p>score a thread to reveal the softer signals.</p>
+            </div>
+          </details>
           <div class="variant-actions" aria-label="Gravity quick actions">
             <button class="ghost small" id="gravityOpenThreadBtn" type="button" disabled>Open thread</button>
             <button class="ghost small" id="gravityOpenProfileBtn" type="button" disabled>Open profile</button>
@@ -1684,7 +1782,7 @@
       {
         words: ["432hz", "432 hz", "frequency", "delta waves", "theta waves", "binaural"],
         category: "meditation",
-        score: 18,
+        score: 22,
         replies: [
           "this one actually slowed my brain down for a second.",
           "tried this kind of thing with headphones in the dark and it makes more sense there.",
@@ -1695,7 +1793,7 @@
       {
         words: ["ambient", "soundscape", "sleep track", "headphones", "rain on window", "sound bath", "singing bowls"],
         category: "can't sleep",
-        score: 18,
+        score: 22,
         replies: [
           "rain on window + this track honestly.",
           "late night headphone music hits different.",
@@ -1704,9 +1802,20 @@
         ]
       },
       {
+        words: ["felt this", "tonight", "quiet", "late night", "rain", "window", "headphones", "exhausted", "stillness", "small ritual"],
+        category: "need calm",
+        score: 21,
+        replies: [
+          "tried this with headphones in the dark honestly.",
+          "rain on window + this tonight.",
+          "this one slowed my brain down for a second.",
+          "small rituals hit harder when you are already tired."
+        ]
+      },
+      {
         words: ["mantra", "chant", "myth", "mythology", "story for sleep", "dreams"],
         category: "meditation",
-        score: 17,
+        score: 20,
         replies: [
           "i like when mantra stuff feels lived-in, not like a lecture.",
           "myths before sleep make the night feel less flat somehow.",
@@ -1785,80 +1894,80 @@
 
     const searchPresets = [
       {
-        category: "can't sleep",
+        category: "Quote Cemetery Detector",
         queries: [
-          "(\"can't sleep\" OR \"wide awake\") (headphones OR rain OR ambient OR breath) since:{since2} -filter:links",
-          "(\"trying to sleep\" OR \"can't relax tonight\") (track OR sound OR breathing) since:{since7} -filter:links"
+          "(\"comment YES\" OR \"daily wisdom\" OR \"manifest abundance\" OR \"the universe will\") since:{since14}",
+          "(\"write this before sleep\" OR \"high vibration only\" OR \"millionaire mindset\") since:{since14}"
         ]
       },
       {
-        category: "overthinking",
+        category: "Emotionally Alive Rooms",
         queries: [
-          "(\"overthinking at night\" OR \"racing thoughts\" OR \"can't shut my brain\") (music OR headphones OR breath) since:{since7}",
-          "(\"late night\" OR 2am OR 3am) (overthinking OR insomnia OR ambient OR calm) since:{since2} -filter:links"
+          "(\"felt this\" OR \"honestly\" OR \"been thinking about this\") (quiet OR sleep OR exhausted OR calm) since:{since2} -filter:links",
+          "(\"people actually\" OR \"same people\" OR mutuals OR regulars) (reply OR replies OR thread) since:{since14} -filter:links"
         ]
       },
       {
-        category: "Calm Tech Radar",
+        category: "Late Night Calm",
         queries: [
-          "(\"calm tech\" OR \"soft internet\" OR \"slow tech\" OR \"gentle tech\") (builder OR creator OR app) since:{since14} -filter:links",
-          "(\"app fatigue\" OR \"internet feels too loud\") (calm OR sleep OR ambient) since:{since14} -filter:links"
+          "(\"late night\" OR 2am OR 3am OR tonight) (quiet OR rain OR headphones OR breathe OR stillness) since:{since2} -filter:links",
+          "(\"can't sleep\" OR \"wide awake\") (ambient OR window OR rain OR ritual OR headphones) since:{since2} -filter:links"
         ]
       },
       {
-        category: "Mantra Radar",
+        category: "Mantra Culture",
         queries: [
-          "(mantra OR mantras) (night OR headphones OR sleep OR \"morning walk\") since:{since14} -filter:links",
-          "(\"this mantra\" OR \"mantra loop\" OR \"mantra music\") (calm OR sleep OR focus) since:{since14} -filter:links"
+          "(mantra OR mantras) (night OR headphones OR sleep OR ritual) since:{since14} -filter:links",
+          "(\"this mantra\" OR \"mantra loop\" OR \"mantra music\") (calm OR sleep OR quiet) since:{since14} -filter:links"
         ]
       },
       {
-        category: "Frequency / 432Hz Radar",
+        category: "432Hz / Frequency Culture",
         queries: [
           "(\"432hz\" OR \"432 Hz\" OR frequency) (headphones OR sleep OR ambient OR track) since:{since14} -filter:links",
           "(\"frequency music\" OR \"healing frequency\") (\"slowed my brain\" OR sleep OR night OR headphones) since:{since14} -filter:links"
         ]
       },
       {
-        category: "Sound Healing Radar",
-        queries: [
-          "(\"sound healing\" OR \"sound bath\") (headphones OR room OR tonight OR session) since:{since14} -filter:links",
-          "(\"singing bowls\" OR \"crystal bowls\") (sleep OR ambient OR nervous OR calm) since:{since14} -filter:links"
-        ]
-      },
-      {
-        category: "Sleep Ambient Radar",
-        queries: [
-          "(\"sleep ambient\" OR \"ambient sleep\" OR \"sleep track\") (rain OR headphones OR night) since:{since7} -filter:links",
-          "(\"rain on window\" OR \"headphones in the dark\" OR \"late night headphone music\") since:{since14} -filter:links"
-        ]
-      },
-      {
-        category: "Mythology Calm Radar",
-        queries: [
-          "(mythology OR myth OR myths) (calm OR sleep OR mantra OR ambient) since:{since14} -filter:links",
-          "(\"myths and stories\" OR \"dreams feel strange lately\") (night OR sleep OR calm) since:{since14} -filter:links"
-        ]
-      },
-      {
-        category: "Delta Waves Radar",
+        category: "Delta Waves",
         queries: [
           "(\"delta waves\" OR \"theta waves\") (sleep OR headphones OR night OR ambient) since:{since14} -filter:links",
           "(\"deep sleep music\" OR \"sleep frequencies\") (delta OR theta OR ambient) since:{since14} -filter:links"
         ]
       },
       {
-        category: "Breathwork Radar",
+        category: "Sound Healing",
         queries: [
-          "(breathwork OR \"breathing exercise\") (tonight OR anxious OR headphones OR sleep) since:{since7} -filter:links",
-          "(\"trying to breathe through it\" OR \"box breathing\" OR \"slow exhales\") since:{since14} -filter:links"
+          "(\"sound healing\" OR \"sound bath\") (headphones OR room OR tonight OR session) since:{since14} -filter:links",
+          "(\"singing bowls\" OR \"crystal bowls\") (sleep OR ambient OR quiet OR calm) since:{since14} -filter:links"
         ]
       },
       {
-        category: "Late Night Ambient Radar",
+        category: "Ambient Sleep Culture",
         queries: [
-          "(\"late night\" OR 2am OR 3am) (ambient OR headphones OR rain OR sleep track) since:{since2} -filter:links",
-          "(\"night thoughts\" OR \"can't sleep\") (ambient OR mantra OR frequency OR breath) since:{since7} -filter:links"
+          "(\"sleep ambient\" OR \"ambient sleep\" OR \"sleep track\") (rain OR headphones OR night) since:{since7} -filter:links",
+          "(\"rain on window\" OR \"headphones in the dark\" OR \"late night headphone music\") since:{since14} -filter:links"
+        ]
+      },
+      {
+        category: "Myth + Calm",
+        queries: [
+          "(mythology OR myth OR myths) (calm OR sleep OR mantra OR ambient) since:{since14} -filter:links",
+          "(\"myths and stories\" OR \"dreams feel strange lately\") (night OR sleep OR calm) since:{since14} -filter:links"
+        ]
+      },
+      {
+        category: "Quiet Internet",
+        queries: [
+          "(\"quiet internet\" OR \"soft internet\" OR \"slow internet\" OR \"calm tech\") since:{since14} -filter:links",
+          "(\"internet feels too loud\" OR \"tired of the timeline\") (quiet OR soft OR calm) since:{since14} -filter:links"
+        ]
+      },
+      {
+        category: "Low Ego Wellness",
+        queries: [
+          "(\"not a guru\" OR \"still figuring this out\" OR \"small ritual\") (calm OR meditation OR breath) since:{since14} -filter:links",
+          "(\"tried this\" OR \"this helped a little\") (breathe OR sleep OR ambient OR mantra) since:{since14} -filter:links"
         ]
       },
       {
@@ -2346,14 +2455,23 @@
       "Cult Detector",
       "Reply Culture",
       "Aesthetic Match",
+      "Quote Cemetery Detector",
+      "Emotionally Alive Rooms",
+      "Late Night Calm",
       "Calm Tech Radar",
       "Ambient Creator Radar",
+      "Mantra Culture",
+      "432Hz / Frequency Culture",
+      "Delta Waves",
+      "Sound Healing",
+      "Ambient Sleep Culture",
+      "Myth + Calm",
+      "Quiet Internet",
+      "Low Ego Wellness",
       "Mantra Radar",
       "Frequency / 432Hz Radar",
-      "Sound Healing Radar",
       "Sleep Ambient Radar",
       "Mythology Calm Radar",
-      "Delta Waves Radar",
       "Breathwork Radar",
       "Late Night Ambient Radar",
       "Dreamy Founder Radar",
@@ -2375,6 +2493,11 @@
       "emotionally alive",
       "late night",
       "recurring people",
+      "personal replies",
+      "emotional depth",
+      "low ego wellness",
+      "quote cemetery risk",
+      "dead quote farm",
       "human replies",
       "soft room",
       "gravity well",
@@ -2386,15 +2509,44 @@
       "mythology",
       "mantra",
       "432hz",
+      "frequency culture",
       "breathwork",
       "delta waves",
       "sleep culture",
+      "late-night calm",
       "dreamy founder",
       "AI companions",
       "slow internet",
       "sleep/sound creators",
       "pastel visual culture"
     ];
+
+    const signatureWhispers = [
+      "quiet internet energy.",
+      "not every thread deserves your energy.",
+      "some rooms feel alive immediately.",
+      "the quieter rooms usually appear later at night.",
+      "soft discoverability, not performance."
+    ];
+
+    const tonightWhispers = [
+      "tonight mode: the quieter rooms usually appear later at night.",
+      "late-night gravity detected softly.",
+      "window rain mode is listening for human rooms.",
+      "some rooms only become visible after midnight."
+    ];
+
+    const signatureTooltips = {
+      "Calm-Tech Match": "How close this thread is to calm tech, soft internet, ambient, myth, mantra, or indie wellness culture.",
+      "Familiar Faces": "Account quality plus recurring people, repeated names, and a room that feels known over time.",
+      "Human Warmth": "Author replies, back-and-forth, real humans, and low ego conversation.",
+      "Soft Discoverability": "Visible enough to matter, small enough to avoid a viral reply black hole.",
+      "Late Night Density": "Freshness and night-active timing. The quieter rooms usually appear later at night.",
+      "Window Rain Score": "Atmosphere, aesthetic consistency, ambient texture, and soft-room feeling.",
+      "Emotional Echo": "Personal anecdotes, exhaustion, sensory details, and replies that feel felt.",
+      "Alive Room Index": "The combined sign that this is an emotionally alive room, not a passive scroll surface.",
+      "Quote Cemetery Risk": "Hashtag-heavy affirmation loops, CTA spirituality, quote farms, and no real conversation."
+    };
 
     const suggestedGravityLists = [
       "CalmTech",
@@ -2407,7 +2559,11 @@
       "GentleAI",
       "MantraFrequency",
       "SleepAmbient",
-      "BreathworkRooms"
+      "BreathworkRooms",
+      "AliveCalmRooms",
+      "SoftRooms",
+      "QuietInternet",
+      "LowEgoWellness"
     ];
 
     const storageKeys = {
@@ -2469,6 +2625,7 @@
     const sessionBadge = document.getElementById("sessionBadge");
     const sessionBadgeText = document.getElementById("sessionBadgeText");
     const endSessionBtn = document.getElementById("endSessionBtn");
+    const yunaWhisper = document.getElementById("yunaWhisper");
     const gravityModeSelect = document.getElementById("gravityModeSelect");
     const gravityRelationshipSelect = document.getElementById("gravityRelationshipSelect");
     const gravityThreadText = document.getElementById("gravityThreadText");
@@ -2478,6 +2635,11 @@
     const gravityLikesInput = document.getElementById("gravityLikesInput");
     const gravityRepliesInput = document.getElementById("gravityRepliesInput");
     const gravityHoursInput = document.getElementById("gravityHoursInput");
+    const gravityRecurringUsersInput = document.getElementById("gravityRecurringUsersInput");
+    const gravityEmotionalDepthRange = document.getElementById("gravityEmotionalDepthRange");
+    const gravityEmotionalDepthValue = document.getElementById("gravityEmotionalDepthValue");
+    const gravityToneMatchRange = document.getElementById("gravityToneMatchRange");
+    const gravityToneMatchValue = document.getElementById("gravityToneMatchValue");
     const gravityFollowerMin = document.getElementById("gravityFollowerMin");
     const gravityFollowerMax = document.getElementById("gravityFollowerMax");
     const gravityFollowerMinValue = document.getElementById("gravityFollowerMinValue");
@@ -2490,6 +2652,7 @@
     const gravityAuthorReplies = document.getElementById("gravityAuthorReplies");
     const gravityBackAndForth = document.getElementById("gravityBackAndForth");
     const gravityRealHumans = document.getElementById("gravityRealHumans");
+    const gravityLateNightActive = document.getElementById("gravityLateNightActive");
     const gravityOriginalMedia = document.getElementById("gravityOriginalMedia");
     const gravityNonPolitical = document.getElementById("gravityNonPolitical");
     const gravityNoBotHeavy = document.getElementById("gravityNoBotHeavy");
@@ -2500,6 +2663,8 @@
     const gravityScoreLabel = document.getElementById("gravityScoreLabel");
     const gravityBreakdown = document.getElementById("gravityBreakdown");
     const gravityWhy = document.getElementById("gravityWhy");
+    const gravityQuoteWarning = document.getElementById("gravityQuoteWarning");
+    const softRoomsMeta = document.getElementById("softRoomsMeta");
     const gravityOpenThreadBtn = document.getElementById("gravityOpenThreadBtn");
     const gravityOpenProfileBtn = document.getElementById("gravityOpenProfileBtn");
     const gravityCopyHandleBtn = document.getElementById("gravityCopyHandleBtn");
@@ -2850,6 +3015,8 @@
       gravityFollowerMaxValue.textContent = compactNumber(gravityFollowerMax.value);
       gravityNicheValue.textContent = gravityNicheRange.value;
       gravityAestheticValue.textContent = gravityAestheticRange.value;
+      gravityEmotionalDepthValue.textContent = gravityEmotionalDepthRange.value;
+      gravityToneMatchValue.textContent = gravityToneMatchRange.value;
     }
 
     function numericValue(input, fallback = 0) {
@@ -2899,14 +3066,18 @@
         likes: numericValue(gravityLikesInput, 0),
         replies: numericValue(gravityRepliesInput, 0),
         hours: numericValue(gravityHoursInput, 24),
+        recurringUsers: numericValue(gravityRecurringUsersInput, 0),
         followerMin,
         followerMax,
         niche: numericValue(gravityNicheRange, 0),
         aesthetic: numericValue(gravityAestheticRange, 0),
+        emotionalDepth: numericValue(gravityEmotionalDepthRange, 0),
+        toneMatch: numericValue(gravityToneMatchRange, 0),
         tags: checkedGravityTags(),
         authorReplies: gravityAuthorReplies.checked,
         backAndForth: gravityBackAndForth.checked,
         realHumans: gravityRealHumans.checked,
+        lateNightActive: gravityLateNightActive.checked,
         originalMedia: gravityOriginalMedia.checked,
         nonPolitical: gravityNonPolitical.checked,
         noBotHeavy: gravityNoBotHeavy.checked,
@@ -2916,42 +3087,114 @@
       };
     }
 
+    function countPattern(text, pattern) {
+      const matches = text.match(pattern);
+      return matches ? matches.length : 0;
+    }
+
+    function compactWordCount(text) {
+      return text.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function countEmojiLikeMarks(text) {
+      return countPattern(text, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu);
+    }
+
     function detectGravityCultureSignals(candidate) {
       const text = `${candidate.text} ${candidate.handle} ${candidate.mode} ${(candidate.tags || []).join(" ")}`.toLowerCase();
       const boosts = [];
       const risks = [];
+      const aliveSignals = [];
+      const deadSignals = [];
+      const hashtagCount = countPattern(candidate.text, /(^|\s)#[a-z0-9_]+/gi);
+      const emojiCount = countEmojiLikeMarks(candidate.text);
+      const words = compactWordCount(candidate.text);
+      const hashtagDense = hashtagCount >= 4 || (words > 0 && hashtagCount / words > 0.08);
+      const repetitiveQuoteFormat = countPattern(candidate.text, /["“”]/g) >= 4 || countPattern(candidate.text, /\n\s*\n/g) >= 2;
+      const highLikesNoConversation = candidate.likes >= 80 && candidate.replies <= 2;
+      const lowReplyDepth = candidate.replies < 5 || (!candidate.backAndForth && !candidate.realHumans);
+      const noRecurringPeople = candidate.recurringUsers <= 0 && !containsAny(text, ["same people", "regulars", "mutuals", "people know each other", "recurring"]);
 
       const boostChecks = [
+        [["felt this", "honestly", "tried this", "made my brain", "this helped a little"], "personal anecdote"],
+        [["tonight", "late night", "2am", "3am", "rain", "window", "headphones", "in the dark"], "late-night sensory"],
+        [["exhausted", "tired", "wide awake", "can't sleep", "overthinking"], "real exhaustion"],
+        [["quiet", "soft", "stillness", "breathe", "sleep", "ritual"], "human calm"],
         [["ambient", "soundscape", "headphones", "rain on window", "sleep track"], "ambient creator"],
         [["432hz", "432 hz", "frequency", "delta waves", "theta waves"], "frequency room"],
         [["mantra", "chant", "japa"], "mantra"],
         [["breathwork", "box breathing", "slow exhales", "breathe through"], "breathwork"],
         [["myth", "mythology", "dreams", "stories for sleep"], "mythology calm"],
         [["ai companion", "gentle ai", "ai friend", "yuna"], "AI companion"],
-        [["cozy internet", "soft internet", "slow tech", "calm tech"], "cozy/calm tech"],
-        [["2am", "3am", "late night", "can't sleep", "night thoughts"], "late night"],
-        [["replying back", "mutuals", "thread feels alive", "people know each other"], "recurring people"],
+        [["cozy internet", "soft internet", "slow tech", "calm tech", "quiet internet"], "cozy/calm tech"],
+        [["replying back", "mutuals", "thread feels alive", "people know each other", "same people", "regulars"], "recurring people"],
         [["made this", "building", "solo founder", "indie"], "low ego builder"]
       ];
 
       const riskChecks = [
-        [["daily affirmation", "quote of the day", "quote repost", "type yes", "comment yes", "drop a ❤️", "rt if"], "engagement bait / quote spam"],
-        [["guru", "high vibe only", "manifest your dream life", "law of attraction", "spiritual awakening course"], "fake spirituality"],
+        [["daily affirmation", "daily wisdom", "quote of the day", "quote repost", "write this before sleep"], "generic affirmation loop"],
+        [["type yes", "comment yes", "comment \"yes\"", "repost if", "rt if", "drop a", "claim it"], "CTA spirituality"],
+        [["manifest abundance", "millionaire mindset", "the universe will", "high vibration only", "high vibe only"], "billionaire/spirituality crossover"],
+        [["guru", "manifest your dream life", "law of attraction", "spiritual awakening course"], "fake spirituality"],
         [["download now", "install now", "free trial", "limited time", "link in bio", "dm me"], "obvious promotion"],
         [["unlock your potential", "transform your life", "deeply resonate", "ancient wisdom reveals"], "polished AI/corporate tone"],
-        [["corporate wellness", "enterprise mindfulness", "b2b wellness"], "corporate wellness"]
+        [["corporate wellness", "enterprise mindfulness", "b2b wellness", "yoga magazine"], "corporate wellness"],
+        [["ai-generated", "ai generated", "generated image", "cosmic aura", "spiritual image"], "AI spiritual image spam"]
       ];
 
       boostChecks.forEach(([words, label]) => {
-        if (containsAny(text, words)) boosts.push(label);
+        if (containsAny(text, words)) {
+          boosts.push(label);
+          aliveSignals.push(label);
+        }
       });
       riskChecks.forEach(([words, label]) => {
-        if (containsAny(text, words)) risks.push(label);
+        if (containsAny(text, words)) {
+          risks.push(label);
+          deadSignals.push(label);
+        }
       });
+
+      if (candidate.recurringUsers >= 2) aliveSignals.push("recurring familiar people");
+      if (candidate.emotionalDepth >= 70) aliveSignals.push("emotional depth");
+      if (candidate.toneMatch >= 70) aliveSignals.push("emotional tone match");
+      if (candidate.lateNightActive || containsAny(text, ["2am", "3am", "late night", "tonight"])) aliveSignals.push("late-night active room");
+      if (candidate.backAndForth && candidate.realHumans) aliveSignals.push("people replying to each other");
+      if (hashtagDense) deadSignals.push("high hashtag density");
+      if (emojiCount >= 4) deadSignals.push("emoji spam");
+      if (repetitiveQuoteFormat) deadSignals.push("repetitive quote formatting");
+      if (highLikesNoConversation) deadSignals.push("high likes + no conversation");
+      if (lowReplyDepth) deadSignals.push("low reply depth");
+      if (noRecurringPeople) deadSignals.push("no recurring users");
+
+      const uniqueAlive = [...new Set(aliveSignals)];
+      const uniqueDead = [...new Set(deadSignals)];
+      const deadQuoteScore = boundedScore(
+        uniqueDead.length * 11 +
+        hashtagCount * 5 +
+        emojiCount * 3 +
+        (highLikesNoConversation ? 20 : 0) +
+        (lowReplyDepth ? 14 : 0) +
+        (noRecurringPeople ? 10 : 0) +
+        (candidate.followers > 120000 && candidate.replies < 8 ? 16 : 0)
+      );
+      const emotionalScore = boundedScore(
+        candidate.emotionalDepth * 0.48 +
+        candidate.toneMatch * 0.22 +
+        Math.min(uniqueAlive.length * 8, 36) +
+        Math.min(candidate.recurringUsers * 6, 24) +
+        (candidate.lateNightActive ? 8 : 0)
+      );
 
       return {
         boosts: [...new Set(boosts)],
-        risks: [...new Set(risks)]
+        risks: [...new Set(risks)],
+        aliveSignals: uniqueAlive,
+        deadSignals: uniqueDead,
+        deadQuoteScore,
+        emotionalScore,
+        hashtagCount,
+        emojiCount
       };
     }
 
@@ -2961,22 +3204,32 @@
       const likeScore = metricBandScore(candidate.likes, 20, 200, 8, 420);
       const replyCountScore = metricBandScore(candidate.replies, 5, 30, 2, 60);
       const accountQuality = boundedScore((followerScore * 0.68) + (candidate.originalMedia ? 18 : 0) + (candidate.tags.length >= 2 ? 14 : 0));
-      const replyCulture = boundedScore((replyCountScore * 0.34) + (candidate.authorReplies ? 24 : 0) + (candidate.backAndForth ? 22 : 0) + (candidate.realHumans ? 20 : 0));
+      const replyCulture = boundedScore((replyCountScore * 0.3) + (candidate.authorReplies ? 21 : 0) + (candidate.backAndForth ? 20 : 0) + (candidate.realHumans ? 18 : 0) + Math.min(candidate.recurringUsers * 6, 22) + (candidate.lateNightActive ? 7 : 0));
       const visibility = boundedScore((likeScore * 0.52) + (replyCountScore * 0.48));
       const freshness = freshnessScore(candidate.hours);
       const aestheticAlignment = boundedScore((candidate.aesthetic * 0.7) + Math.min(candidate.tags.length * 8, 30));
-      const aliveRoom = boundedScore((replyCulture * 0.48) + Math.min(cultureSignals.boosts.length * 10, 34) + (candidate.backAndForth ? 10 : 0) + (candidate.authorReplies ? 8 : 0));
+      const emotionalDepth = cultureSignals.emotionalScore;
+      const quoteCemeteryRisk = cultureSignals.deadQuoteScore;
+      const aliveRoom = boundedScore(
+        replyCulture * 0.34 +
+        emotionalDepth * 0.32 +
+        Math.min(cultureSignals.aliveSignals.length * 7, 32) +
+        (candidate.backAndForth ? 8 : 0) +
+        (candidate.authorReplies ? 6 : 0) -
+        quoteCemeteryRisk * 0.22
+      );
       const passiveGiantPenalty = candidate.followers > 150000 && candidate.replies < 5 ? 12 : candidate.followers > 300000 ? 10 : 0;
       const deadReplyPenalty = candidate.likes > 120 && candidate.replies < 3 ? 14 : 0;
-      const penalties = (candidate.nonPolitical ? 0 : 18) + (candidate.noBotHeavy ? 0 : 24) + (cultureSignals.risks.length * 9) + passiveGiantPenalty + deadReplyPenalty;
+      const penalties = (candidate.nonPolitical ? 0 : 18) + (candidate.noBotHeavy ? 0 : 24) + (cultureSignals.risks.length * 9) + (quoteCemeteryRisk * 0.42) + passiveGiantPenalty + deadReplyPenalty;
       const total = boundedScore(
-        candidate.niche * 0.21 +
+        candidate.niche * 0.17 +
         accountQuality * 0.14 +
-        replyCulture * 0.2 +
-        visibility * 0.13 +
+        replyCulture * 0.18 +
+        visibility * 0.1 +
         freshness * 0.08 +
-        aestheticAlignment * 0.1 +
-        aliveRoom * 0.14 -
+        aestheticAlignment * 0.09 +
+        emotionalDepth * 0.13 +
+        aliveRoom * 0.11 -
         penalties
       );
 
@@ -2984,32 +3237,50 @@
         score: total,
         decision: total >= 70 ? "recommended" : total >= 50 ? "watch" : "skip",
         breakdown: {
-          "niche": boundedScore(candidate.niche),
-          "account": accountQuality,
-          "reply culture": replyCulture,
-          "visibility": visibility,
-          "freshness": freshness,
-          "aesthetic": aestheticAlignment,
-          "alive room": aliveRoom
+          "Calm-Tech Match": boundedScore(candidate.niche),
+          "Familiar Faces": accountQuality,
+          "Human Warmth": replyCulture,
+          "Soft Discoverability": visibility,
+          "Late Night Density": freshness,
+          "Window Rain Score": aestheticAlignment,
+          "Emotional Echo": emotionalDepth,
+          "Alive Room Index": aliveRoom,
+          "Quote Cemetery Risk": quoteCemeteryRisk
         },
         penalties,
+        quoteCemeteryRisk,
+        aliveRoom,
+        emotionalDepth,
         cultureSignals
       };
     }
 
     function gravityWhyText(candidate, result) {
+      const cemeteryWarning = result.quoteCemeteryRisk >= 55
+        ? ` Quote cemetery warning: ${result.cultureSignals.deadSignals.slice(0, 3).join(", ")}.`
+        : "";
       if (result.score < 50) {
-        return "Skip this one tonight. The thread is not giving enough social gravity, or it risks low-quality / chaotic attention.";
+        return `Skip this one tonight. The thread is not giving enough social gravity, or it risks passive quote-farm attention.${cemeteryWarning}`;
       }
       const reasons = [];
       if (candidate.followers >= candidate.followerMin && candidate.followers <= candidate.followerMax) reasons.push("mid-size account range");
       if (candidate.replies >= 5 && candidate.replies <= 30) reasons.push("visible reply lane");
       if (candidate.authorReplies) reasons.push("author is likely present");
+      if (candidate.recurringUsers >= 2) reasons.push(`${candidate.recurringUsers} recurring people`);
+      if (candidate.emotionalDepth >= 70) reasons.push("emotional depth");
+      if (candidate.toneMatch >= 70) reasons.push("tone match");
+      if (candidate.lateNightActive) reasons.push("late-night activity");
       if (candidate.hours <= 6) reasons.push("fresh window");
       if (candidate.tags.length) reasons.push(`aesthetic match: ${candidate.tags.slice(0, 3).join(", ")}`);
       if (result.cultureSignals?.boosts?.length) reasons.push(`culture: ${result.cultureSignals.boosts.slice(0, 3).join(", ")}`);
       const riskNote = result.cultureSignals?.risks?.length ? ` Watch for ${result.cultureSignals.risks.slice(0, 2).join(", ")}.` : "";
-      return `This thread matters because it has ${reasons.join(", ") || "enough aligned signals"} without needing a viral reply black hole.${riskNote}`;
+      const atmosphere = [];
+      if (result.aliveRoom >= 76) atmosphere.push("some rooms feel alive immediately");
+      if (candidate.lateNightActive || containsAny(`${candidate.text} ${(candidate.tags || []).join(" ")}`.toLowerCase(), ["late night", "2am", "3am", "tonight"])) atmosphere.push("late-night gravity detected");
+      if (candidate.recurringUsers >= 2 || result.cultureSignals?.aliveSignals?.includes("recurring familiar people")) atmosphere.push("familiar people detected");
+      if (result.cultureSignals?.aliveSignals?.some((signal) => /low ego|human calm|personal anecdote/i.test(signal))) atmosphere.push("low ego room");
+      const signatureNote = atmosphere.length ? ` ${atmosphere.slice(0, 2).join(". ")}.` : " quiet internet energy.";
+      return `This thread matters because it has ${reasons.join(", ") || "enough aligned signals"} without needing a viral reply black hole.${riskNote}${cemeteryWarning}${signatureNote}`;
     }
 
     function containsAny(text, words) {
@@ -3304,6 +3575,12 @@
         .replace(/\bcompound\b/gi, "add up")
         .replace(/\bspiritual alignment\b/gi, "the room feeling quieter")
         .replace(/\bancient mantra deeply calms\b/gi, "this mantra slowed")
+        .replace(/\bdeeply heals the nervous system\b/gi, "helped a little")
+        .replace(/\bmay the universe guide your soul tonight\b/gi, "hope tonight gets a little quieter")
+        .replace(/\bthe universe will provide\b/gi, "maybe one small thing helps")
+        .replace(/\bmanifest abundance\b/gi, "make a little room")
+        .replace(/\bhigh vibration only\b/gi, "quiet helps")
+        .replace(/\bmillionaire mindset\b/gi, "less noise")
         .replace(/\bhigh vibrational\b/gi, "quiet")
         .replace(/\btransform your life\b/gi, "help a little")
         .replace(/\bunlock your potential\b/gi, "make the next minute easier")
@@ -3829,13 +4106,43 @@
     }
 
     function breakdownRow(label, value) {
+      const isRisk = /risk|cemetery/i.test(label);
+      const tooltip = signatureTooltips[label] || "Yuna internal room signal.";
       return `
-        <div class="breakdown-row">
+        <div class="breakdown-row ${isRisk ? "risk-row" : ""}" title="${escapeHtml(tooltip)}">
           <span>${escapeHtml(label)}</span>
           <span class="bar-shell"><span class="bar-fill" style="width: ${boundedScore(value)}%"></span></span>
           <span>${boundedScore(value)}</span>
         </div>
       `;
+    }
+
+    function setSoftRoomsMeta(lines) {
+      softRoomsMeta.innerHTML = lines.map((line) => `<p>${escapeHtml(line)}</p>`).join("");
+    }
+
+    function renderSoftRoomsMeta(candidate, result) {
+      if (!candidate || !result) {
+        setSoftRoomsMeta([
+          "some rooms feel alive immediately.",
+          "score a thread to reveal the softer signals."
+        ]);
+        return;
+      }
+
+      const aliveSignals = result.cultureSignals?.aliveSignals || [];
+      const deadSignals = result.cultureSignals?.deadSignals || [];
+      const lines = [
+        `Quiet Gravity: ${result.score}/100 · ${result.decision}`,
+        `Alive Room Index: ${result.aliveRoom} · Familiar Faces: ${candidate.recurringUsers || 0}`,
+        `Emotional Echo: ${result.emotionalDepth} · Quote Cemetery Risk: ${result.quoteCemeteryRisk}`,
+        aliveSignals.length ? `soft signal: ${aliveSignals.slice(0, 4).join(", ")}` : "soft signal: waiting for human warmth",
+        deadSignals.length ? `cemetery dust: ${deadSignals.slice(0, 3).join(", ")}` : "cemetery dust: low",
+        candidate.lateNightActive || containsAny(`${candidate.text} ${(candidate.tags || []).join(" ")}`.toLowerCase(), ["late night", "2am", "3am", "tonight"])
+          ? "window rain mode: late-night gravity detected."
+          : "window rain mode: quiet, not active yet."
+      ];
+      setSoftRoomsMeta(lines);
     }
 
     function renderGravityScore() {
@@ -3844,6 +4151,9 @@
         gravityScoreLabel.textContent = "Score a thread to decide whether to skip, watch, or reply.";
         gravityBreakdown.innerHTML = "";
         gravityWhy.textContent = "The console is now a map first, reply tool second.";
+        gravityQuoteWarning.hidden = true;
+        gravityQuoteWarning.textContent = "";
+        renderSoftRoomsMeta(null, null);
         gravityGenerateRepliesBtn.disabled = true;
         gravityAddCandidateBtn.disabled = true;
         gravitySaveSessionBtn.disabled = true;
@@ -3854,12 +4164,18 @@
       const { candidate, result } = gravityCurrentScore;
       gravityScoreValue.textContent = result.score;
       gravityScoreLabel.textContent = result.decision === "recommended"
-        ? "recommended gravity well"
+        ? "quiet gravity well"
         : result.decision === "watch"
-          ? "watch before replying"
+          ? "watch the room first"
           : "skip this thread";
       gravityBreakdown.innerHTML = Object.entries(result.breakdown).map(([label, value]) => breakdownRow(label, value)).join("");
       gravityWhy.textContent = gravityWhyText(candidate, result);
+      const deadSignals = result.cultureSignals?.deadSignals || [];
+      gravityQuoteWarning.hidden = result.quoteCemeteryRisk < 45 && deadSignals.length === 0;
+      gravityQuoteWarning.textContent = gravityQuoteWarning.hidden
+        ? ""
+        : `Quote cemetery warning: ${deadSignals.slice(0, 4).join(", ") || "passive quote-farm pattern"}. Look for real back-and-forth before replying.`;
+      renderSoftRoomsMeta(candidate, result);
       gravityGenerateRepliesBtn.disabled = result.score < 50;
       gravityAddCandidateBtn.disabled = false;
       gravitySaveSessionBtn.disabled = false;
@@ -3940,7 +4256,8 @@
             <h3>${escapeHtml(note.handle)} ${note.score !== null && note.score !== undefined ? `<span class="pill">${note.score}</span>` : ""}</h3>
             <p>${escapeHtml(note.status)} · ${escapeHtml(note.vibe || "no cluster")} · ${formatDate(note.createdAt)}</p>
             <p>${escapeHtml(note.text || "No private note yet.")}</p>
-            ${note.replyCulture !== null && note.replyCulture !== undefined ? `<p>reply culture ${escapeHtml(String(note.replyCulture))} · ${escapeHtml(note.list || "no list")}</p>` : ""}
+            ${note.replyCulture !== null && note.replyCulture !== undefined ? `<p>Human Warmth ${escapeHtml(String(note.replyCulture))} · ${escapeHtml(note.list || "no list")}</p>` : ""}
+            ${note.aliveRoom !== null && note.aliveRoom !== undefined ? `<p>Alive Room Index ${escapeHtml(String(note.aliveRoom))} · Quote Cemetery Risk ${escapeHtml(String(note.quoteCemeteryRisk ?? 0))} · Familiar Faces ${escapeHtml(String(note.recurringUsers ?? 0))}</p>` : ""}
           </article>
         `).join("")
         : '<p class="empty">Account notes stay local on this browser.</p>';
@@ -3955,6 +4272,29 @@
       renderGravityAccountNotes();
     }
 
+    function applyYunaSignatureLayer() {
+      const hour = new Date().getHours();
+      const isTonight = hour < 5 || hour >= 23;
+      if (isTonight) {
+        document.body.classList.add("yuna-night-mode");
+        yunaWhisper.textContent = tonightWhispers[hour % tonightWhispers.length];
+        yunaWhisper.title = "Tonight Mode · window rain mode";
+        return;
+      }
+      yunaWhisper.textContent = signatureWhispers[hour % signatureWhispers.length];
+      yunaWhisper.title = "Yuna signature layer";
+    }
+
+    function gravityStatusLine(result) {
+      if (result.quoteCemeteryRisk >= 55) return "Quote Cemetery Risk high. not every thread deserves your energy.";
+      if (result.score >= 70 && result.cultureSignals?.aliveSignals?.includes("recurring familiar people")) return "Familiar people detected.";
+      if (result.score >= 70 && result.cultureSignals?.aliveSignals?.includes("late-night active room")) return "Late-night gravity detected.";
+      if (result.score >= 70 && result.aliveRoom >= 76) return "Some rooms feel alive immediately.";
+      if (result.score >= 70) return "Quiet Gravity is strong here.";
+      if (result.score >= 50) return "Watch the room first. Soft Signal is forming.";
+      return "Not every thread deserves your energy.";
+    }
+
     function scoreGravityThread() {
       const candidate = readGravityCandidate();
       const result = scoreGravityCandidate(candidate);
@@ -3967,7 +4307,7 @@
         gravityAccountNoteVibeInput.value = candidate.tags.slice(0, 3).join(", ");
       }
       renderGravityAll();
-      setGravityStatus(result.score >= 70 ? "Recommended gravity well." : result.score >= 50 ? "Watch this thread before replying." : "Skip this thread tonight.");
+      setGravityStatus(gravityStatusLine(result));
     }
 
     function generateGravityReplies() {
@@ -4002,6 +4342,9 @@
         decision: result.decision,
         why: gravityWhyText(candidate, result),
         cultureSignals: result.cultureSignals,
+        aliveRoom: result.aliveRoom,
+        emotionalDepth: result.emotionalDepth,
+        quoteCemeteryRisk: result.quoteCemeteryRisk,
         inactive: candidate.hours > 24 || candidate.replies < 5 || !candidate.authorReplies
       };
     }
@@ -4066,7 +4409,10 @@
         vibe: gravityAccountNoteVibeInput.value.trim() || (snapshot?.tags || checkedGravityTags()).slice(0, 3).join(", "),
         text: gravityAccountNoteText.value.trim(),
         score: snapshot?.score ?? null,
-        replyCulture: gravityCurrentScore?.result.breakdown["reply culture"] ?? null,
+        replyCulture: gravityCurrentScore?.result.breakdown["Human Warmth"] ?? null,
+        aliveRoom: gravityCurrentScore?.result.aliveRoom ?? null,
+        quoteCemeteryRisk: gravityCurrentScore?.result.quoteCemeteryRisk ?? null,
+        recurringUsers: Math.max(snapshot?.recurringUsers ?? 0, numericValue(gravityRecurringUsersInput, 0)),
         list: gravityListSelect.value || "",
         url: snapshot?.url || gravityUrlInput.value.trim(),
         createdAt: new Date().toISOString()
@@ -4082,6 +4428,8 @@
     function markGravityRecurringAccount() {
       const snapshot = currentGravitySnapshot();
       if (!snapshot) return;
+      gravityRecurringUsersInput.value = String(Math.max(numericValue(gravityRecurringUsersInput, 0), 2));
+      gravityLateNightActive.checked = snapshot.lateNightActive || containsAny(`${snapshot.text} ${(snapshot.tags || []).join(" ")}`.toLowerCase(), ["late night", "2am", "3am", "tonight"]);
       gravityAccountNoteHandleInput.value = snapshot.handle;
       gravityAccountNoteStatusSelect.value = "good small room";
       gravityAccountNoteVibeInput.value = [...new Set([...(snapshot.tags || []), ...(snapshot.cultureSignals?.boosts || [])])]
@@ -4439,7 +4787,9 @@
       gravityFollowerMin,
       gravityFollowerMax,
       gravityNicheRange,
-      gravityAestheticRange
+      gravityAestheticRange,
+      gravityEmotionalDepthRange,
+      gravityToneMatchRange
     ].forEach((input) => input.addEventListener("input", syncGravityRangeLabels));
 
     generateBtn.addEventListener("click", () => generateReplies("base"));
@@ -4519,6 +4869,7 @@
     populateGravityControls();
     populateSelectors();
     populateFounderSelectors();
+    applyYunaSignatureLayer();
     hydrateSessionState();
     renderGravityAll();
     updateTweetCount();

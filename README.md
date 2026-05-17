@@ -26,7 +26,11 @@ Threads under 50 should be skipped. Threads over 70 are recommended gravity well
 
 Account notes create a private local memory for handles, vibe clusters, reply culture impressions, and whether an account is worth watching again.
 
-The wellness radar now focuses on emotionally alive calm-tech rooms instead of generic wellness SEO. It includes mantra, 432Hz/frequency, sound healing, sleep ambient, mythology calm, delta waves, breathwork, and late-night ambient clusters. Gravity scoring boosts active human reply culture, recurring people, ambient creators, mythology/mantra signals, soft/cozy internet, and low-ego builders while reducing score for quote spam, fake spirituality, giant passive accounts, dead replies, and obvious promotion.
+The wellness radar now focuses on emotionally alive calm-tech rooms instead of generic wellness SEO. It includes Quote Cemetery Detector, Emotionally Alive Rooms, Late Night Calm, Mantra Culture, 432Hz/Frequency Culture, Delta Waves, Sound Healing, Ambient Sleep Culture, Myth + Calm, Quiet Internet, and Low Ego Wellness clusters. Gravity scoring boosts active human reply culture, recurring people, emotional depth, late-night activity, ambient creators, mythology/mantra signals, soft/cozy internet, and low-ego builders while reducing score for quote spam, fake spirituality, hashtag-heavy affirmation loops, CTA spirituality, giant passive accounts, dead replies, and obvious promotion.
+
+The Gravity Map includes a quote cemetery warning, recurring users count, emotional depth score, tone match, alive room score, and local recurring familiar account notes. It is meant to separate living calm internet rooms from recycled Pinterest-style wellness content before any reply is drafted.
+
+The interface also carries a subtle Yuna signature layer: Quiet Gravity, Alive Room Index, Familiar Faces, Emotional Echo, Human Warmth, Soft Signal, and a small hidden soft rooms panel for reading the atmosphere of a thread without turning it into a growth dashboard.
 
 ## Reply Engine Style
 
