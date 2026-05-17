@@ -26,6 +26,8 @@ Threads under 50 should be skipped. Threads over 70 are recommended gravity well
 
 Account notes create a private local memory for handles, vibe clusters, reply culture impressions, and whether an account is worth watching again.
 
+The wellness radar now focuses on emotionally alive calm-tech rooms instead of generic wellness SEO. It includes mantra, 432Hz/frequency, sound healing, sleep ambient, mythology calm, delta waves, breathwork, and late-night ambient clusters. Gravity scoring boosts active human reply culture, recurring people, ambient creators, mythology/mantra signals, soft/cozy internet, and low-ego builders while reducing score for quote spam, fake spirituality, giant passive accounts, dead replies, and obvious promotion.
+
 ## Reply Engine Style
 
 The reply engine favors short, human-feeling replies over polished content. It avoids startup guru language, LinkedIn tone, engagement bait, therapy-speak, sales language, hashtags, and overly cinematic wellness copy.

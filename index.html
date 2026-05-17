@@ -1048,6 +1048,14 @@
           </div>
           <div class="score-grid" id="gravityBreakdown"></div>
           <div class="history-run" id="gravityWhy">The console is now a map first, reply tool second.</div>
+          <div class="variant-actions" aria-label="Gravity quick actions">
+            <button class="ghost small" id="gravityOpenThreadBtn" type="button" disabled>Open thread</button>
+            <button class="ghost small" id="gravityOpenProfileBtn" type="button" disabled>Open profile</button>
+            <button class="ghost small" id="gravityCopyHandleBtn" type="button" disabled>Copy handle</button>
+            <button class="ghost small" id="gravitySaveCalmTechBtn" type="button" disabled>Save calm-tech</button>
+            <button class="ghost small" id="gravitySaveFrequencyBtn" type="button" disabled>Save mantra/frequency</button>
+            <button class="ghost small" id="gravityMarkRecurringBtn" type="button" disabled>Mark recurring</button>
+          </div>
         </section>
 
         <section class="panel" aria-labelledby="gravity-replies-title">
@@ -1674,11 +1682,55 @@
 
     const contextualReplies = [
       {
+        words: ["432hz", "432 hz", "frequency", "delta waves", "theta waves", "binaural"],
+        category: "meditation",
+        score: 18,
+        replies: [
+          "this one actually slowed my brain down for a second.",
+          "tried this kind of thing with headphones in the dark and it makes more sense there.",
+          "felt the shift around the second layer. not dramatic, just noticeably quieter.",
+          "late night frequency stuff is either nothing or suddenly the room changes a little."
+        ]
+      },
+      {
+        words: ["ambient", "soundscape", "sleep track", "headphones", "rain on window", "sound bath", "singing bowls"],
+        category: "can't sleep",
+        score: 18,
+        replies: [
+          "rain on window + this track honestly.",
+          "late night headphone music hits different.",
+          "this kinda became part of my sleep routine accidentally.",
+          "the room feels different when the low layer comes in."
+        ]
+      },
+      {
+        words: ["mantra", "chant", "myth", "mythology", "story for sleep", "dreams"],
+        category: "meditation",
+        score: 17,
+        replies: [
+          "i like when mantra stuff feels lived-in, not like a lecture.",
+          "myths before sleep make the night feel less flat somehow.",
+          "this feels better when it is treated like a small ritual, not a whole personality.",
+          "the story layer is what makes it stay with me a bit."
+        ]
+      },
+      {
+        words: ["breathwork", "box breathing", "slow exhales", "breathe through", "breathing exercise"],
+        category: "need calm",
+        score: 17,
+        replies: [
+          "slow exhales are annoyingly effective sometimes.",
+          "i always forget how much the body changes before the mind does.",
+          "this is the kind of thing that sounds too simple until you actually need it.",
+          "one longer exhale can buy a tiny bit of room."
+        ]
+      },
+      {
         words: ["sleep", "insomnia", "awake", "night"],
         category: "can't sleep",
         replies: [
-          "If sleep is not here yet, I hope rest can still sit beside you for a while.",
-          "Long nights can make thoughts feel bigger. Wishing you one small soft landing."
+          "if sleep is not here yet, even lying there softer counts a little.",
+          "long nights make every thought louder. hope one thing gets quieter soon."
         ]
       },
       {
@@ -1735,69 +1787,97 @@
       {
         category: "can't sleep",
         queries: [
-          "(\"can't sleep\" OR insomnia OR \"wide awake\") since:{since7} -filter:links",
-          "(\"trying to sleep\" OR \"can't relax tonight\") since:{since7} -filter:links"
+          "(\"can't sleep\" OR \"wide awake\") (headphones OR rain OR ambient OR breath) since:{since2} -filter:links",
+          "(\"trying to sleep\" OR \"can't relax tonight\") (track OR sound OR breathing) since:{since7} -filter:links"
         ]
       },
       {
         category: "overthinking",
         queries: [
-          "(\"overthinking at night\" OR \"racing thoughts\" OR \"can't shut my brain\") since:{since7}",
-          "(\"late night\" OR 2am OR 3am) (overthinking OR insomnia OR breath OR calm) since:{since7} -filter:links"
+          "(\"overthinking at night\" OR \"racing thoughts\" OR \"can't shut my brain\") (music OR headphones OR breath) since:{since7}",
+          "(\"late night\" OR 2am OR 3am) (overthinking OR insomnia OR ambient OR calm) since:{since2} -filter:links"
         ]
       },
       {
-        category: "soft internet",
+        category: "Calm Tech Radar",
         queries: [
-          "(\"calm tech\" OR \"soft internet\" OR \"slow tech\" OR \"gentle tech\" OR \"digital calm\") since:{since14}",
-          "(\"app fatigue\" OR \"internet feels too loud\") (calm OR sleep OR meditation) since:{since14}"
+          "(\"calm tech\" OR \"soft internet\" OR \"slow tech\" OR \"gentle tech\") (builder OR creator OR app) since:{since14} -filter:links",
+          "(\"app fatigue\" OR \"internet feels too loud\") (calm OR sleep OR ambient) since:{since14} -filter:links"
         ]
       },
       {
-        category: "meditation",
+        category: "Mantra Radar",
         queries: [
-          "(\"meditation app\" OR \"tried meditation app\") (calm OR sleep OR tonight) since:{since14}",
-          "(\"looking for meditation\" OR \"meditation helped me\") since:{since14} -filter:links"
+          "(mantra OR mantras) (night OR headphones OR sleep OR \"morning walk\") since:{since14} -filter:links",
+          "(\"this mantra\" OR \"mantra loop\" OR \"mantra music\") (calm OR sleep OR focus) since:{since14} -filter:links"
         ]
       },
       {
-        category: "need calm",
+        category: "Frequency / 432Hz Radar",
         queries: [
-          "(\"need peace\" OR \"need calm\" OR \"need a calm app\") since:{since7} -filter:links",
-          "(\"trying to breathe through it\" OR \"breathing exercises\") since:{since14} -filter:links"
+          "(\"432hz\" OR \"432 Hz\" OR frequency) (headphones OR sleep OR ambient OR track) since:{since14} -filter:links",
+          "(\"frequency music\" OR \"healing frequency\") (\"slowed my brain\" OR sleep OR night OR headphones) since:{since14} -filter:links"
         ]
       },
       {
-        category: "loneliness",
+        category: "Sound Healing Radar",
         queries: [
-          "(\"feel so alone tonight\" OR \"wish life was quieter\") since:{since7} -filter:links",
-          "(\"late night thoughts\" OR \"night thoughts\") (alone OR lonely OR quiet) since:{since7}"
+          "(\"sound healing\" OR \"sound bath\") (headphones OR room OR tonight OR session) since:{since14} -filter:links",
+          "(\"singing bowls\" OR \"crystal bowls\") (sleep OR ambient OR nervous OR calm) since:{since14} -filter:links"
         ]
       },
       {
-        category: "gentle ai",
+        category: "Sleep Ambient Radar",
         queries: [
-          "(\"gentle ai\" OR \"ai companion\") (calm OR sleep OR meditation) since:{since14}",
-          "(\"one time\" OR \"no ads\") (app OR meditation OR calm) since:{since14}"
+          "(\"sleep ambient\" OR \"ambient sleep\" OR \"sleep track\") (rain OR headphones OR night) since:{since7} -filter:links",
+          "(\"rain on window\" OR \"headphones in the dark\" OR \"late night headphone music\") since:{since14} -filter:links"
         ]
       },
       {
-        category: "dream / myth",
+        category: "Mythology Calm Radar",
         queries: [
-          "(\"dreams feel strange lately\" OR \"night thoughts\") since:{since7}",
-          "(\"hidden room\" OR mythology OR mantra OR ambient) (app OR meditation OR sleep) since:{since14}"
+          "(mythology OR myth OR myths) (calm OR sleep OR mantra OR ambient) since:{since14} -filter:links",
+          "(\"myths and stories\" OR \"dreams feel strange lately\") (night OR sleep OR calm) since:{since14} -filter:links"
+        ]
+      },
+      {
+        category: "Delta Waves Radar",
+        queries: [
+          "(\"delta waves\" OR \"theta waves\") (sleep OR headphones OR night OR ambient) since:{since14} -filter:links",
+          "(\"deep sleep music\" OR \"sleep frequencies\") (delta OR theta OR ambient) since:{since14} -filter:links"
+        ]
+      },
+      {
+        category: "Breathwork Radar",
+        queries: [
+          "(breathwork OR \"breathing exercise\") (tonight OR anxious OR headphones OR sleep) since:{since7} -filter:links",
+          "(\"trying to breathe through it\" OR \"box breathing\" OR \"slow exhales\") since:{since14} -filter:links"
+        ]
+      },
+      {
+        category: "Late Night Ambient Radar",
+        queries: [
+          "(\"late night\" OR 2am OR 3am) (ambient OR headphones OR rain OR sleep track) since:{since2} -filter:links",
+          "(\"night thoughts\" OR \"can't sleep\") (ambient OR mantra OR frequency OR breath) since:{since7} -filter:links"
+        ]
+      },
+      {
+        category: "AI Companion Radar",
+        queries: [
+          "(\"gentle ai\" OR \"ai companion\") (calm OR sleep OR emotional OR lonely) since:{since14} -filter:links",
+          "(\"ai friend\" OR \"ai companion\") (soft OR calm OR night OR mental health) since:{since14} -filter:links"
         ]
       }
     ];
 
     const tonightSearches = [
-      "(\"can't sleep\" OR insomnia OR \"wide awake\") since:{since7} -filter:links",
-      "(\"overthinking at night\" OR \"racing thoughts\" OR \"can't shut my brain\") since:{since7}",
-      "(\"late night\" OR 2am OR 3am) (overthinking OR insomnia OR breath OR calm) since:{since7} -filter:links",
-      "(\"trying to sleep\" OR \"can't relax tonight\") since:{since7} -filter:links",
-      "(\"feel so alone tonight\" OR \"wish life was quieter\") since:{since7} -filter:links",
-      "(\"dreams feel strange lately\" OR \"night thoughts\") since:{since7}",
-      "(\"need peace\" OR \"need calm\") since:{since7} -filter:links"
+      "(\"can't sleep\" OR \"wide awake\") (ambient OR rain OR headphones OR breath) since:{since2} -filter:links",
+      "(\"late night\" OR 2am OR 3am) (ambient OR mantra OR frequency OR sleep track) since:{since2} -filter:links",
+      "(\"rain on window\" OR \"headphones in the dark\" OR \"late night headphone music\") since:{since14} -filter:links",
+      "(\"trying to breathe through it\" OR \"slow exhales\" OR \"box breathing\") since:{since7} -filter:links",
+      "(\"dreams feel strange lately\" OR \"night thoughts\") (myth OR story OR sleep) since:{since7}",
+      "(\"this track\" OR \"this one slowed my brain\") (sleep OR ambient OR headphones) since:{since14} -filter:links",
+      "(\"432hz\" OR \"delta waves\" OR \"sound bath\") (tonight OR sleep OR headphones) since:{since14} -filter:links"
     ];
 
     const founderCategories = [
@@ -2268,6 +2348,14 @@
       "Aesthetic Match",
       "Calm Tech Radar",
       "Ambient Creator Radar",
+      "Mantra Radar",
+      "Frequency / 432Hz Radar",
+      "Sound Healing Radar",
+      "Sleep Ambient Radar",
+      "Mythology Calm Radar",
+      "Delta Waves Radar",
+      "Breathwork Radar",
+      "Late Night Ambient Radar",
       "Dreamy Founder Radar",
       "AI Companion Radar",
       "Cozy Internet Radar"
@@ -2284,12 +2372,24 @@
     ];
 
     const gravityTags = [
+      "emotionally alive",
+      "late night",
+      "recurring people",
+      "human replies",
+      "soft room",
+      "gravity well",
       "dreamy UI",
-      "ambient creators",
+      "ambient creator",
       "cozy internet",
       "calm tech",
       "indie wellness",
       "mythology",
+      "mantra",
+      "432hz",
+      "breathwork",
+      "delta waves",
+      "sleep culture",
+      "dreamy founder",
       "AI companions",
       "slow internet",
       "sleep/sound creators",
@@ -2304,7 +2404,10 @@
       "SlowInternet",
       "IndieWellness",
       "MythologyAndCalm",
-      "GentleAI"
+      "GentleAI",
+      "MantraFrequency",
+      "SleepAmbient",
+      "BreathworkRooms"
     ];
 
     const storageKeys = {
@@ -2397,6 +2500,12 @@
     const gravityScoreLabel = document.getElementById("gravityScoreLabel");
     const gravityBreakdown = document.getElementById("gravityBreakdown");
     const gravityWhy = document.getElementById("gravityWhy");
+    const gravityOpenThreadBtn = document.getElementById("gravityOpenThreadBtn");
+    const gravityOpenProfileBtn = document.getElementById("gravityOpenProfileBtn");
+    const gravityCopyHandleBtn = document.getElementById("gravityCopyHandleBtn");
+    const gravitySaveCalmTechBtn = document.getElementById("gravitySaveCalmTechBtn");
+    const gravitySaveFrequencyBtn = document.getElementById("gravitySaveFrequencyBtn");
+    const gravityMarkRecurringBtn = document.getElementById("gravityMarkRecurringBtn");
     const gravityRepliesList = document.getElementById("gravityRepliesList");
     const gravityListSelect = document.getElementById("gravityListSelect");
     const gravityListTypeSelect = document.getElementById("gravityListTypeSelect");
@@ -2807,7 +2916,47 @@
       };
     }
 
+    function detectGravityCultureSignals(candidate) {
+      const text = `${candidate.text} ${candidate.handle} ${candidate.mode} ${(candidate.tags || []).join(" ")}`.toLowerCase();
+      const boosts = [];
+      const risks = [];
+
+      const boostChecks = [
+        [["ambient", "soundscape", "headphones", "rain on window", "sleep track"], "ambient creator"],
+        [["432hz", "432 hz", "frequency", "delta waves", "theta waves"], "frequency room"],
+        [["mantra", "chant", "japa"], "mantra"],
+        [["breathwork", "box breathing", "slow exhales", "breathe through"], "breathwork"],
+        [["myth", "mythology", "dreams", "stories for sleep"], "mythology calm"],
+        [["ai companion", "gentle ai", "ai friend", "yuna"], "AI companion"],
+        [["cozy internet", "soft internet", "slow tech", "calm tech"], "cozy/calm tech"],
+        [["2am", "3am", "late night", "can't sleep", "night thoughts"], "late night"],
+        [["replying back", "mutuals", "thread feels alive", "people know each other"], "recurring people"],
+        [["made this", "building", "solo founder", "indie"], "low ego builder"]
+      ];
+
+      const riskChecks = [
+        [["daily affirmation", "quote of the day", "quote repost", "type yes", "comment yes", "drop a ❤️", "rt if"], "engagement bait / quote spam"],
+        [["guru", "high vibe only", "manifest your dream life", "law of attraction", "spiritual awakening course"], "fake spirituality"],
+        [["download now", "install now", "free trial", "limited time", "link in bio", "dm me"], "obvious promotion"],
+        [["unlock your potential", "transform your life", "deeply resonate", "ancient wisdom reveals"], "polished AI/corporate tone"],
+        [["corporate wellness", "enterprise mindfulness", "b2b wellness"], "corporate wellness"]
+      ];
+
+      boostChecks.forEach(([words, label]) => {
+        if (containsAny(text, words)) boosts.push(label);
+      });
+      riskChecks.forEach(([words, label]) => {
+        if (containsAny(text, words)) risks.push(label);
+      });
+
+      return {
+        boosts: [...new Set(boosts)],
+        risks: [...new Set(risks)]
+      };
+    }
+
     function scoreGravityCandidate(candidate) {
+      const cultureSignals = detectGravityCultureSignals(candidate);
       const followerScore = sweetSpotScore(candidate.followers, candidate.followerMin, candidate.followerMax, 1500, 90000);
       const likeScore = metricBandScore(candidate.likes, 20, 200, 8, 420);
       const replyCountScore = metricBandScore(candidate.replies, 5, 30, 2, 60);
@@ -2816,14 +2965,18 @@
       const visibility = boundedScore((likeScore * 0.52) + (replyCountScore * 0.48));
       const freshness = freshnessScore(candidate.hours);
       const aestheticAlignment = boundedScore((candidate.aesthetic * 0.7) + Math.min(candidate.tags.length * 8, 30));
-      const penalties = (candidate.nonPolitical ? 0 : 18) + (candidate.noBotHeavy ? 0 : 24);
+      const aliveRoom = boundedScore((replyCulture * 0.48) + Math.min(cultureSignals.boosts.length * 10, 34) + (candidate.backAndForth ? 10 : 0) + (candidate.authorReplies ? 8 : 0));
+      const passiveGiantPenalty = candidate.followers > 150000 && candidate.replies < 5 ? 12 : candidate.followers > 300000 ? 10 : 0;
+      const deadReplyPenalty = candidate.likes > 120 && candidate.replies < 3 ? 14 : 0;
+      const penalties = (candidate.nonPolitical ? 0 : 18) + (candidate.noBotHeavy ? 0 : 24) + (cultureSignals.risks.length * 9) + passiveGiantPenalty + deadReplyPenalty;
       const total = boundedScore(
-        candidate.niche * 0.25 +
-        accountQuality * 0.18 +
-        replyCulture * 0.22 +
-        visibility * 0.15 +
-        freshness * 0.1 +
-        aestheticAlignment * 0.1 -
+        candidate.niche * 0.21 +
+        accountQuality * 0.14 +
+        replyCulture * 0.2 +
+        visibility * 0.13 +
+        freshness * 0.08 +
+        aestheticAlignment * 0.1 +
+        aliveRoom * 0.14 -
         penalties
       );
 
@@ -2836,9 +2989,11 @@
           "reply culture": replyCulture,
           "visibility": visibility,
           "freshness": freshness,
-          "aesthetic": aestheticAlignment
+          "aesthetic": aestheticAlignment,
+          "alive room": aliveRoom
         },
-        penalties
+        penalties,
+        cultureSignals
       };
     }
 
@@ -2852,7 +3007,9 @@
       if (candidate.authorReplies) reasons.push("author is likely present");
       if (candidate.hours <= 6) reasons.push("fresh window");
       if (candidate.tags.length) reasons.push(`aesthetic match: ${candidate.tags.slice(0, 3).join(", ")}`);
-      return `This thread matters because it has ${reasons.join(", ") || "enough aligned signals"} without needing a viral reply black hole.`;
+      if (result.cultureSignals?.boosts?.length) reasons.push(`culture: ${result.cultureSignals.boosts.slice(0, 3).join(", ")}`);
+      const riskNote = result.cultureSignals?.risks?.length ? ` Watch for ${result.cultureSignals.risks.slice(0, 2).join(", ")}.` : "";
+      return `This thread matters because it has ${reasons.join(", ") || "enough aligned signals"} without needing a viral reply black hole.${riskNote}`;
     }
 
     function containsAny(text, words) {
@@ -2935,7 +3092,7 @@
               text,
               category: entry.category,
               tone: "context",
-              score: entry.category === category ? 13 : 10
+              score: entry.score || (entry.category === category ? 13 : 10)
             });
           });
         }
@@ -3145,6 +3302,11 @@
         .replace(/\bfriction\b/gi, "rough edge")
         .replace(/\bsignal\b/gi, "sign")
         .replace(/\bcompound\b/gi, "add up")
+        .replace(/\bspiritual alignment\b/gi, "the room feeling quieter")
+        .replace(/\bancient mantra deeply calms\b/gi, "this mantra slowed")
+        .replace(/\bhigh vibrational\b/gi, "quiet")
+        .replace(/\btransform your life\b/gi, "help a little")
+        .replace(/\bunlock your potential\b/gi, "make the next minute easier")
         .replace(/\s+/g, " ")
         .trim();
 
@@ -3612,6 +3774,7 @@
 
     function resolveSearchQuery(query) {
       return query
+        .replaceAll("{since2}", formatSearchDate(2))
         .replaceAll("{since7}", formatSearchDate(7))
         .replaceAll("{since14}", formatSearchDate(14));
     }
@@ -3684,6 +3847,7 @@
         gravityGenerateRepliesBtn.disabled = true;
         gravityAddCandidateBtn.disabled = true;
         gravitySaveSessionBtn.disabled = true;
+        setGravityQuickActionsDisabled(true);
         return;
       }
 
@@ -3699,6 +3863,20 @@
       gravityGenerateRepliesBtn.disabled = result.score < 50;
       gravityAddCandidateBtn.disabled = false;
       gravitySaveSessionBtn.disabled = false;
+      setGravityQuickActionsDisabled(false);
+    }
+
+    function setGravityQuickActionsDisabled(disabled) {
+      [
+        gravityOpenThreadBtn,
+        gravityOpenProfileBtn,
+        gravityCopyHandleBtn,
+        gravitySaveCalmTechBtn,
+        gravitySaveFrequencyBtn,
+        gravityMarkRecurringBtn
+      ].forEach((button) => {
+        button.disabled = disabled;
+      });
     }
 
     function renderGravityReplies() {
@@ -3823,8 +4001,32 @@
         score: result.score,
         decision: result.decision,
         why: gravityWhyText(candidate, result),
+        cultureSignals: result.cultureSignals,
         inactive: candidate.hours > 24 || candidate.replies < 5 || !candidate.authorReplies
       };
+    }
+
+    function normalizedHandle(handle) {
+      return (handle || "").trim().replace(/^@/, "");
+    }
+
+    function gravityProfileUrl(candidate = readGravityCandidate()) {
+      const handle = normalizedHandle(candidate.handle);
+      return handle ? `https://x.com/${encodeURIComponent(handle)}` : "";
+    }
+
+    function saveGravitySnapshotToList(listName, extra = {}) {
+      const snapshot = currentGravitySnapshot();
+      if (!snapshot) return;
+      if (!gravityState.lists[listName]) gravityState.lists[listName] = [];
+      gravityState.lists[listName].unshift({
+        ...snapshot,
+        ...extra
+      });
+      gravityState.lists[listName] = gravityState.lists[listName].slice(0, 80);
+      writeGravityStorage();
+      renderGravityLists();
+      setGravityStatus(`Saved to ${listName}.`);
     }
 
     function addGravityCandidateToList() {
@@ -3875,6 +4077,21 @@
       writeGravityStorage();
       renderGravityAccountNotes();
       setGravityStatus(`Saved account note for ${handle}.`);
+    }
+
+    function markGravityRecurringAccount() {
+      const snapshot = currentGravitySnapshot();
+      if (!snapshot) return;
+      gravityAccountNoteHandleInput.value = snapshot.handle;
+      gravityAccountNoteStatusSelect.value = "good small room";
+      gravityAccountNoteVibeInput.value = [...new Set([...(snapshot.tags || []), ...(snapshot.cultureSignals?.boosts || [])])]
+        .slice(0, 5)
+        .join(", ");
+      const noteText = gravityAccountNoteText.value.trim();
+      gravityAccountNoteText.value = noteText
+        ? `${noteText}\nrecurring familiar account. people seem to actually talk here.`
+        : "recurring familiar account. people seem to actually talk here.";
+      saveGravityAccountNote();
     }
 
     function addGravityListGroup() {
@@ -4173,6 +4390,37 @@
     gravityAddListBtn.addEventListener("click", addGravityListGroup);
     gravitySaveSessionBtn.addEventListener("click", saveGravitySession);
     gravitySaveAccountNoteBtn.addEventListener("click", saveGravityAccountNote);
+    gravityOpenThreadBtn.addEventListener("click", () => {
+      const snapshot = currentGravitySnapshot();
+      if (!snapshot?.url) {
+        setGravityStatus("Paste a thread URL first.");
+        return;
+      }
+      window.open(snapshot.url, "_blank", "noopener,noreferrer");
+      setGravityStatus("Opened thread in X.");
+    });
+    gravityOpenProfileBtn.addEventListener("click", () => {
+      const profileUrl = gravityProfileUrl();
+      if (!profileUrl) {
+        setGravityStatus("Add a handle first.");
+        return;
+      }
+      window.open(profileUrl, "_blank", "noopener,noreferrer");
+      setGravityStatus("Opened profile in X.");
+    });
+    gravityCopyHandleBtn.addEventListener("click", async () => {
+      const snapshot = currentGravitySnapshot();
+      if (!snapshot?.handle) return;
+      await copyText(snapshot.handle);
+      setGravityStatus("Handle copied.");
+    });
+    gravitySaveCalmTechBtn.addEventListener("click", () => {
+      saveGravitySnapshotToList("CalmTech", { quickSave: "calm-tech" });
+    });
+    gravitySaveFrequencyBtn.addEventListener("click", () => {
+      saveGravitySnapshotToList("MantraFrequency", { quickSave: "mantra-frequency" });
+    });
+    gravityMarkRecurringBtn.addEventListener("click", markGravityRecurringAccount);
     gravityClearSessionsBtn.addEventListener("click", () => {
       gravityState.sessions = [];
       writeGravityStorage();
