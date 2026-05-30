@@ -666,6 +666,138 @@
       gap: 12px;
     }
 
+    .worthiness-card {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 14px;
+      padding: 15px;
+      border: 1px solid rgba(200, 230, 255, 0.16);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 16% 0%, rgba(200, 230, 255, 0.075), transparent 42%),
+        radial-gradient(circle at 84% 12%, rgba(140, 124, 255, 0.07), transparent 44%),
+        rgba(200, 230, 255, 0.034);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 16px 36px rgba(0, 2, 12, 0.2);
+    }
+
+    .worthiness-header {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .worthiness-title {
+      margin: 0;
+      color: var(--soft);
+      font-size: 0.96rem;
+      font-weight: 680;
+      letter-spacing: 0;
+    }
+
+    .worthiness-label {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .worthiness-score {
+      display: grid;
+      min-width: 112px;
+      justify-items: end;
+      gap: 2px;
+      text-align: right;
+    }
+
+    .worthiness-score strong {
+      color: #f2f8ff;
+      font-size: 2rem;
+      line-height: 1;
+      font-weight: 680;
+    }
+
+    .worthiness-score span {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .worthiness-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .worthiness-meter {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .worthiness-meter-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.3;
+    }
+
+    .worthiness-meter-row strong {
+      color: var(--soft);
+      font-weight: 650;
+    }
+
+    .worthiness-meter .bar-fill {
+      background: linear-gradient(90deg, rgba(200, 230, 255, 0.84), rgba(201, 192, 255, 0.72));
+    }
+
+    .worthiness-body {
+      display: grid;
+      gap: 10px;
+    }
+
+    .worthiness-reasons {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--soft);
+      font-size: 0.84rem;
+      line-height: 1.42;
+    }
+
+    .worthiness-reasons li {
+      padding: 8px 10px;
+      border: 1px solid rgba(200, 230, 255, 0.1);
+      border-radius: 8px;
+      background: rgba(6, 8, 22, 0.28);
+    }
+
+    .worthiness-reasons li.is-warning {
+      border-color: rgba(243, 201, 139, 0.28);
+      color: #f4d7a8;
+      background: rgba(243, 201, 139, 0.052);
+    }
+
+    .worthiness-approach {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+
+    .worthiness-approach strong {
+      color: var(--accent);
+      font-weight: 680;
+    }
+
     .reply-card,
     .memory-card {
       padding: 15px;
@@ -1194,6 +1326,19 @@
         grid-template-columns: 1fr;
       }
 
+      .worthiness-header {
+        display: grid;
+      }
+
+      .worthiness-score {
+        justify-items: start;
+        text-align: left;
+      }
+
+      .worthiness-grid {
+        grid-template-columns: 1fr;
+      }
+
       .session-grid {
         grid-template-columns: 1fr;
       }
@@ -1547,6 +1692,7 @@
         <div class="section-head">
           <h2 id="suggestions-title">Wellness/Yuna suggestions</h2>
         </div>
+        <div class="worthiness-card" id="wellnessWorthinessCard" aria-live="polite"></div>
         <div class="reply-list" id="suggestionsList">
           <p class="empty">Paste a tweet, choose a category and tone, then generate a soft reply set.</p>
         </div>
@@ -1659,6 +1805,7 @@
           <div class="section-head">
             <h2 id="founder-suggestions-title">Indie Founder suggestions</h2>
           </div>
+          <div class="worthiness-card" id="founderWorthinessCard" aria-live="polite"></div>
           <div class="reply-list" id="founderSuggestionsList">
             <p class="empty">Paste a builder tweet, choose a category and tone, then generate a founder-native reply set.</p>
           </div>
@@ -3107,6 +3254,7 @@
     const shorterBtn = document.getElementById("shorterBtn");
     const statusEl = document.getElementById("status");
     const suggestionsList = document.getElementById("suggestionsList");
+    const wellnessWorthinessCard = document.getElementById("wellnessWorthinessCard");
     const favoritesList = document.getElementById("favoritesList");
     const historyList = document.getElementById("historyList");
     const searchRadarList = document.getElementById("searchRadarList");
@@ -3126,6 +3274,7 @@
     const founderCasualBtn = document.getElementById("founderCasualBtn");
     const founderStatusEl = document.getElementById("founderStatus");
     const founderSuggestionsList = document.getElementById("founderSuggestionsList");
+    const founderWorthinessCard = document.getElementById("founderWorthinessCard");
     const founderFavoritesList = document.getElementById("founderFavoritesList");
     const founderHistoryList = document.getElementById("founderHistoryList");
     const founderSearchRadarList = document.getElementById("founderSearchRadarList");
@@ -3703,6 +3852,327 @@
 
     function containsAny(text, words) {
       return words.some((word) => text.includes(word));
+    }
+
+    const replyWorthinessTopics = [
+      {
+        label: "indie founder",
+        categories: ["solo founder", "indie hacker", "build in public", "builder prompts", "no users yet", "launch day", "product hunt", "app store launch", "coding burnout", "vibe coding", "no-code", "founder loneliness", "revenue anxiety", "saas building", "mobile app founder", "shipping update"],
+        words: ["founder", "builder", "startup", "indie", "saas", "mvp", "launch", "launched", "ship", "shipping", "shipped", "product", "app", "users", "customer", "revenue", "mrr", "no-code", "nocode", "build in public", "product hunt", "stripe"]
+      },
+      {
+        label: "wellness",
+        categories: ["can't sleep", "overthinking", "burnout", "sadness", "soft internet", "need calm", "loneliness", "founder fatigue", "meditation"],
+        words: ["wellness", "sleep", "rest", "burnout", "anxiety", "calm", "soft", "healing", "nervous system", "breath", "breathe", "meditation", "mindful", "mindfulness", "journal", "lonely", "overthinking"]
+      },
+      {
+        label: "creator economy",
+        categories: ["creator monetization"],
+        words: ["creator", "newsletter", "content", "audience", "community", "course", "membership", "paid community", "sponsor", "monetization", "subscribers"]
+      },
+      {
+        label: "AI",
+        categories: ["app discovery", "vibe coding", "calm-tech builder"],
+        words: ["ai", "llm", "agent", "chatgpt", "model", "prompt", "automation", "cursor", "claude", "openai", "local-first", "no api"]
+      },
+      {
+        label: "mindfulness",
+        categories: ["meditation", "need calm", "soft internet"],
+        words: ["mindfulness", "mindful", "meditate", "meditation", "breathwork", "presence", "stillness", "slow", "grounding", "ritual", "mantra"]
+      }
+    ];
+
+    function escapeRegExp(value) {
+      return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function normalizeWorthinessText(value) {
+      return String(value || "").toLowerCase().replace(/[’‘]/g, "'").replace(/[“”]/g, '"');
+    }
+
+    function keywordHitCount(text, words) {
+      return words.reduce((count, word) => {
+        const keyword = normalizeWorthinessText(word).trim();
+        if (!keyword) return count;
+        if (/^[a-z0-9]+$/.test(keyword) && keyword.length <= 3) {
+          return count + (new RegExp(`\\b${escapeRegExp(keyword)}\\b`, "i").test(text) ? 1 : 0);
+        }
+        return count + (text.includes(keyword) ? 1 : 0);
+      }, 0);
+    }
+
+    function firstReplyCountMention(text) {
+      const match = text.match(/\b(\d{1,4})\s+(reply|replies|comments?)\b/i);
+      return match ? Number(match[1]) : null;
+    }
+
+    function detectWorthinessSignals(tweetText, category, scope) {
+      const lower = normalizeWorthinessText(tweetText);
+      const categoryLower = normalizeWorthinessText(category);
+      const words = compactWordCount(tweetText);
+      const linkCount = countPattern(tweetText, /(https?:\/\/|www\.|t\.co\/)/gi);
+      const replyCount = firstReplyCountMention(tweetText);
+      const question = /[?？]/.test(tweetText) || containsAny(lower, ["what do you think", "any advice", "how do you", "how would you", "curious if", "thoughts?"]);
+      const recent = containsAny(lower, ["today", "tonight", "right now", "just shipped", "just launched", "just posted", "this morning", "this week", "fresh", "day one", "launched today", "shipped today", "now live"]);
+      const activeDiscussion = question || containsAny(lower, ["thoughts", "discussion", "debate", "anyone else", "reply with", "what are you", "what did you", "share your", "tell me"]);
+      const crowded = containsAny(lower, ["viral", "blew up", "thousands of replies", "hundreds of replies", "too many replies", "ratio", "everyone is arguing", "hot take"]) || (replyCount !== null && replyCount > 80);
+      const lowReplyCount = replyCount !== null && replyCount <= 12;
+      const personal = /\b(i|i'm|i’ve|i've|we|we're|my|our)\b/i.test(lower) || containsAny(lower, ["my story", "learned this", "i learned", "i tried", "i built", "i shipped", "i felt", "been struggling"]);
+      const lesson = containsAny(lower, ["lesson learned", "learned this", "what i learned", "mistake", "takeaway", "realized", "changed my mind"]);
+      const discussionStarter = activeDiscussion || containsAny(lower, ["here's the question", "open question", "what worked", "what would you do"]);
+      const announcement = containsAny(lower, ["we're excited to announce", "big announcement", "now available", "launching our", "check out", "read more", "press release"]);
+      const linkDump = linkCount >= 2 || (linkCount >= 1 && words < 28);
+      const oneLineUpdate = words > 0 && words < 16 && !question && !personal;
+      const authentic = containsAny(lower, ["honestly", "real talk", "felt", "struggled", "hard", "messy", "personal", "vulnerable", "behind the scenes"]);
+      const reflective = containsAny(lower, ["i think", "i learned", "realized", "noticed", "reminded me", "been thinking", "reflection", "in hindsight"]);
+      const hostile = containsAny(lower, ["hate", "stupid", "idiot", "moron", "trash", "scam", "bullshit", "shut up", "destroyed", "clown"]);
+      const outrage = containsAny(lower, ["outrage", "rage bait", "engagement bait", "argument", "fight me", "cancel", "exposed", "ratio", "hot take"]);
+      const promo = containsAny(lower, ["limited time", "buy now", "sale", "discount", "download now", "sign up", "dm me", "book a call"]);
+      const categoryWords = categoryLower.split(/[^a-z0-9+.-]+/).filter((word) => word.length > 2);
+      const categoryHits = keywordHitCount(lower, categoryWords);
+      const topicMatches = replyWorthinessTopics
+        .map((topic) => {
+          const categoryMatch = topic.categories.some((topicCategory) => categoryLower.includes(topicCategory));
+          const wordHits = keywordHitCount(lower, topic.words);
+          const scopeBoost = scope === "founder" && topic.label === "indie founder" ? 1 : 0;
+          return { ...topic, categoryMatch, wordHits, total: wordHits + (categoryMatch ? 2 : 0) + scopeBoost };
+        })
+        .filter((topic) => topic.total > 0)
+        .sort((a, b) => b.total - a.total);
+
+      return {
+        lower,
+        words,
+        linkCount,
+        replyCount,
+        question,
+        recent,
+        activeDiscussion,
+        crowded,
+        lowReplyCount,
+        personal,
+        lesson,
+        discussionStarter,
+        announcement,
+        linkDump,
+        oneLineUpdate,
+        authentic,
+        reflective,
+        hostile,
+        outrage,
+        promo,
+        categoryHits,
+        bestTopic: topicMatches[0] || null
+      };
+    }
+
+    function scoreReplyWorthinessSignals(signals, scope) {
+      const visibility = boundedScore(
+        52 +
+        (signals.recent ? 18 : 0) +
+        (signals.lowReplyCount ? 14 : 0) +
+        (signals.activeDiscussion ? 12 : 0) -
+        (signals.crowded ? 28 : 0) -
+        (signals.linkDump ? 6 : 0) -
+        (signals.words < 12 && !signals.question ? 8 : 0)
+      );
+      const relevance = boundedScore(
+        38 +
+        Math.min(signals.categoryHits * 18, 34) +
+        Math.min((signals.bestTopic?.wordHits || 0) * 10, 36) +
+        (signals.bestTopic?.categoryMatch ? 12 : 0) +
+        (scope === "founder" && signals.bestTopic?.label === "indie founder" ? 8 : 0)
+      );
+      const conversationPotential = boundedScore(
+        44 +
+        (signals.question ? 22 : 0) +
+        (signals.personal ? 16 : 0) +
+        (signals.lesson ? 12 : 0) +
+        (signals.discussionStarter ? 12 : 0) -
+        (signals.announcement ? 14 : 0) -
+        (signals.linkDump ? 18 : 0) -
+        (signals.oneLineUpdate ? 12 : 0) -
+        (signals.promo ? 8 : 0)
+      );
+      const warmthFit = boundedScore(
+        58 +
+        (signals.authentic ? 13 : 0) +
+        (signals.reflective ? 12 : 0) +
+        (signals.personal ? 9 : 0) -
+        (signals.hostile ? 32 : 0) -
+        (signals.outrage ? 24 : 0) -
+        (signals.promo ? 10 : 0)
+      );
+
+      return {
+        visibility,
+        relevance,
+        conversationPotential,
+        warmthFit
+      };
+    }
+
+    function replyWorthinessStatus(score) {
+      if (score >= 90) return { icon: "🌙", label: "Exceptional" };
+      if (score >= 75) return { icon: "🌙", label: "Strong Opportunity" };
+      if (score >= 60) return { icon: "🌙", label: "Worth Considering" };
+      if (score >= 40) return { icon: "⚠", label: "Low Signal" };
+      return { icon: "❌", label: "Skip" };
+    }
+
+    function replyWorthinessReasons(signals, scores, overall) {
+      const reasons = [];
+
+      function add(text, type = "positive") {
+        if (!reasons.some((reason) => reason.text === text)) {
+          reasons.push({ text, type });
+        }
+      }
+
+      if (signals.personal) add("✓ Personal or lived-experience signal");
+      if (signals.question) add("✓ Clear question or discussion starter");
+      if (signals.lesson) add("✓ Lesson learned or reflective context");
+      if (signals.bestTopic?.label) add(`✓ Relevant to ${signals.bestTopic.label}`);
+      if (signals.recent) add("✓ Feels recent enough to join");
+      if (signals.activeDiscussion) add("✓ Active discussion cue present");
+      if (signals.lowReplyCount) add("✓ Reply count appears low enough to be seen");
+      if (signals.crowded) add("⚠ Thread may already be crowded", "warning");
+      if (signals.linkDump) add("⚠ Link-heavy post with less room to respond", "warning");
+      if (signals.announcement) add("⚠ Announcement-like post may invite less conversation", "warning");
+      if (signals.hostile || signals.outrage) add("⚠ Hostile or outrage-bait language detected", "warning");
+      if (scores.warmthFit >= 70 && !signals.hostile && !signals.outrage) add("✓ Natural fit for a warm human reply");
+      if (scores.conversationPotential >= 70) add("✓ Enough room for a meaningful reply");
+      if (overall < 40) add("❌ Better to save attention for a calmer thread", "warning");
+
+      while (reasons.length < 3 && overall >= 40) {
+        if (!reasons.some((reason) => reason.text.includes("human reply"))) add("✓ Enough context for a human reply");
+        else if (!reasons.some((reason) => reason.text.includes("selected radar"))) add("✓ Close enough to the selected radar");
+        else add("✓ Worth a slower read before drafting");
+      }
+
+      while (reasons.length < 3) {
+        add("⚠ Not enough strong signals yet", "warning");
+        add("⚠ Reply only if you have a specific human angle", "warning");
+        add("❌ Skipping is a valid attention choice", "warning");
+      }
+
+      return reasons.slice(0, 5);
+    }
+
+    function suggestedReplyApproach(signals, scores, overall, category, tone, scope) {
+      const context = `${category} ${tone}`.toLowerCase();
+      if (overall < 40) return "Skip for now";
+      if (signals.hostile || signals.outrage || overall < 60) return "Ultra Short";
+      if (scope === "founder" || containsAny(context, ["founder", "builder", "indie", "saas"])) {
+        if (containsAny(context, ["mentor", "practical"])) return "Mentor Aware";
+        return scores.conversationPotential >= 74 ? "Warm Founder" : "Supportive";
+      }
+      if (signals.question) return "Curious Question";
+      if (signals.personal || signals.reflective) return "Personal Experience";
+      if (containsAny(context, ["mentor", "helpful", "practical"])) return "Mentor Aware";
+      return "Supportive";
+    }
+
+    function calculateReplyWorthiness(tweetText, category, tone, scope = "wellness") {
+      const trimmed = tweetText.trim();
+      if (!trimmed) {
+        return {
+          hasText: false,
+          overall: null,
+          status: { icon: "🌙", label: "Local attention check" },
+          subScores: {
+            visibility: null,
+            relevance: null,
+            conversationPotential: null,
+            warmthFit: null
+          },
+          reasons: [],
+          approach: "Paste a post first"
+        };
+      }
+
+      const signals = detectWorthinessSignals(trimmed, category, scope);
+      const scores = scoreReplyWorthinessSignals(signals, scope);
+      const overall = boundedScore(
+        scores.visibility * 0.25 +
+        scores.relevance * 0.25 +
+        scores.conversationPotential * 0.3 +
+        scores.warmthFit * 0.2
+      );
+
+      return {
+        hasText: true,
+        overall,
+        status: replyWorthinessStatus(overall),
+        subScores: scores,
+        reasons: replyWorthinessReasons(signals, scores, overall),
+        approach: suggestedReplyApproach(signals, scores, overall, category, tone, scope)
+      };
+    }
+
+    function worthinessMeter(label, value) {
+      const display = value === null || value === undefined ? "--" : value;
+      const width = value === null || value === undefined ? 0 : value;
+      return `
+        <div class="worthiness-meter">
+          <div class="worthiness-meter-row">
+            <strong>${escapeHtml(label)}</strong>
+            <span>${escapeHtml(display)}/100</span>
+          </div>
+          <div class="bar-shell" aria-hidden="true">
+            <div class="bar-fill" style="width: ${width}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderReplyWorthinessCard(container, result) {
+      if (!container) return;
+      const label = result.hasText
+        ? `${result.status.icon} ${result.status.label}`
+        : "Local heuristic score from pasted text, category, and tone.";
+      const score = result.hasText ? result.overall : "--";
+      const reasons = result.hasText
+        ? result.reasons.map((reason) => `<li class="${reason.type === "warning" ? "is-warning" : ""}">${escapeHtml(reason.text)}</li>`).join("")
+        : '<li>Paste a post to decide whether this deserves attention before drafting replies.</li>';
+
+      container.innerHTML = `
+        <div class="worthiness-header">
+          <div>
+            <h3 class="worthiness-title">🌙 Reply Worthiness</h3>
+            <p class="worthiness-label">${escapeHtml(label)}</p>
+          </div>
+          <div class="worthiness-score" aria-label="Overall Score">
+            <strong>${escapeHtml(score)}</strong>
+            <span>Overall Score /100</span>
+          </div>
+        </div>
+        <div class="worthiness-grid">
+          ${worthinessMeter("Visibility", result.subScores.visibility)}
+          ${worthinessMeter("Relevance", result.subScores.relevance)}
+          ${worthinessMeter("Conversation Potential", result.subScores.conversationPotential)}
+          ${worthinessMeter("Warmth Fit", result.subScores.warmthFit)}
+        </div>
+        <div class="worthiness-body">
+          <p class="worthiness-label">Why reply?</p>
+          <ul class="worthiness-reasons">${reasons}</ul>
+          <p class="worthiness-approach"><span>Suggested approach</span><strong>${escapeHtml(result.approach)}</strong></p>
+        </div>
+      `;
+    }
+
+    function renderWellnessWorthiness() {
+      renderReplyWorthinessCard(
+        wellnessWorthinessCard,
+        calculateReplyWorthiness(tweetInput.value, categorySelect.value, toneSelect.value, "wellness")
+      );
+    }
+
+    function renderFounderWorthiness() {
+      renderReplyWorthinessCard(
+        founderWorthinessCard,
+        calculateReplyWorthiness(founderTweetInput.value, founderCategorySelect.value, founderToneSelect.value, "founder")
+      );
     }
 
     function detectKeywordCategories(tweetText) {
@@ -5223,6 +5693,7 @@
     }
 
     function renderAll() {
+      renderWellnessWorthiness();
       renderSuggestions();
       renderFavorites();
       renderHistory();
@@ -5230,6 +5701,7 @@
     }
 
     function renderFounderAll() {
+      renderFounderWorthiness();
       renderFounderSuggestions();
       renderFounderFavorites();
       renderFounderHistory();
@@ -5500,8 +5972,18 @@
       setFounderStatus("Indie Founder history cleared.");
     });
 
-    tweetInput.addEventListener("input", updateTweetCount);
-    founderTweetInput.addEventListener("input", updateFounderTweetCount);
+    tweetInput.addEventListener("input", () => {
+      updateTweetCount();
+      renderWellnessWorthiness();
+    });
+    categorySelect.addEventListener("change", renderWellnessWorthiness);
+    toneSelect.addEventListener("change", renderWellnessWorthiness);
+    founderTweetInput.addEventListener("input", () => {
+      updateFounderTweetCount();
+      renderFounderWorthiness();
+    });
+    founderCategorySelect.addEventListener("change", renderFounderWorthiness);
+    founderToneSelect.addEventListener("change", renderFounderWorthiness);
 
     document.addEventListener("keydown", (event) => {
       const meta = event.metaKey || event.ctrlKey;

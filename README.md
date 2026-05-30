@@ -94,6 +94,28 @@ Supports common founder thread archetypes like:
 
 Replies are intentionally low-ego, short, human, slightly messy, and non-salesy. Project links are only suggested when a thread explicitly asks for them.
 
+## Reply Worthiness Score
+
+Yuna includes a local Reply Worthiness panel above generated replies to help decide whether a pasted post deserves attention before drafting.
+
+The score is a lightweight browser-only heuristic, not a growth-hacking system. It looks at:
+
+- Visibility
+- Relevance to the selected radar/category
+- Conversation potential
+- Warmth fit
+
+The overall score is weighted toward meaningful conversation rather than volume:
+
+- Visibility: 25%
+- Relevance: 25%
+- Conversation Potential: 30%
+- Warmth Fit: 20%
+
+The panel also shows a few plain-language reasons and a suggested reply approach such as Warm Founder, Mentor Aware, Curious Question, Personal Experience, Ultra Short, or Supportive.
+
+Everything is calculated from the pasted text and selected local controls. No API, X integration, account, tracking, cloud storage, external service, or automation is used.
+
 ## Human Texture Controls
 
 Human Texture Controls allow replies to shift between:
