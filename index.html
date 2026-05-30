@@ -262,7 +262,7 @@
       border: 1px solid var(--line-strong);
       border-radius: 8px;
       color: var(--text);
-      background: rgba(200, 230, 255, 0.045);
+      background: rgba(200, 230, 255, 0.04);
       cursor: pointer;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
       transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
@@ -270,9 +270,9 @@
 
     button:hover:not(:disabled) {
       transform: translateY(-1px);
-      border-color: rgba(200, 230, 255, 0.48);
-      background: rgba(200, 230, 255, 0.075);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 10px 24px rgba(0, 2, 12, 0.2);
+      border-color: rgba(200, 230, 255, 0.36);
+      background: rgba(200, 230, 255, 0.07);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 10px 24px rgba(0, 2, 12, 0.18), 0 0 18px rgba(200, 230, 255, 0.035);
     }
 
     button:disabled {
@@ -364,9 +364,8 @@
     .launch-mode-pill {
       border-color: rgba(200, 230, 255, 0.26);
       color: #eaf5ff;
-      background:
-        linear-gradient(135deg, rgba(200, 230, 255, 0.09), rgba(140, 124, 255, 0.1)),
-        rgba(11, 16, 38, 0.54);
+      background: rgba(200, 230, 255, 0.065);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 0 22px rgba(140, 124, 255, 0.04);
     }
 
     .launch-mode-pill[hidden] {
@@ -460,10 +459,14 @@
       margin: 0;
       max-width: 760px;
       color: #f2f6ff;
+      background: linear-gradient(95deg, #f5f8ff 0%, #dfefff 55%, #dcd8ff 100%);
+      background-clip: text;
       font-size: clamp(2.15rem, 6vw, 4.45rem);
       line-height: 1.03;
       font-weight: 650;
       letter-spacing: 0;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       text-shadow: 0 0 28px rgba(200, 230, 255, 0.08);
     }
 
@@ -498,9 +501,10 @@
     }
 
     .tab-button[aria-selected="true"] {
-      color: #07101f;
-      background: linear-gradient(135deg, #e9f6ff, #c8e6ff 58%, #d9ddff);
-      box-shadow: 0 12px 30px rgba(200, 230, 255, 0.12), 0 0 22px rgba(140, 124, 255, 0.08);
+      border-color: rgba(200, 230, 255, 0.28);
+      color: #f2f7ff;
+      background: rgba(200, 230, 255, 0.105);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 30px rgba(0, 2, 12, 0.22), 0 0 24px rgba(200, 230, 255, 0.055);
     }
 
     .tab-panel {
@@ -624,11 +628,17 @@
 
     .primary {
       min-width: 160px;
-      border-color: rgba(200, 230, 255, 0.46);
-      color: #07101f;
-      background: linear-gradient(135deg, #edf8ff, #c8e6ff 58%, #d9ddff);
-      box-shadow: 0 14px 34px rgba(200, 230, 255, 0.12), 0 0 26px rgba(140, 124, 255, 0.09);
+      border-color: rgba(200, 230, 255, 0.32);
+      color: #f4f8ff;
+      background: rgba(200, 230, 255, 0.12);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 34px rgba(0, 2, 12, 0.24), 0 0 24px rgba(200, 230, 255, 0.055);
       font-weight: 720;
+    }
+
+    .primary:hover:not(:disabled) {
+      border-color: rgba(200, 230, 255, 0.42);
+      background: rgba(200, 230, 255, 0.15);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 16px 36px rgba(0, 2, 12, 0.26), 0 0 28px rgba(200, 230, 255, 0.07);
     }
 
     .ghost {
@@ -868,7 +878,7 @@
     }
 
     .founder-tab .primary {
-      background: linear-gradient(135deg, #eef8ff, #c8e6ff 58%, #d9ddff);
+      background: rgba(200, 230, 255, 0.12);
     }
 
     .founder-tab .radar-panel {
