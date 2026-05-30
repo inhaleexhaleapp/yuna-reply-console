@@ -44,10 +44,11 @@
       margin: 0;
       color: var(--text);
       background:
-        radial-gradient(ellipse 88% 56% at 16% 10%, rgba(140, 124, 255, 0.16), transparent 62%),
-        radial-gradient(ellipse 72% 48% at 84% 6%, rgba(200, 230, 255, 0.1), transparent 58%),
-        radial-gradient(ellipse 120% 42% at 44% 24%, rgba(95, 104, 190, 0.12), transparent 64%),
-        radial-gradient(ellipse 92% 58% at 48% 92%, rgba(19, 25, 58, 0.86), transparent 64%),
+        radial-gradient(ellipse 92% 56% at 14% 8%, rgba(140, 124, 255, 0.17), transparent 64%),
+        radial-gradient(ellipse 76% 48% at 84% 6%, rgba(200, 230, 255, 0.11), transparent 60%),
+        radial-gradient(ellipse 132% 46% at 44% 24%, rgba(95, 104, 190, 0.16), transparent 66%),
+        radial-gradient(ellipse 78% 34% at 64% 38%, rgba(64, 79, 164, 0.12), transparent 68%),
+        radial-gradient(ellipse 92% 58% at 48% 92%, rgba(19, 25, 58, 0.88), transparent 64%),
         radial-gradient(ellipse 70% 44% at 52% -8%, rgba(255, 255, 255, 0.035), transparent 62%),
         linear-gradient(145deg, #060816 0%, #0b1026 48%, #13193a 100%);
       background-attachment: fixed;
@@ -55,6 +56,7 @@
         0% 0%,
         100% 0%,
         50% 18%,
+        64% 38%,
         50% 100%,
         50% 0%,
         0 0;
@@ -62,6 +64,7 @@
       background-size:
         145% 145%,
         140% 140%,
+        150% 150%,
         150% 150%,
         132% 132%,
         100% 100%,
@@ -74,9 +77,10 @@
       --accent-2: #c9c0ff;
       --glow: rgba(140, 124, 255, 0.16);
       background:
-        radial-gradient(ellipse 88% 56% at 16% 10%, rgba(140, 124, 255, 0.18), transparent 62%),
-        radial-gradient(ellipse 72% 48% at 84% 6%, rgba(200, 230, 255, 0.12), transparent 58%),
-        radial-gradient(ellipse 120% 42% at 44% 24%, rgba(95, 104, 190, 0.13), transparent 64%),
+        radial-gradient(ellipse 92% 56% at 14% 8%, rgba(140, 124, 255, 0.19), transparent 64%),
+        radial-gradient(ellipse 76% 48% at 84% 6%, rgba(200, 230, 255, 0.13), transparent 60%),
+        radial-gradient(ellipse 132% 46% at 44% 24%, rgba(95, 104, 190, 0.17), transparent 66%),
+        radial-gradient(ellipse 78% 34% at 64% 38%, rgba(64, 79, 164, 0.13), transparent 68%),
         radial-gradient(ellipse 92% 58% at 48% 92%, rgba(19, 25, 58, 0.9), transparent 64%),
         radial-gradient(ellipse 70% 44% at 52% -8%, rgba(255, 255, 255, 0.04), transparent 62%),
         linear-gradient(145deg, #060816 0%, #0b1026 48%, #13193a 100%);
@@ -85,6 +89,7 @@
         0% 0%,
         100% 0%,
         50% 18%,
+        64% 38%,
         50% 100%,
         50% 0%,
         0 0;
@@ -92,6 +97,7 @@
       background-size:
         145% 145%,
         140% 140%,
+        150% 150%,
         150% 150%,
         132% 132%,
         100% 100%,
@@ -110,14 +116,20 @@
       pointer-events: none;
       content: "";
       background:
-        radial-gradient(circle at 24px 36px, rgba(238, 246, 255, 0.48) 0 0.7px, transparent 1.2px),
-        radial-gradient(circle at 126px 88px, rgba(201, 192, 255, 0.3) 0 0.8px, transparent 1.3px),
-        radial-gradient(circle at 210px 164px, rgba(200, 230, 255, 0.22) 0 0.6px, transparent 1.1px),
-        radial-gradient(circle at 420px 260px, rgba(238, 246, 255, 0.2) 0 1.05px, transparent 1.7px),
-        radial-gradient(circle at 720px 520px, rgba(201, 192, 255, 0.16) 0 1.2px, transparent 1.9px),
-        radial-gradient(circle at 860px 120px, rgba(238, 246, 255, 0.14) 0 1.4px, transparent 2.2px),
+        radial-gradient(circle at 16px 22px, rgba(238, 246, 255, 0.62) 0 0.55px, transparent 1.05px),
+        radial-gradient(circle at 54px 78px, rgba(201, 192, 255, 0.38) 0 0.65px, transparent 1.15px),
+        radial-gradient(circle at 118px 42px, rgba(200, 230, 255, 0.3) 0 0.5px, transparent 1px),
+        radial-gradient(circle at 24px 36px, rgba(238, 246, 255, 0.5) 0 0.75px, transparent 1.25px),
+        radial-gradient(circle at 126px 88px, rgba(201, 192, 255, 0.34) 0 0.85px, transparent 1.35px),
+        radial-gradient(circle at 210px 164px, rgba(200, 230, 255, 0.26) 0 0.65px, transparent 1.15px),
+        radial-gradient(circle at 420px 260px, rgba(238, 246, 255, 0.24) 0 1.05px, transparent 1.7px),
+        radial-gradient(circle at 720px 520px, rgba(201, 192, 255, 0.18) 0 1.2px, transparent 1.9px),
+        radial-gradient(circle at 860px 120px, rgba(238, 246, 255, 0.16) 0 1.4px, transparent 2.2px),
         linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 36%);
       background-position:
+        0 0,
+        42px 64px,
+        86px 14px,
         0 0,
         80px 120px,
         180px 40px,
@@ -126,6 +138,9 @@
         320px 80px,
         0 0;
       background-size:
+        96px 108px,
+        132px 148px,
+        172px 156px,
         230px 250px,
         340px 360px,
         520px 560px,
@@ -133,7 +148,7 @@
         1060px 920px,
         1320px 1120px,
         100% 100%;
-      opacity: 0.68;
+      opacity: 0.78;
       animation: yuna-star-drift 240s linear infinite;
       mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.18));
     }
@@ -145,13 +160,16 @@
       pointer-events: none;
       content: "";
       background:
-        linear-gradient(118deg, transparent 22%, rgba(140, 124, 255, 0.055) 38%, rgba(200, 230, 255, 0.048) 47%, transparent 64%),
-        radial-gradient(ellipse 52% 32% at 20% 18%, rgba(140, 124, 255, 0.13), transparent 68%),
-        radial-gradient(ellipse 42% 28% at 78% 24%, rgba(200, 230, 255, 0.08), transparent 66%),
-        radial-gradient(ellipse 72% 38% at 48% 74%, rgba(88, 104, 190, 0.11), transparent 70%),
-        radial-gradient(ellipse 48% 34% at 6% 82%, rgba(55, 86, 145, 0.12), transparent 68%);
-      filter: blur(15px);
-      opacity: 0.9;
+        radial-gradient(circle at 12% 18%, rgba(238, 246, 255, 0.16) 0 1.7px, transparent 3px),
+        radial-gradient(circle at 82% 16%, rgba(201, 192, 255, 0.12) 0 2.2px, transparent 4px),
+        radial-gradient(circle at 74% 62%, rgba(200, 230, 255, 0.1) 0 1.9px, transparent 3.4px),
+        linear-gradient(118deg, transparent 18%, rgba(140, 124, 255, 0.07) 36%, rgba(200, 230, 255, 0.052) 47%, transparent 67%),
+        radial-gradient(ellipse 58% 34% at 18% 18%, rgba(140, 124, 255, 0.15), transparent 70%),
+        radial-gradient(ellipse 46% 30% at 78% 24%, rgba(200, 230, 255, 0.09), transparent 68%),
+        radial-gradient(ellipse 86% 42% at 50% 72%, rgba(88, 104, 190, 0.13), transparent 72%),
+        radial-gradient(ellipse 54% 34% at 6% 82%, rgba(55, 86, 145, 0.13), transparent 70%);
+      filter: blur(13px);
+      opacity: 0.94;
       transform: translate3d(0, 0, 0);
       animation: yuna-nebula-drift 220s ease-in-out infinite alternate;
     }
@@ -162,6 +180,7 @@
           0% 0%,
           100% 0%,
           50% 18%,
+          64% 38%,
           50% 100%,
           50% 0%,
           0 0;
@@ -172,6 +191,7 @@
           4% 3%,
           96% 5%,
           48% 20%,
+          62% 40%,
           54% 96%,
           50% 2%,
           0 0;
@@ -181,6 +201,9 @@
     @keyframes yuna-star-drift {
       from {
         background-position:
+          0 0,
+          42px 64px,
+          86px 14px,
           0 0,
           80px 120px,
           180px 40px,
@@ -192,6 +215,9 @@
 
       to {
         background-position:
+          -26px 36px,
+          70px 42px,
+          58px 76px,
           -42px 68px,
           118px 92px,
           142px 104px,
