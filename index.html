@@ -44,10 +44,29 @@
       margin: 0;
       color: var(--text);
       background:
-        radial-gradient(circle at 18% 8%, rgba(140, 124, 255, 0.18), transparent 30%),
-        radial-gradient(circle at 82% 4%, rgba(200, 230, 255, 0.12), transparent 28%),
-        radial-gradient(circle at 52% 100%, rgba(19, 25, 58, 0.86), transparent 46%),
+        radial-gradient(ellipse 88% 56% at 16% 10%, rgba(140, 124, 255, 0.16), transparent 62%),
+        radial-gradient(ellipse 72% 48% at 84% 6%, rgba(200, 230, 255, 0.1), transparent 58%),
+        radial-gradient(ellipse 120% 42% at 44% 24%, rgba(95, 104, 190, 0.12), transparent 64%),
+        radial-gradient(ellipse 92% 58% at 48% 92%, rgba(19, 25, 58, 0.86), transparent 64%),
+        radial-gradient(ellipse 70% 44% at 52% -8%, rgba(255, 255, 255, 0.035), transparent 62%),
         linear-gradient(145deg, #060816 0%, #0b1026 48%, #13193a 100%);
+      background-attachment: fixed;
+      background-position:
+        0% 0%,
+        100% 0%,
+        50% 18%,
+        50% 100%,
+        50% 0%,
+        0 0;
+      background-repeat: no-repeat;
+      background-size:
+        145% 145%,
+        140% 140%,
+        150% 150%,
+        132% 132%,
+        100% 100%,
+        100% 100%;
+      animation: yuna-cosmic-drift 190s ease-in-out infinite alternate;
     }
 
     body.yuna-night-mode {
@@ -55,10 +74,28 @@
       --accent-2: #c9c0ff;
       --glow: rgba(140, 124, 255, 0.16);
       background:
-        radial-gradient(circle at 20% 10%, rgba(140, 124, 255, 0.2), transparent 31%),
-        radial-gradient(circle at 78% 6%, rgba(200, 230, 255, 0.14), transparent 30%),
-        radial-gradient(circle at 50% 105%, rgba(19, 25, 58, 0.9), transparent 48%),
+        radial-gradient(ellipse 88% 56% at 16% 10%, rgba(140, 124, 255, 0.18), transparent 62%),
+        radial-gradient(ellipse 72% 48% at 84% 6%, rgba(200, 230, 255, 0.12), transparent 58%),
+        radial-gradient(ellipse 120% 42% at 44% 24%, rgba(95, 104, 190, 0.13), transparent 64%),
+        radial-gradient(ellipse 92% 58% at 48% 92%, rgba(19, 25, 58, 0.9), transparent 64%),
+        radial-gradient(ellipse 70% 44% at 52% -8%, rgba(255, 255, 255, 0.04), transparent 62%),
         linear-gradient(145deg, #060816 0%, #0b1026 48%, #13193a 100%);
+      background-attachment: fixed;
+      background-position:
+        0% 0%,
+        100% 0%,
+        50% 18%,
+        50% 100%,
+        50% 0%,
+        0 0;
+      background-repeat: no-repeat;
+      background-size:
+        145% 145%,
+        140% 140%,
+        150% 150%,
+        132% 132%,
+        100% 100%,
+        100% 100%;
     }
 
     body.yuna-night-mode .panel,
@@ -73,14 +110,32 @@
       pointer-events: none;
       content: "";
       background:
-        radial-gradient(circle at 12% 16%, rgba(200, 230, 255, 0.34) 0 1px, transparent 1.8px),
-        radial-gradient(circle at 34% 26%, rgba(201, 192, 255, 0.24) 0 1px, transparent 1.7px),
-        radial-gradient(circle at 78% 18%, rgba(200, 230, 255, 0.26) 0 1px, transparent 1.8px),
-        radial-gradient(circle at 88% 46%, rgba(201, 192, 255, 0.2) 0 1px, transparent 1.7px),
-        radial-gradient(circle at 18% 64%, rgba(200, 230, 255, 0.18) 0 1px, transparent 1.8px),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 35%);
-      opacity: 0.62;
-      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.16));
+        radial-gradient(circle at 24px 36px, rgba(238, 246, 255, 0.48) 0 0.7px, transparent 1.2px),
+        radial-gradient(circle at 126px 88px, rgba(201, 192, 255, 0.3) 0 0.8px, transparent 1.3px),
+        radial-gradient(circle at 210px 164px, rgba(200, 230, 255, 0.22) 0 0.6px, transparent 1.1px),
+        radial-gradient(circle at 420px 260px, rgba(238, 246, 255, 0.2) 0 1.05px, transparent 1.7px),
+        radial-gradient(circle at 720px 520px, rgba(201, 192, 255, 0.16) 0 1.2px, transparent 1.9px),
+        radial-gradient(circle at 860px 120px, rgba(238, 246, 255, 0.14) 0 1.4px, transparent 2.2px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 36%);
+      background-position:
+        0 0,
+        80px 120px,
+        180px 40px,
+        220px 180px,
+        0 0,
+        320px 80px,
+        0 0;
+      background-size:
+        230px 250px,
+        340px 360px,
+        520px 560px,
+        760px 720px,
+        1060px 920px,
+        1320px 1120px,
+        100% 100%;
+      opacity: 0.68;
+      animation: yuna-star-drift 240s linear infinite;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.18));
     }
 
     body::after {
@@ -90,10 +145,79 @@
       pointer-events: none;
       content: "";
       background:
-        radial-gradient(circle at 28% 18%, rgba(140, 124, 255, 0.13), transparent 34%),
-        radial-gradient(circle at 76% 30%, rgba(200, 230, 255, 0.08), transparent 32%),
-        radial-gradient(circle at 44% 78%, rgba(140, 124, 255, 0.1), transparent 42%);
-      filter: blur(2px);
+        linear-gradient(118deg, transparent 22%, rgba(140, 124, 255, 0.055) 38%, rgba(200, 230, 255, 0.048) 47%, transparent 64%),
+        radial-gradient(ellipse 52% 32% at 20% 18%, rgba(140, 124, 255, 0.13), transparent 68%),
+        radial-gradient(ellipse 42% 28% at 78% 24%, rgba(200, 230, 255, 0.08), transparent 66%),
+        radial-gradient(ellipse 72% 38% at 48% 74%, rgba(88, 104, 190, 0.11), transparent 70%),
+        radial-gradient(ellipse 48% 34% at 6% 82%, rgba(55, 86, 145, 0.12), transparent 68%);
+      filter: blur(15px);
+      opacity: 0.9;
+      transform: translate3d(0, 0, 0);
+      animation: yuna-nebula-drift 220s ease-in-out infinite alternate;
+    }
+
+    @keyframes yuna-cosmic-drift {
+      from {
+        background-position:
+          0% 0%,
+          100% 0%,
+          50% 18%,
+          50% 100%,
+          50% 0%,
+          0 0;
+      }
+
+      to {
+        background-position:
+          4% 3%,
+          96% 5%,
+          48% 20%,
+          54% 96%,
+          50% 2%,
+          0 0;
+      }
+    }
+
+    @keyframes yuna-star-drift {
+      from {
+        background-position:
+          0 0,
+          80px 120px,
+          180px 40px,
+          220px 180px,
+          0 0,
+          320px 80px,
+          0 0;
+      }
+
+      to {
+        background-position:
+          -42px 68px,
+          118px 92px,
+          142px 104px,
+          260px 136px,
+          -28px 34px,
+          286px 118px,
+          0 0;
+      }
+    }
+
+    @keyframes yuna-nebula-drift {
+      from {
+        transform: translate3d(-1.2%, -0.8%, 0) scale(1.02);
+      }
+
+      to {
+        transform: translate3d(1.4%, 1%, 0) scale(1.05);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body,
+      body::before,
+      body::after {
+        animation: none;
+      }
     }
 
     button,
