@@ -17,7 +17,11 @@ function musicShape(text, mode, tone, anchor) {
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
-  const openers = (musicToneOpeners[tone] || [""]).filter(Boolean);
+  const replyWords = similarityWords(cleaned);
+  // Skip openers that would echo a word the reply already uses ("lovely... lovely").
+  const openers = (musicToneOpeners[tone] || [""])
+    .filter(Boolean)
+    .filter((opener) => ![...similarityWords(opener)].some((word) => replyWords.has(word)));
   if (openers.length && ["warmer", "slightly witty"].includes(mode) && cleaned.length < 120 && !/^(oh|okay|love|quietly|following|composer)/i.test(cleaned)) {
     cleaned = `${openers[Math.floor(Math.random() * openers.length)]} ${cleaned}`;
   }

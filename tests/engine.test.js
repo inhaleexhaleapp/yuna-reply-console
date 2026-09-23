@@ -186,3 +186,10 @@ test("radar list import merges instead of overwriting", () => {
   assert.deepEqual(lists.Mine.map((item) => item.handle), ["@m"]);
   assert.deepEqual(lists.NewList.map((item) => item.handle), ["@c"]);
 });
+
+test("music: openers never repeat a word from the reply", () => {
+  for (let round = 0; round < 40; round += 1) {
+    const text = y.musicShape("the atmosphere here is lovely. is audio in yet or still silent?", "slightly witty", "curious listener", null);
+    assert.equal((text.match(/lovely/g) || []).length, 1, text);
+  }
+});

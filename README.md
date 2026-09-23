@@ -1,336 +1,119 @@
 # Yuna Reply Console
 
-**Yuna Reply Console is a local-first reply companion for thoughtful conversations online.**
+**A local-first, human-in-the-loop reply companion for thoughtful conversations on X.**
 
-Not a bot.  
-Not automation.  
-Not an engagement farm.
+Not a bot. Not automation. Not an engagement farm.
 
-`Open Source` `Local First` `Privacy Friendly` `No API Required` `Human-in-the-Loop`
+[![tests](https://github.com/inhaleexhaleapp/yuna-reply-console/actions/workflows/test.yml/badge.svg)](https://github.com/inhaleexhaleapp/yuna-reply-console/actions/workflows/test.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-b9a4ff.svg)](LICENSE)
+![no dependencies](https://img.shields.io/badge/dependencies-0-c8e6ff.svg)
+![no API](https://img.shields.io/badge/API-none-f3d9c2.svg)
 
-Yuna Reply Console is a quiet local-first social gravity console for people who still want the internet to feel human. It helps you manually find aligned X threads, map reply opportunities, understand room culture, and draft softer replies for `@inhaleexhaleapp`.
+**[Open the live console →](https://inhaleexhaleapp.github.io/yuna-reply-console/)**
 
-It does not connect to X, use the X API, post, like, follow, DM, scrape, or automate anything. Paste a tweet, choose a category and tone, generate suggestions, copy one manually if it feels right, and stay fully in control.
+![Yuna Reply Console, Music / Sound tab](docs/screenshot.png)
 
-Yuna only opens doors: X search URLs, profile links, post links, scoring helpers, reply drafts, local notes, and atmosphere signals. You decide where to enter, what to copy, and what to post.
+Yuna helps you find living conversations, decide whether they deserve your energy, and draft short, human replies you copy and post yourself. It was built for [`@inhaleexhaleapp`](https://x.com/inhaleexhaleapp): calm tech, ambient music, and indie game soundtracks.
 
-## Screenshot
+It never connects to X. No API, no posting, liking, following, DMs, or scraping. Yuna only opens doors: search links, profile links, scores, drafts, and private notes. You decide where to enter, what to copy, and what to post.
 
-<!-- TODO: Add an app screenshot here once a screenshot file is committed to the repository. Do not reference an image path until the file exists. -->
+## Why
 
-## Privacy
+Online conversation rewards speed, volume, and performance. Yuna is built for a calmer path: notice better rooms, pause before replying, and write something that sounds like a person who actually read the post.
 
-Yuna Reply Console is designed to stay local and quiet:
-
-- Runs entirely in the browser
-- No accounts
-- No tracking
-- No cloud storage
-- LocalStorage only
-- No backend, external dependency, API key, or API connection required
-
-History, favorites, used replies, radar notes, and session data stay in `localStorage` on the same browser where you use the console.
-
-## Why This Exists
-
-Online conversation can reward speed, volume, and performance. Yuna Reply Console exists for a calmer path: notice better conversations, pause before replying, and write with more care.
-
-The goal is not to maximize engagement. The goal is to support healthier, more human communication: slower replies, better context, softer tone, and a little more intentionality before entering a conversation.
+That is also what works on X for small accounts. Templated, repeated or link-heavy replies get filtered, while real replies build mutuals. So Yuna is designed to keep every reply specific and different from the last one.
 
 ## Tabs
 
-### Gravity Map
-
-The primary workspace for scoring thread opportunity, reply culture, aesthetic alignment, freshness, account quality, and list fit before replying.
-
-Built around one question:
-
-> "where should I emotionally exist online tonight?"
-
-The Gravity Map prioritizes finding where to exist online before generating replies.
-
-### Wellness / Yuna
-
-The original soft wellness reply assistant.
-
-Includes:
-
-- Search Radar
-- Tonight Mode
-- Favorites
-- Used replies
-- Local history
-- Calm-tech discovery presets
-- Mantra, ambient, and mythology clusters
-
-Focused on emotionally alive calm-tech rooms instead of generic wellness SEO.
-
-### Indie Founder
-
-A separate builder-focused reply assistant for:
-
-- Indie hackers
-- Solo founders
-- No-code creators
-- App developers
-- Product makers
-
-Includes:
-
-- Founder-focused Search Radar
-- Indie Night Shift
-- Founder-native tones
-- Favorites
-- Used replies
-- Local history
-
-Supports common founder thread archetypes like:
-
-- "what are you building?"
-- "drop your startup"
-- "what did you ship today?"
-- "building in public"
-- "weekend build thread"
-
-Replies are intentionally low-ego, short, human, slightly messy, and non-salesy. Project links are only suggested when a thread explicitly asks for them.
-
-### Music / Sound
-
-For the music side of `@inhaleexhaleapp`: indie game devs, game composers, and ambient / drone producers.
-
-- **Rooms**: gamedev WIP, looking for composer, composer peer, ambient / drone producer, music release, process / gear, soundtrack talk.
-- **Scene-aware replies**: picks up scenes (fog, forest, ruins, lantern, cave…), instruments (cello, felt piano, frame drum, field recordings…), and genres (folk horror, cozy, dark ambient…) and replies like someone who can already hear the soundtrack.
-- **Composer calls** are detected automatically. Replies lead with at most two human offers ("happy to send a short sketch"), never a hard pitch. A portfolio link is only added if you set a URL and allow it.
-- **Similarity guard**: every reply is compared with your last 30 used replies across all tabs. Near-duplicates are pushed down and flagged, because small accounts get filtered for repeated reply patterns. One template is never used twice in the same set.
-- **People to know**: paste accounts one per line (`@handle | category | followers | date | link | mood`, the format Grok returns). The list merges instead of overwriting, and whoever you haven't replied to lately floats to the top. "Replied today" keeps the rhythm honest.
-- **Music Search Radar** with a **Saturday shift** for `#ScreenshotSaturday`.
-- Shortcut: `/?mode=music`.
-
-## Reply Worthiness Score
-
-Yuna includes a local Reply Worthiness panel above generated replies to help decide whether a pasted post deserves attention before drafting.
-
-The score is a lightweight browser-only heuristic, not a growth-hacking system. It looks at:
-
-- Visibility
-- Relevance to the selected radar/category
-- Conversation potential
-- Warmth fit
-
-The overall score is weighted toward meaningful conversation rather than volume:
-
-- Visibility: 25%
-- Relevance: 25%
-- Conversation Potential: 30%
-- Warmth Fit: 20%
-
-The panel also shows a few plain-language reasons and a suggested reply approach such as Warm Founder, Mentor Aware, Curious Question, Personal Experience, Ultra Short, or Supportive.
-
-Everything is calculated from the pasted text and selected local controls. No API, X integration, account, tracking, cloud storage, external service, or automation is used.
-
-## Echo Engine
-
-Template replies feel like templates when they don't touch the tweet. The Echo Engine is a small local heuristic layer that fixes that:
-
-- **Anchors**: pulls one concrete detail from the pasted text (a time like `3am`, a year, a count like `10 users`, a duration like `6 hours`, a sound like `432hz` or `rain sounds`, a ritual, a tool like `cursor`, a milestone like `app store rejection`, or a short `-ing` activity phrase) and writes it back into a few replies.
-- **Intent**: reads what the tweet is doing — question, invitation ("what are you building?"), share, celebration, struggle, confession — and picks the matching template family.
-- **Real answers to real questions**: "what helps you fall asleep?" gets a first-person answer instead of sympathy.
-- **No dangling "this"**: replies like "tried this with headphones" are pushed down when the tweet isn't actually sharing a track, link, or app.
-- At most 3 of the 5 replies are echo replies, so the set still feels varied. Echo replies show an `echo · <kind>` pill.
-
-## Copy Claude Prompt
-
-Both reply tabs have a **Copy Claude prompt** button. It copies a ready-to-paste prompt with the tweet, category, tone, detected intent, anchors, local worthiness score, link rules, and the console's voice rules and banned phrases. Paste it into claude.ai yourself when a tweet deserves a better-than-template reply.
-
-The console still sends nothing anywhere: no API, no key, no network. It only writes to your clipboard.
-
-## Keyboard
-
-- `⌘ Enter` / `Ctrl Enter` inside a tweet box generates replies.
-
-## Human Texture Controls
-
-Human Texture Controls allow replies to shift between:
-
-- Text
-- Playful text
-- Meme caption
-- GIF cue
-
-Link mode can be set to:
-
-- No link
-- Auto link if asked
-- Include link
-
-The goal is not polished content. The goal is believable human presence.
-
-## Social Gravity Mapping
-
-The console prioritizes signal over scale.
-
-Threads are scored from 0-100 using:
-
-- Niche relevance
-- Reply culture
-- Conversational depth
-- Visibility opportunity
-- Freshness
-- Aesthetic alignment
-- Reciprocal interaction potential
-
-Low-score threads are usually better skipped in favor of smaller but human active rooms. High-score threads become gravity wells.
-
-Candidate accounts can be saved into local radar lists such as:
-
-- CalmTech
-- AmbientCreators
-- CozyInternet
-- DreamyUI
-- SlowInternet
-- IndieWellness
-- MythologyAndCalm
-- GentleAI
-
-Account notes create a private local memory for handles, vibe clusters, reply culture impressions, recurring familiar people, and whether an account is worth revisiting later.
-
-## Wellness Radar
-
-The wellness radar focuses on living calm internet rooms rather than recycled quote ecosystems.
-
-Clusters include:
-
-- Quote Cemetery Detector
-- Human Active Rooms
-- Late Night Calm
-- Mantra Culture
-- 432Hz / Frequency Culture
-- Delta Waves
-- Sound Healing
-- Ambient Sleep Culture
-- Myth + Calm
-- Quiet Internet
-- Low Ego Wellness
-
-Gravity scoring boosts:
-
-- Active human reply culture
-- Recurring people
-- Late-night activity
-- Ambient creators
-- Mythology/mantra signals
-- Cozy internet behavior
-- Low-ego builders
-
-It reduces score for:
-
-- Quote spam
-- Fake spirituality
-- Affirmation loops
-- CTA spirituality
-- Giant passive accounts
-- Dead replies
-- Obvious promotion
-
-The goal is to separate living rooms from recycled Pinterest-style wellness content before any reply is drafted.
-
-## Yuna Signature Layer
-
-The interface carries a subtle atmosphere layer:
-
-- Quiet Gravity
-- Alive Room Index
-- Familiar Faces
-- Human Warmth
-- Soft Signal
-- Emotional Residue
-
-A small hidden soft rooms panel exists for reading the atmosphere of a thread without turning the console into a growth dashboard.
-
-## Reply Engine Style
-
-The reply engine favors:
-
-- Short replies
-- Human-feeling cadence
-- Low-ego phrasing
-- Slight imperfection
-- Conversational rhythm
-
-It avoids:
-
-- Startup guru language
-- LinkedIn tone
-- Engagement bait
-- Therapy-speak
-- Sales language
-- Hashtags
-- Over-polished optimism
-- Overly cinematic wellness prose
-
-Generated sets are shaped as:
-
-- Safest
-- Warmer
-- Slightly witty
-- Mentor-aware
-- Ultra-short
+| Tab | What it's for |
+| --- | --- |
+| **Gravity Map** | Score a thread or account before replying: niche fit, reply culture, freshness, aesthetic alignment, reciprocity. Save candidates to private radar lists and account notes. |
+| **Wellness / Yuna** | Soft replies for calm-internet rooms: sleep, overthinking, meditation, ambient and mantra culture. |
+| **Indie Founder** | Low-ego builder replies for "what are you building?", launches, app review pain and late-night shipping. Skips threads that are too noisy to be seen in. |
+| **Music / Sound** | Replies for game WIPs (`#ScreenshotSaturday`), composer calls, composer peers and ambient producers, plus a *People to know* list for building real mutuals. |
+
+Every tab includes a **Search Radar** of preset X searches (opened in Latest view) for manual discovery.
+
+## How the reply engine thinks
+
+Everything below runs in your browser from the text you paste. There is no model and no network call.
+
+- **Echo engine.** Pulls one concrete detail from the post (`3am`, `2019`, `10 users`, `6 hours`, `432hz`, `cursor`, `app store rejection`, `misty forest`, `felt piano`…) and writes it back into a few replies, so they reference the post instead of floating above it.
+- **Intent.** Reads what the post is doing: question, invitation, share, celebration, struggle, confession. Real questions get a first-person answer instead of sympathy, and invitations get your own answer instead of an echo.
+- **No dangling "this".** Replies like "tried this with headphones" are pushed down when the post isn't actually sharing a track, link or app.
+- **Similarity guard.** Every reply is compared with your last 30 used replies across all tabs. Near-duplicates are pushed down and flagged, and one template is never used twice in the same set.
+- **Composer calls** (Music tab) are detected automatically. At most two soft offers per set, never a hard pitch. A portfolio link is only added if you set one and allow it.
+- **Reply Worthiness.** A 0–100 score that weighs visibility (25%), relevance (25%), conversation potential (30%) and warmth fit (20%), with plain-language reasons and a suggested approach.
+- **Voice rules.** Short, mostly lowercase, low-ego, slightly imperfect. No hashtags, guru tone, LinkedIn tone, therapy-speak or sales language. Each set is shaped as *safest, warmer, slightly witty, mentor-aware, ultra-short*.
+- **Copy Claude prompt.** When a post deserves better than a template, one button copies a ready prompt with the post, detected intent, anchors, worthiness score, link rules and all voice rules. You paste it into claude.ai yourself. The console only writes to your clipboard.
 
 Replies should feel noticed, not written.
 
-## Session Intentions
+## Session intentions
 
-On launch, the console asks for a session intention.
+On launch, Yuna asks how you want to exist online tonight:
 
-- Map Only
-- Looking
-- Reply Soft
-- Full
+- **Map only.** Score and map, no replies.
+- **Looking.** Browse notes and lists, no replies.
+- **Reply soft.** Up to 3 reply generations.
+- **Full.** Up to 5 reply generations.
 
-Map-oriented modes intentionally limit reply generation unless deliberately bypassed. Sessions expire after 6 hours and are archived locally.
+Limits are a mindful pause, not a lock: you can deliberately bypass them. Sessions expire after 6 hours and are archived locally.
 
-## Use Locally
+## Privacy and your data
 
-Open `index.html` directly in a browser.
+- Runs entirely in the browser: no accounts, tracking, backend, API key or cloud storage.
+- Everything is kept in `localStorage` on the device you use.
+- **Your data** panel: *Save backup file* exports all Yuna data as one JSON file, and *Restore from backup* loads it on another device (for example iPad ⇄ Mac). Restoring shows a summary and asks before replacing anything.
+- A test checks that the code never makes network calls.
 
-The console works offline and stores:
+## Use it
 
-- History
-- Favorites
-- Used replies
-- Local notes
+**Live:** https://inhaleexhaleapp.github.io/yuna-reply-console/
 
-inside `localStorage` on the same browser.
+**Locally:** download or clone the repo and open `index.html`. No build step, server or `npm install` needed.
 
-Search Radar sections include local preset X search queries for manual discovery. Open in X only generates manual X search URLs using Latest view.
+**Launch modes** for iOS Shortcuts or bookmarks. They only switch tabs and adjust microcopy:
 
-No build step, server, npm install, backend, external dependency, or API key is needed.
+`?mode=gravity` · `?mode=wellness` · `?mode=founder` · `?mode=music` · `?mode=tonight`
 
-## GitHub Pages
+**Keyboard**
 
-Because this is a static app, it can be published with GitHub Pages from the repository root:
+- `⌘/Ctrl + Enter` in any post box generates replies.
+- In Gravity Map: `⌘/Ctrl + Enter` scores the thread, `⌘/Ctrl + Shift + Enter` drafts secondary replies, `⌘/Ctrl + S` saves the radar session.
 
-1. Open the repository settings on GitHub.
-2. Go to Pages.
-3. Set the source to the main branch and the repository root.
-4. Save the setting and wait for GitHub Pages to publish the site.
+## Project structure
 
-## Shortcut Launch Modes
+```
+index.html            markup only
+css/yuna.css          styles (night-sky theme)
+js/
+  data/               reply banks, lexicons, search presets per tab
+  core/               utils, storage keys, backup, DOM refs, state
+  engine/             pure logic: echo, worthiness, similarity, text rules,
+                      per-tab candidate builders, Claude prompt
+  ui/                 rendering and actions per tab
+  app.js              event wiring and startup (loaded last)
+tests/                node:test suites, zero dependencies
+```
 
-iOS Shortcuts can open the local console with a mode parameter to prepare the right view without searching, fetching, posting, or automating anything.
+Scripts are plain classic `<script>` files that share one global scope. There are no modules and no bundler, so the page runs straight from the file system.
 
-- `/?mode=tonight`
-- `/?mode=founder`
-- `/?mode=wellness`
-- `/?mode=gravity`
-- `/?mode=music`
+## Tests
 
-These modes only switch tabs, show a small local status pill, adjust microcopy, and prioritize local radar presets.
+```bash
+node --test
+```
+
+The engine files load into a Node `vm` context, so they are tested without a browser or any npm packages. The suites cover intent, anchors, echo replies, similarity, people-list parsing, composer calls, reply-set invariants (length, uniqueness, banned phrases), backup validation, list merging, and page integrity. GitHub Actions runs them on every push.
 
 ## Roadmap
 
-- Accessibility improvements
-- More localization
-- Import/export settings
-- Community-contributed reply styles
-- Better documentation
+- Learn from used replies: rank the reply styles you actually post.
+- More localization.
+- Accessibility pass.
+- Community-contributed reply styles.
+
+## License
+
+[MIT](LICENSE) © Inhale Exhale Studio
