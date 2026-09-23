@@ -1021,6 +1021,42 @@
         var(--panel);
     }
 
+    .music-tab {
+      --accent: #f3d9c2;
+      --accent-2: #b9a4ff;
+    }
+
+    .music-tab .panel {
+      background:
+        radial-gradient(circle at 86% 0%, rgba(243, 217, 194, 0.07), transparent 40%),
+        var(--panel);
+    }
+
+    .music-tab .primary {
+      background: rgba(243, 217, 194, 0.12);
+    }
+
+    .music-tab input[type="url"] {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 44px;
+      padding: 0 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      color: var(--text);
+      background: rgba(4, 7, 20, 0.54);
+    }
+
+    .short-textarea {
+      min-height: 96px;
+    }
+
+    .music-person-mood {
+      margin: 4px 0 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
     .cockpit-note {
       margin: 0 0 14px;
       color: var(--muted);
@@ -1392,6 +1428,7 @@
       <button class="tab-button" id="gravityTabBtn" type="button" role="tab" aria-selected="true" aria-controls="gravityPanel" data-tab-target="gravityPanel">Gravity Map</button>
       <button class="tab-button" id="wellnessTabBtn" type="button" role="tab" aria-selected="false" aria-controls="wellnessPanel" data-tab-target="wellnessPanel">Wellness / Yuna</button>
       <button class="tab-button" id="founderTabBtn" type="button" role="tab" aria-selected="false" aria-controls="founderPanel" data-tab-target="founderPanel">Indie Founder</button>
+      <button class="tab-button" id="musicTabBtn" type="button" role="tab" aria-selected="false" aria-controls="musicPanel" data-tab-target="musicPanel">Music / Sound</button>
     </nav>
 
     <section class="tab-panel is-active gravity-tab" id="gravityPanel" role="tabpanel" aria-labelledby="gravityTabBtn">
@@ -1847,6 +1884,106 @@
             <aside class="tonight-mode" aria-labelledby="founder-night-title">
               <h3 id="founder-night-title">Indie Night Shift</h3>
               <div class="query-list" id="founderNightSearchList"></div>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="tab-panel music-tab" id="musicPanel" role="tabpanel" aria-labelledby="musicTabBtn">
+      <div class="layout">
+        <section class="panel" aria-labelledby="music-compose-title">
+          <div class="section-head">
+            <div>
+              <h2 id="music-compose-title">Music / Sound replies</h2>
+              <p class="cockpit-note">For game WIPs, composer calls, and ambient rooms. Reply like someone who can already hear it.</p>
+            </div>
+          </div>
+
+          <label for="musicTweetInput">Pasted post text</label>
+          <textarea id="musicTweetInput" placeholder="Paste a #ScreenshotSaturday WIP, a composer call, or a track post..." aria-describedby="musicTweetMeta"></textarea>
+          <div class="input-meta" id="musicTweetMeta">
+            <span id="musicTweetCount">0 characters</span>
+            <span>⌘/Ctrl + Enter</span>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <label for="musicCategorySelect">Room</label>
+              <select id="musicCategorySelect" aria-label="Music room selector"></select>
+            </div>
+            <div>
+              <label for="musicToneSelect">Tone</label>
+              <select id="musicToneSelect" aria-label="Music tone selector"></select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <label for="musicLinkModeSelect">Portfolio link</label>
+              <select id="musicLinkModeSelect" aria-label="Portfolio link mode">
+                <option value="none">Never</option>
+                <option value="auto">Only on composer calls</option>
+                <option value="include">Composer calls, first choice</option>
+              </select>
+            </div>
+            <div>
+              <label for="musicPortfolioInput">Portfolio URL</label>
+              <input id="musicPortfolioInput" type="url" placeholder="https://youtube.com/@..." />
+            </div>
+          </div>
+
+          <div class="primary-actions">
+            <button class="primary" id="musicGenerateBtn" type="button">Generate 5 replies</button>
+            <button class="ghost" id="musicCopyAllBtn" type="button" disabled>Copy All</button>
+            <button class="ghost" id="musicClaudePromptBtn" type="button" title="Copies a ready prompt for claude.ai. Nothing is sent anywhere by the console." disabled>Copy Claude prompt</button>
+          </div>
+          <p class="status" id="musicStatus" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel" aria-labelledby="music-suggestions-title">
+          <div class="section-head">
+            <h2 id="music-suggestions-title">Music suggestions</h2>
+          </div>
+          <div class="reply-list" id="musicSuggestionsList"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="music-people-title">
+          <div class="section-head">
+            <div>
+              <h2 id="music-people-title">People to know</h2>
+              <p class="cockpit-note">Build a few real mutuals, not a crowd. Whoever you haven't replied to lately floats up.</p>
+            </div>
+          </div>
+          <label for="musicPeopleInput">Paste accounts (one per line, Grok format works)</label>
+          <textarea id="musicPeopleInput" class="short-textarea" placeholder="@handle | game dev | 1.2k | Sep 22, 2026 | https://x.com/... | misty mythic forest"></textarea>
+          <div class="primary-actions">
+            <button class="ghost" id="musicPeopleImportBtn" type="button">Add to list</button>
+            <button class="ghost" id="musicPeopleExportBtn" type="button">Copy list</button>
+          </div>
+          <div class="reply-list" id="musicPeopleList"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="music-used-title">
+          <div class="section-head">
+            <h2 id="music-used-title">Music used</h2>
+          </div>
+          <div class="reply-list" id="musicUsedList"></div>
+        </section>
+
+        <section class="panel radar-panel" aria-labelledby="music-radar-title">
+          <div class="section-head">
+            <div>
+              <h2 id="music-radar-title">Music Search Radar</h2>
+              <p class="radar-note">Open in X uses Latest. Native clips beat links; keep links for the first reply.</p>
+            </div>
+            <p class="eyebrow">Manual discovery only. No X connection.</p>
+          </div>
+          <div class="radar-layout">
+            <div class="radar-grid" id="musicSearchRadarList"></div>
+            <aside class="tonight-mode" aria-labelledby="music-saturday-title">
+              <h3 id="music-saturday-title">Saturday shift</h3>
+              <div class="query-list" id="musicSaturdayList"></div>
             </aside>
           </div>
         </section>
@@ -3251,6 +3388,24 @@
     const toneSelect = document.getElementById("toneSelect");
     const generateBtn = document.getElementById("generateBtn");
     const copyAllBtn = document.getElementById("copyAllBtn");
+    const musicTweetInput = document.getElementById("musicTweetInput");
+    const musicTweetCount = document.getElementById("musicTweetCount");
+    const musicCategorySelect = document.getElementById("musicCategorySelect");
+    const musicToneSelect = document.getElementById("musicToneSelect");
+    const musicLinkModeSelect = document.getElementById("musicLinkModeSelect");
+    const musicPortfolioInput = document.getElementById("musicPortfolioInput");
+    const musicGenerateBtn = document.getElementById("musicGenerateBtn");
+    const musicCopyAllBtn = document.getElementById("musicCopyAllBtn");
+    const musicClaudePromptBtn = document.getElementById("musicClaudePromptBtn");
+    const musicStatus = document.getElementById("musicStatus");
+    const musicSuggestionsList = document.getElementById("musicSuggestionsList");
+    const musicPeopleInput = document.getElementById("musicPeopleInput");
+    const musicPeopleImportBtn = document.getElementById("musicPeopleImportBtn");
+    const musicPeopleExportBtn = document.getElementById("musicPeopleExportBtn");
+    const musicPeopleList = document.getElementById("musicPeopleList");
+    const musicUsedList = document.getElementById("musicUsedList");
+    const musicSearchRadarList = document.getElementById("musicSearchRadarList");
+    const musicSaturdayList = document.getElementById("musicSaturdayList");
     const claudePromptBtn = document.getElementById("claudePromptBtn");
     const founderClaudePromptBtn = document.getElementById("founderClaudePromptBtn");
     const softerBtn = document.getElementById("softerBtn");
@@ -3325,7 +3480,7 @@
       try {
         const params = new URLSearchParams(window.location.search);
         const mode = (params.get("mode") || "").toLowerCase().trim();
-        return ["tonight", "founder", "wellness", "gravity"].includes(mode) ? mode : "";
+        return ["tonight", "founder", "wellness", "gravity", "music"].includes(mode) ? mode : "";
       } catch (error) {
         return "";
       }
@@ -4558,7 +4713,16 @@
       "432 hz": "432hz",
       "528 hz": "528hz",
       "rain on the window": "rain on the window",
-      "cafe": "café"
+      "cafe": "café",
+      "foggy": "fog",
+      "misty": "mist",
+      "snowy": "snow",
+      "caves": "cave",
+      "mountains": "mountains",
+      "moonlight": "moonlight",
+      "candles": "candles",
+      "singing bowls": "singing bowls",
+      "field recording": "field recording"
     };
 
     function normalizeEchoText(value) {
@@ -4607,7 +4771,7 @@
       return { primary, question, share, celebration, struggle, lateNight, invitation, confession };
     }
 
-    function extractTweetAnchors(tweetText) {
+    function extractTweetAnchors(tweetText, extraLexicon = []) {
       const text = normalizeEchoText(tweetText);
       const lower = text.toLowerCase();
       const anchors = [];
@@ -4635,7 +4799,7 @@
       const moneyMatch = lower.match(/(\$\s?\d[\d,.]*\s?k?)(\s?mrr)?/);
       if (moneyMatch) add(moneyMatch[0].replace(/\s+/g, ""), "count", 8);
 
-      echoLexicon.forEach((group) => {
+      [...extraLexicon, ...echoLexicon].forEach((group) => {
         [...group.words].sort((a, b) => b.length - a.length).forEach((word) => {
           const spoken = echoPhraseAliases[word] || word;
           if (anchors.some((anchor) => anchor.phrase.includes(spoken) || spoken.includes(anchor.phrase) || anchor.phrase.includes(word))) return;
@@ -4822,7 +4986,8 @@
         pool.forEach((template, templateIndex) => {
           candidates.push({
             text: fillEchoTemplate(template, anchor),
-            category: context === "founder" ? "echo" : "echo",
+            template,
+            category: "echo",
             tone: `echo · ${anchor.kind}`,
             anchor: anchor.phrase,
             score: 21 + anchor.weight * 0.6 - anchorIndex * 1.5 - (templateIndex >= (kindTemplates[intentKey] || []).length ? 1.5 : 0)
@@ -4843,10 +5008,15 @@
     function capEchoReplies(sorted, limit = 5, maxEcho = 3) {
       const picked = [];
       const anchorUse = new Map();
+      const templatesUsed = new Set();
       let echoCount = 0;
       for (const item of sorted) {
         if (picked.length >= limit) break;
         const isEcho = String(item.tone || "").startsWith("echo");
+        if (item.template) {
+          if (templatesUsed.has(item.template)) continue;
+          templatesUsed.add(item.template);
+        }
         if (isEcho) {
           if (echoCount >= maxEcho) continue;
           const used = anchorUse.get(item.anchor) || 0;
@@ -4865,10 +5035,15 @@
     // ---------------------------------------------------------------
     function buildClaudePrompt(tweetText, context, options = {}) {
       const intent = analyzeTweetIntent(tweetText);
-      const anchors = extractTweetAnchors(tweetText).map((anchor) => anchor.phrase);
-      const worthiness = calculateReplyWorthiness(tweetText, options.category || "", options.tone || "", context);
+      const anchors = extractTweetAnchors(tweetText, context === "music" ? musicLexicon : []).map((anchor) => anchor.phrase);
+      const worthiness = calculateReplyWorthiness(tweetText, options.category || "", options.tone || "", context === "music" ? "wellness" : context);
       const isFounder = context === "founder";
-      const linkLine = isFounder
+      const isMusic = context === "music";
+      const linkLine = isMusic
+        ? options.linkMode !== "none" && options.portfolioUrl
+          ? `- only if the post is looking for a composer, one reply may include my portfolio: ${options.portfolioUrl}`
+          : "- no links. if they are looking for a composer, offer to send a short sketch instead"
+        : isFounder
         ? options.linkMode === "include"
           ? `- one reply may mention my app with this link: ${founderProjectUrl}`
           : options.linkMode === "none"
@@ -4877,13 +5052,15 @@
         : "- no links, no app mentions unless the tweet directly asks for app recommendations";
 
       return [
-        `help me reply to a tweet on X. i'm @inhaleexhaleapp — elvin, solo founder of inhale exhale, a small calm meditation / sleep sound app. i also make ambient music.`,
+        isMusic
+          ? "help me reply to a post on X. i'm @inhaleexhaleapp — elvin, an ambient / mythic / ritual music producer moving toward indie game soundtracks (hellblade-inspired scores, steppe journeys, drones)."
+          : "help me reply to a tweet on X. i'm @inhaleexhaleapp — elvin, solo founder of inhale exhale, a small calm meditation / sleep sound app. i also make ambient music.",
         "",
         "tweet:",
         `"""${tweetText.trim()}"""`,
         "",
         "context:",
-        `- room: ${isFounder ? "indie founder / builder" : "wellness / calm internet"}`,
+        `- room: ${isMusic ? "indie game dev / composers / ambient music" : isFounder ? "indie founder / builder" : "wellness / calm internet"}`,
         options.category ? `- category: ${options.category}` : null,
         options.tone ? `- tone i want: ${options.tone}` : null,
         `- what the tweet is doing: ${intent.primary}${intent.lateNight ? " (late night)" : ""}`,
@@ -4895,6 +5072,7 @@
         "- mostly lowercase, casual, like a real person typing on their phone",
         `- short: under ${replyEngineRules.preferredMax} characters each, some much shorter`,
         "- reference one concrete detail from the tweet so it doesn't feel like a template",
+        isMusic ? "- if it's a game WIP, react like someone who can already hear its soundtrack: mood, texture, one instrument idea. never pitch myself unless they ask for a composer" : null,
         "- low-ego, warm, slightly imperfect is fine. no hashtags, no emojis unless one fits naturally",
         "- no therapy-speak, no guru / linkedin tone, no engagement bait, no sales language",
         `- avoid: ${[...replyEngineRules.avoidWords, ...replyEngineRules.bannedPhrases].join(", ")}`,
@@ -4903,6 +5081,625 @@
         "give me 5 replies in this order: safest, warmer, slightly witty, mentor-aware, ultra-short.",
         "just the 5 lines, numbered, no commentary."
       ].filter((line) => line !== null).join("\n");
+    }
+
+    // ---------------------------------------------------------------
+    // Music / Sound tab: replies for indie game devs, composers and
+    // ambient producers, a people list for building real mutuals, and
+    // a similarity guard so replies never look templated. Local only.
+    // ---------------------------------------------------------------
+
+    const musicCategories = [
+      "gamedev WIP",
+      "looking for composer",
+      "composer peer",
+      "ambient / drone producer",
+      "music release",
+      "process / gear",
+      "soundtrack talk"
+    ];
+
+    const musicTones = [
+      "curious listener",
+      "fellow composer",
+      "soft ambient",
+      "gamedev fan",
+      "ultra short"
+    ];
+
+    const musicLexicon = [
+      { kind: "scene", words: ["fog", "foggy", "mist", "misty", "forest", "woods", "ruins", "temple", "shrine", "cave", "caves", "snow", "snowy", "rain", "storm", "ocean", "sea", "shore", "desert", "steppe", "mountain", "mountains", "swamp", "marsh", "night", "moon", "moonlight", "lantern", "candle", "candles", "underwater", "abyss", "void", "graveyard", "cathedral", "village", "castle", "dungeon", "tower", "lighthouse", "island", "valley", "river", "lake", "ice", "fire", "embers", "dust", "sunset", "dawn", "dusk", "stars", "space", "wind"] },
+      { kind: "instrument", words: ["cello", "violin", "viola", "piano", "felt piano", "synth", "synth pad", "pads", "choir", "vocals", "throat singing", "frame drum", "taiko", "drums", "duduk", "ney", "kalimba", "flute", "harp", "guitar", "bass", "strings", "brass", "music box", "singing bowl", "singing bowls", "field recording", "field recordings", "tape loop", "modular", "granular", "reverb", "drone", "bells", "organ", "oud", "baglama", "kanun"] },
+      { kind: "genre", words: ["horror", "survival horror", "cozy", "soulslike", "metroidvania", "roguelike", "puzzle", "narrative", "walking sim", "folk horror", "dark fantasy", "mythic", "mythology", "folklore", "ritual", "melancholic", "liminal", "lofi", "ambient", "drone", "dark ambient", "ost", "soundtrack", "boss theme", "main theme", "menu music"] }
+    ];
+
+    const musicEchoTemplates = {
+      scene: {
+        share: [
+          "the {a} in this already has a sound. something low and slow underneath it.",
+          "i can almost hear the {a} here. long reverb, one lonely cello.",
+          "that {a} is doing so much work. would love to hear what it sounds like at night.",
+          "okay the {a} atmosphere is beautiful. what are you using for audio so far?"
+        ],
+        any: [
+          "{a} + a slow drone is my favorite combination in games.",
+          "anything with {a} in it gets my full attention honestly."
+        ]
+      },
+      instrument: {
+        share: ["the {a} layer is the thing for me here.", "{a} is such an underrated texture for games.", "love how the {a} sits in the mix. very patient."],
+        any: ["{a} never misses for me.", "more {a} everywhere, please."]
+      },
+      genre: {
+        share: ["{a} done this quietly is so rare. following along.", "this is exactly the {a} mood i love."],
+        any: ["{a} soundtracks are where the interesting stuff happens right now.", "{a} needs more patient music. glad people are making it."]
+      }
+    };
+
+    const musicReplyBank = {
+      "gamedev WIP": [
+        "this looks like it already has a soundtrack in its head. what's the mood you're aiming for?",
+        "the atmosphere here is lovely. is audio in yet or still silent?",
+        "such a patient mood. following to see where it goes.",
+        "the lighting alone tells a story. curious how it'll sound.",
+        "this is the kind of screenshot that makes me want to open my daw."
+      ],
+      "looking for composer": [
+        "hi! i make ambient, mythic and ritual-leaning music. would love to hear more about the mood you want.",
+        "this sounds like a lovely project. i score quiet, atmospheric stuff. happy to send a short sketch if it helps.",
+        "what references do you have in mind? i do fog-and-drone type atmospheres mostly.",
+        "if you're open to ambient / dark folk textures, i'd love to be considered. no pressure either way."
+      ],
+      "composer peer": [
+        "the space in this is beautiful. you're not afraid of silence, love that.",
+        "that tail at the end. how long is the reverb on that?",
+        "this would sit so well under a slow exploration scene.",
+        "such a good texture. what are you layering underneath?"
+      ],
+      "ambient / drone producer": [
+        "this is the good kind of slow.",
+        "put this on and the room changed a little. thank you.",
+        "love how nothing rushes here.",
+        "that low end is so gentle. headphones recommended, clearly."
+      ],
+      "music release": [
+        "congrats on putting it out. saving it for tonight.",
+        "listening now. the opening already feels like a place.",
+        "releasing ambient into the timeline takes courage lol. congrats.",
+        "the cover and the sound match so well."
+      ],
+      "process / gear": [
+        "love seeing the process side. what was the first layer you laid down?",
+        "the simplest setups always make the most honest sounds.",
+        "field recordings are half of my process too. where was this one from?",
+        "this is the part nobody sees. thanks for sharing it."
+      ],
+      "soundtrack talk": [
+        "the soundtracks that stay with me are always the ones that leave space.",
+        "silence is an instrument in games and not enough people use it.",
+        "hellblade's audio still lives in my head years later.",
+        "the best game music makes you forget it's playing, then you miss it when it stops."
+      ]
+    };
+
+    const musicToneOpeners = {
+      "curious listener": ["oh this is lovely.", "okay, this mood.", ""],
+      "fellow composer": ["composer brain says:", "love this.", ""],
+      "soft ambient": ["quietly loving this.", "this is so calm.", ""],
+      "gamedev fan": ["following this one.", "okay this looks special.", ""],
+      "ultra short": [""]
+    };
+
+    const musicSearchPresets = [
+      {
+        category: "ScreenshotSaturday · atmosphere",
+        queries: [
+          "#ScreenshotSaturday (atmospheric OR fog OR foggy OR mythic OR moody OR melancholic) since:{since7} -filter:replies",
+          "#ScreenshotSaturday (forest OR ruins OR temple OR cave OR snow OR lantern) since:{since7} -filter:replies",
+          "#ScreenshotSaturday (cozy OR quiet OR peaceful) since:{since7} -filter:replies"
+        ]
+      },
+      {
+        category: "Looking for a composer",
+        queries: [
+          "(\"looking for a composer\" OR \"need a composer\" OR \"looking for music\" OR \"need music for my game\") since:{since14} -filter:replies",
+          "(composer OR soundtrack) (#indiedev OR #indiegamedev) (\"looking for\" OR \"hiring\") since:{since14}"
+        ]
+      },
+      {
+        category: "Composer peers",
+        queries: [
+          "(#gamemusic OR #GameAudio OR #composer) (ambient OR atmospheric OR dark) since:{since7} -filter:replies",
+          "(wip OR \"work in progress\") (soundtrack OR ost OR \"game music\") since:{since7} -filter:replies"
+        ]
+      },
+      {
+        category: "Ambient / drone rooms",
+        queries: [
+          "(#ambient OR #drone OR #ambientmusic OR #darkambient) since:{since7} -filter:replies -filter:links",
+          "(ambient OR drone) (\"field recording\" OR \"tape loop\" OR modular OR granular) since:{since7} -filter:replies"
+        ]
+      },
+      {
+        category: "Myth · ritual · folklore",
+        queries: [
+          "(mythology OR folklore OR ritual) (game OR soundtrack OR ost) since:{since14} -filter:replies",
+          "(\"folk horror\" OR \"dark folk\" OR \"ritual music\") since:{since14} -filter:replies"
+        ]
+      },
+      {
+        category: "Scene-scoring conversations",
+        queries: [
+          "(Hellblade OR Senua) (music OR soundtrack OR ost OR audio) since:{since14}",
+          "(\"game soundtrack\" OR \"video game music\") (favorite OR underrated OR \"stays with me\") since:{since7} -filter:replies"
+        ]
+      }
+    ];
+
+    const musicSaturdaySearches = [
+      "#ScreenshotSaturday (atmospheric OR fog OR mythic) since:{since2} -filter:replies",
+      "#ScreenshotSaturday (horror OR dark OR eerie) since:{since2} -filter:replies",
+      "#ScreenshotSaturday (cozy OR quiet) since:{since2} -filter:replies",
+      "(#indiegamedev OR #gamedev) (\"sound design\" OR \"no music yet\" OR \"placeholder music\") since:{since7}"
+    ];
+
+    const musicStorageKey = "yunaMusicState";
+
+    function readMusicState() {
+      const fallback = { used: [], history: [], people: [], portfolioUrl: "", linkMode: "none" };
+      try {
+        const parsed = JSON.parse(localStorage.getItem(musicStorageKey) || "null");
+        return parsed && typeof parsed === "object" ? { ...fallback, ...parsed } : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    const musicState = readMusicState();
+    let musicCurrentReplies = [];
+
+    function writeMusicStorage() {
+      try {
+        localStorage.setItem(musicStorageKey, JSON.stringify(musicState));
+      } catch (error) {
+        // storage can be unavailable in private windows; the tab still works in memory
+      }
+    }
+
+    // --- similarity guard -------------------------------------------------
+    function similarityWords(text) {
+      return new Set(normalizeEchoText(text).toLowerCase().replace(/[^a-z0-9\s']/g, " ").split(/\s+/).filter((word) => word.length > 2 && !echoStopWords.has(word)));
+    }
+
+    function replySimilarity(a, b) {
+      const wordsA = similarityWords(a);
+      const wordsB = similarityWords(b);
+      if (!wordsA.size || !wordsB.size) return 0;
+      let shared = 0;
+      wordsA.forEach((word) => { if (wordsB.has(word)) shared += 1; });
+      return shared / Math.min(wordsA.size, wordsB.size);
+    }
+
+    function recentlyPostedTexts() {
+      const lists = [
+        (typeof appState !== "undefined" && appState.used) || [],
+        (typeof founderState !== "undefined" && founderState.used) || [],
+        musicState.used || []
+      ];
+      return lists
+        .flat()
+        .slice()
+        .sort((a, b) => String(b.usedAt || b.createdAt || "").localeCompare(String(a.usedAt || a.createdAt || "")))
+        .slice(0, 30)
+        .map((item) => item.text)
+        .filter(Boolean);
+    }
+
+    function similarityWarning(text) {
+      let best = 0;
+      recentlyPostedTexts().forEach((posted) => {
+        if (posted === text) return;
+        best = Math.max(best, replySimilarity(text, posted));
+      });
+      return best >= 0.6 ? Math.round(best * 100) : 0;
+    }
+
+    function similarityPill(text) {
+      const overlap = similarityWarning(text);
+      return overlap
+        ? `<span class="pill warn" title="Small accounts get filtered for repeated reply patterns. Rephrase before posting.">${overlap}% like a recent reply</span>`
+        : "";
+    }
+
+    // --- reply generation -------------------------------------------------
+    function musicShape(text, mode, tone, anchor) {
+      let cleaned = sentenceCaseToLowercaseBias(removeAiCadence(text))
+        .replace(/\bI\b/g, "i")
+        .replace(/\bI’m\b/g, "i’m");
+
+      if (mode === "ultra-short" && tone === "composer offer") {
+        const pool = ["would love to hear more about it 🙏", "sounds like my kind of project. dm open?", "ritual + drums is exactly my lane. would love to chat."];
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      if (mode === "ultra-short") {
+        const pool = anchor
+          ? [`that ${anchor} though.`, `the ${anchor} 🌫️`, `${anchor} mood, yes.`]
+          : ["the atmosphere here 🌫️", "this already has a sound.", "okay, this mood.", "following this one."];
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      const openers = (musicToneOpeners[tone] || [""]).filter(Boolean);
+      if (openers.length && ["warmer", "slightly witty"].includes(mode) && cleaned.length < 120 && !/^(oh|okay|love|quietly|following|composer)/i.test(cleaned)) {
+        cleaned = `${openers[Math.floor(Math.random() * openers.length)]} ${cleaned}`;
+      }
+
+      return trimToLimit(cleaned.replace(/\s+/g, " ").trim(), 220);
+    }
+
+    function buildMusicCandidates(tweetText, category, tone) {
+      const intent = analyzeTweetIntent(tweetText);
+      const anchors = extractTweetAnchors(tweetText, musicLexicon);
+      const lower = normalizeEchoText(tweetText).toLowerCase();
+      const composerWanted = category === "looking for composer" || containsAny(lower, ["looking for a composer", "need a composer", "looking for music", "need music", "hiring a composer", "composer wanted"]);
+      const sharesWork = intent.share || category === "gamedev WIP" || containsAny(lower, ["#screenshotsaturday", "screenshotsaturday", "wip", "progress", "devlog", "here's", "made this", "working on"]);
+      const effectiveCategory = composerWanted ? "looking for composer" : category;
+      const candidates = [];
+
+      (musicReplyBank[effectiveCategory] || []).forEach((text, index) => {
+        candidates.push({ text, category: effectiveCategory, tone: composerWanted ? "composer offer" : tone, score: (composerWanted ? (index < 2 ? 27 : 12) : 14) - index * 0.3 });
+      });
+
+      musicCategories.forEach((otherCategory) => {
+        if (otherCategory === effectiveCategory || otherCategory === "looking for composer") return;
+        (musicReplyBank[otherCategory] || []).forEach((text) => {
+          candidates.push({ text, category: otherCategory, tone, score: 5 });
+        });
+      });
+
+      anchors.forEach((anchor, anchorIndex) => {
+        const family = musicEchoTemplates[anchor.kind] || echoTemplates.wellness[anchor.kind];
+        if (!family) return;
+        const intentKey = sharesWork ? "share" : intent.struggle ? "struggle" : "any";
+        [...(family[intentKey] || []), ...(family.any || [])].forEach((template, templateIndex) => {
+          candidates.push({
+            text: fillEchoTemplate(template, anchor),
+            template,
+            category: effectiveCategory,
+            tone: `echo · ${anchor.kind}`,
+            anchor: anchor.phrase,
+            score: 21 + anchor.weight * 0.6 - anchorIndex * 1.5 - templateIndex * 0.4
+          });
+        });
+      });
+
+      if (composerWanted && musicState.linkMode !== "none" && musicState.portfolioUrl) {
+        candidates.push({
+          text: `i make ambient / mythic music and would love to hear more about the project. a few pieces: ${musicState.portfolioUrl}`,
+          category: "looking for composer",
+          tone: "portfolio",
+          score: musicState.linkMode === "include" ? 30 : 24
+        });
+      }
+
+      candidates.forEach((candidate) => {
+        candidate.score -= danglingReferencePenalty(candidate.text, { share: sharesWork || composerWanted });
+        candidate.score += Math.random() * 4;
+      });
+
+      return { candidates, anchors, intent, composerWanted };
+    }
+
+    function generateMusicReplies() {
+      const tweetText = musicTweetInput.value.trim();
+      const category = musicCategorySelect.value;
+      const tone = musicToneSelect.value;
+      if (!tweetText) {
+        setMusicStatus("Paste a post first, then generate replies.");
+        musicTweetInput.focus();
+        return;
+      }
+      if (!ensureActiveSessionForReply(setMusicStatus)) return;
+
+      const { candidates, anchors, composerWanted } = buildMusicCandidates(tweetText, category, tone);
+      const recent = new Set([...musicState.used.slice(0, 30).map((item) => item.text), ...musicCurrentReplies.map((item) => item.text)]);
+      const seen = new Set();
+      const unique = candidates
+        .map((candidate) => ({ ...candidate, score: candidate.score - (recent.has(candidate.text) ? 6 : 0) - similarityWarning(candidate.text) / 20 }))
+        .filter((candidate) => {
+          const key = candidate.text.toLowerCase();
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .sort((a, b) => b.score - a.score);
+
+      const picked = capEchoReplies(unique, 5, 3);
+      const modes = tone === "ultra short"
+        ? ["ultra-short", "ultra-short", "safest", "ultra-short", "warmer"]
+        : replyEngineRules.replyOrder;
+      const firstAnchor = anchors[0] && anchors[0].phrase;
+      const shapedSeen = new Set();
+      musicCurrentReplies = picked.map((item, index) => {
+        const mode = modes[index] || "safest";
+        return {
+          ...item,
+          mode,
+          text: item.tone === "portfolio" ? item.text : musicShape(item.text, mode, item.tone === "composer offer" ? "composer offer" : tone, mode === "ultra-short" ? (item.anchor || firstAnchor) : null)
+        };
+      }).filter((item) => {
+        const key = item.text.toLowerCase();
+        if (shapedSeen.has(key)) return false;
+        shapedSeen.add(key);
+        return true;
+      });
+
+      recordReplyGeneration();
+      musicState.history.unshift({
+        tweet: tweetText.slice(0, 280),
+        category,
+        tone,
+        replies: musicCurrentReplies.map((reply) => reply.text),
+        createdAt: new Date().toISOString()
+      });
+      musicState.history = musicState.history.slice(0, 40);
+      writeMusicStorage();
+      renderMusicAll();
+      setMusicStatus(composerWanted
+        ? "Composer call detected. Keep it human, link only if you set a portfolio."
+        : `${musicCurrentReplies.length} replies ready.${anchors.length ? ` picked up: ${anchors.map((anchor) => anchor.phrase).join(", ")}` : ""}`);
+    }
+
+    // --- people list ------------------------------------------------------
+    function parsePeopleLines(raw) {
+      return String(raw || "")
+        .split(/\n+/)
+        .map((line) => line.trim())
+        .filter((line) => /@[A-Za-z0-9_]{2,15}/.test(line))
+        .map((line) => {
+          const handle = line.match(/@([A-Za-z0-9_]{2,15})/)[1];
+          const parts = line.split("|").map((part) => part.trim());
+          if (parts.length >= 5 && parts[0].startsWith("@")) {
+            return {
+              handle: `@${handle}`,
+              category: parts[1] || "",
+              followers: parts[2] || "",
+              postDate: parts[3] || "",
+              link: ((parts[4] || "").match(/https?:\/\/\S+/) || [""])[0],
+              mood: parts.slice(5).join(" · "),
+              addedAt: new Date().toISOString(),
+              lastReplied: ""
+            };
+          }
+          const link = (line.match(/https?:\/\/\S+/) || [""])[0].replace(/[),.]+$/, "");
+          const date = (line.match(/\b(20\d{2}-\d{2}-\d{2}|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.? \d{1,2}(?:, ?20\d{2})?)\b/i) || [""])[0];
+          const followers = (parts.find((part) => /\d/.test(part) && /(k|followers|~|\d,\d)/i.test(part) && !/https?:/.test(part) && part !== date) || "").replace(/followers?/i, "").trim();
+          const textParts = parts.filter((part) => part && !part.startsWith("@") && !/https?:/.test(part) && part !== date && part !== followers && !/^\d/.test(part));
+          return {
+            handle: `@${handle}`,
+            category: textParts[0] || "",
+            followers,
+            postDate: date,
+            link,
+            mood: textParts.slice(1).join(" · "),
+            addedAt: new Date().toISOString(),
+            lastReplied: ""
+          };
+        });
+    }
+
+    function mergePeople(incoming) {
+      let added = 0;
+      incoming.forEach((person) => {
+        const existing = musicState.people.find((item) => item.handle.toLowerCase() === person.handle.toLowerCase());
+        if (existing) {
+          Object.keys(person).forEach((key) => {
+            if (!["addedAt", "lastReplied"].includes(key) && person[key]) existing[key] = person[key];
+          });
+        } else {
+          musicState.people.push(person);
+          added += 1;
+        }
+      });
+      return added;
+    }
+
+    function daysSince(iso) {
+      if (!iso) return null;
+      const diff = Date.now() - new Date(iso).getTime();
+      return Number.isFinite(diff) ? Math.floor(diff / 86400000) : null;
+    }
+
+    function renderMusicPeople() {
+      if (!musicState.people.length) {
+        musicPeopleList.innerHTML = '<p class="empty">Paste lines like <code>@handle | game dev | 1.2k | Sep 20 | https://x.com/... | foggy mythic forest</code>. Accounts you have not replied to in a while float to the top.</p>';
+        return;
+      }
+      const waitDays = (person) => {
+        const days = daysSince(person.lastReplied);
+        return days === null ? 9999 : days;
+      };
+      const sorted = musicState.people.slice().sort((a, b) => waitDays(b) - waitDays(a));
+      musicPeopleList.innerHTML = sorted.map((person) => {
+        const days = daysSince(person.lastReplied);
+        const handleSlug = person.handle.replace(/^@/, "");
+        return `
+          <article class="memory-card music-person">
+            <p class="memory-text"><strong>${escapeHtml(person.handle)}</strong> ${person.category ? `· ${escapeHtml(person.category)}` : ""} ${person.followers ? `· ${escapeHtml(person.followers)}` : ""}</p>
+            ${person.mood ? `<p class="music-person-mood">${escapeHtml(person.mood)}</p>` : ""}
+            <div class="reply-meta">
+              <span class="pill ${days === null ? "warn" : days >= 5 ? "warn" : "safe"}">${days === null ? "not replied yet" : days === 0 ? "replied today" : `replied ${days}d ago`}</span>
+              ${person.postDate ? `<span class="pill">post ${escapeHtml(person.postDate)}</span>` : ""}
+            </div>
+            <div class="reply-actions">
+              <button class="small" type="button" data-music-person="profile" data-handle="${escapeHtml(handleSlug)}">Open profile</button>
+              ${person.link ? `<button class="small" type="button" data-music-person="post" data-handle="${escapeHtml(handleSlug)}">Open post</button>` : ""}
+              <button class="small" type="button" data-music-person="replied" data-handle="${escapeHtml(handleSlug)}">Replied today</button>
+              <button class="small danger" type="button" data-music-person="remove" data-handle="${escapeHtml(handleSlug)}">Remove</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    // --- rendering --------------------------------------------------------
+    function setMusicStatus(message) {
+      musicStatus.textContent = message;
+    }
+
+    function musicReplyCard(reply, index) {
+      const used = musicState.used.some((item) => item.text === reply.text);
+      return `
+        <article class="reply-card">
+          <p class="reply-text">${escapeHtml(reply.text)}</p>
+          <div class="reply-meta">
+            <span class="pill">${reply.text.length}/220</span>
+            ${reply.mode ? `<span class="pill">${escapeHtml(reply.mode)}</span>` : ""}
+            <span class="pill">${escapeHtml(reply.tone || reply.category)}</span>
+            ${similarityPill(reply.text)}
+            ${soundsPromotional(reply.text) || /https?:\/\//.test(reply.text) ? '<span class="pill warn">link / promo, post sparingly</span>' : ""}
+            ${used ? '<span class="pill safe">Used</span>' : ""}
+          </div>
+          <div class="reply-actions">
+            <button class="small" type="button" data-music-action="copy" data-index="${index}">Copy</button>
+            <button class="small" type="button" data-music-action="used" data-index="${index}">${used ? "Used" : "Mark as Used"}</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderMusicSuggestions() {
+      musicSuggestionsList.innerHTML = musicCurrentReplies.length
+        ? musicCurrentReplies.map(musicReplyCard).join("")
+        : '<p class="empty">Paste a WIP, a composer call, or a track post. Replies pick up the mood and never repeat your recent ones.</p>';
+      musicCopyAllBtn.disabled = !musicCurrentReplies.length;
+    }
+
+    function renderMusicHistory() {
+      musicUsedList.innerHTML = musicState.used.length
+        ? musicState.used.slice(0, 12).map((item) => `
+          <article class="memory-card">
+            <p class="memory-text">${escapeHtml(item.text)}</p>
+            <div class="reply-meta"><span class="pill">${escapeHtml(item.category || "music")}</span><span class="pill">${escapeHtml(formatDate(item.usedAt))}</span></div>
+          </article>
+        `).join("")
+        : '<p class="empty">Replies you mark as used show up here and feed the similarity guard.</p>';
+    }
+
+    function renderMusicSearchRadar() {
+      musicSearchRadarList.innerHTML = musicSearchPresets.map((preset) => `
+        <section class="radar-category" aria-label="${escapeHtml(preset.category)} music search presets">
+          <h3>${escapeHtml(preset.category)}</h3>
+          <div class="query-list">
+            ${preset.queries.map((query) => queryCard(query, preset.category, "music")).join("")}
+          </div>
+        </section>
+      `).join("");
+      musicSaturdayList.innerHTML = musicSaturdaySearches.map((query) => queryCard(query, "Saturday shift", "music")).join("");
+    }
+
+    function renderMusicAll() {
+      renderMusicSuggestions();
+      renderMusicHistory();
+      renderMusicPeople();
+      renderMusicSearchRadar();
+      musicClaudePromptBtn.disabled = !musicTweetInput.value.trim();
+    }
+
+    function initMusicTab() {
+      musicCategorySelect.innerHTML = musicCategories.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join("");
+      musicToneSelect.innerHTML = musicTones.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join("");
+      musicPortfolioInput.value = musicState.portfolioUrl || "";
+      musicLinkModeSelect.value = musicState.linkMode || "none";
+
+      musicTweetInput.addEventListener("input", () => {
+        musicTweetCount.textContent = `${musicTweetInput.value.length} characters`;
+        musicClaudePromptBtn.disabled = !musicTweetInput.value.trim();
+      });
+      musicTweetInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+          event.preventDefault();
+          generateMusicReplies();
+        }
+      });
+      musicGenerateBtn.addEventListener("click", generateMusicReplies);
+      musicPortfolioInput.addEventListener("change", () => {
+        musicState.portfolioUrl = musicPortfolioInput.value.trim();
+        writeMusicStorage();
+      });
+      musicLinkModeSelect.addEventListener("change", () => {
+        musicState.linkMode = musicLinkModeSelect.value;
+        writeMusicStorage();
+      });
+      musicCopyAllBtn.addEventListener("click", async () => {
+        await copyText(musicCurrentReplies.map((reply, index) => `${index + 1}. ${reply.text}`).join("\n"));
+        setMusicStatus("Copied all replies.");
+      });
+      musicClaudePromptBtn.addEventListener("click", async () => {
+        const tweetText = musicTweetInput.value.trim();
+        if (!tweetText) return;
+        await copyText(buildClaudePrompt(tweetText, "music", {
+          category: musicCategorySelect.value,
+          tone: musicToneSelect.value,
+          linkMode: musicState.linkMode,
+          portfolioUrl: musicState.portfolioUrl
+        }));
+        setMusicStatus("Claude prompt copied. Paste it into claude.ai, then pick one by hand.");
+      });
+
+      musicSuggestionsList.addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-music-action]");
+        if (!button) return;
+        const reply = musicCurrentReplies[Number(button.dataset.index)];
+        if (!reply) return;
+        if (button.dataset.musicAction === "copy") {
+          await copyText(reply.text);
+          setMusicStatus("Copied. Reply like you actually watched it.");
+        }
+        if (button.dataset.musicAction === "used" && !musicState.used.some((item) => item.text === reply.text)) {
+          musicState.used.unshift({ text: reply.text, category: reply.category, usedAt: new Date().toISOString() });
+          musicState.used = musicState.used.slice(0, 80);
+          writeMusicStorage();
+          renderMusicAll();
+        }
+      });
+
+      musicPeopleImportBtn.addEventListener("click", () => {
+        const people = parsePeopleLines(musicPeopleInput.value);
+        if (!people.length) {
+          setMusicStatus("No @handles found. One account per line, like Grok's list.");
+          return;
+        }
+        const added = mergePeople(people);
+        musicPeopleInput.value = "";
+        writeMusicStorage();
+        renderMusicPeople();
+        setMusicStatus(`${added} new, ${people.length - added} updated. Existing people were kept.`);
+      });
+
+      musicPeopleExportBtn.addEventListener("click", async () => {
+        await copyText(musicState.people.map((person) => [person.handle, person.category, person.followers, person.postDate, person.link, person.mood].join(" | ")).join("\n"));
+        setMusicStatus("People list copied as text.");
+      });
+
+      musicPeopleList.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-music-person]");
+        if (!button) return;
+        const handle = `@${button.dataset.handle}`.toLowerCase();
+        const person = musicState.people.find((item) => item.handle.toLowerCase() === handle);
+        if (!person) return;
+        const action = button.dataset.musicPerson;
+        if (action === "profile") window.open(`https://x.com/${button.dataset.handle}`, "_blank", "noopener,noreferrer");
+        if (action === "post" && person.link) window.open(person.link, "_blank", "noopener,noreferrer");
+        if (action === "replied") person.lastReplied = new Date().toISOString();
+        if (action === "remove") musicState.people = musicState.people.filter((item) => item !== person);
+        if (["replied", "remove"].includes(action)) {
+          writeMusicStorage();
+          renderMusicPeople();
+        }
+      });
+
+      renderMusicAll();
     }
 
     function recentTextSet() {
@@ -5813,6 +6610,11 @@
           tab: "wellnessPanel",
           whisper: "open a few doors, choose gently."
         },
+        music: {
+          label: "Music / Sound · opened by shortcut",
+          tab: "musicPanel",
+          whisper: new Date().getDay() === 6 ? "saturday. the screenshots are out." : "find one scene you can already hear."
+        },
         gravity: {
           label: "Gravity Map · opened by shortcut",
           tab: "gravityPanel",
@@ -6192,6 +6994,8 @@
           await copyText(query);
           if (scope === "founder") {
             setFounderStatus("Founder search query copied.");
+          } else if (scope === "music") {
+            setMusicStatus("Search query copied.");
           } else {
             setStatus("Search query copied.");
           }
@@ -6201,6 +7005,8 @@
           window.open(buildXSearchUrl(query), "_blank", "noopener,noreferrer");
           if (scope === "founder") {
             setFounderStatus("Opened founder X search in a new tab.");
+          } else if (scope === "music") {
+            setMusicStatus("Opened X search in a new tab.");
           } else {
             setStatus("Opened X search in a new tab.");
           }
@@ -6445,6 +7251,7 @@
     document.addEventListener("keydown", (event) => {
       const meta = event.metaKey || event.ctrlKey;
       if (!meta) return;
+      if (event.target && ["tweetInput", "founderTweetInput", "musicTweetInput"].includes(event.target.id)) return;
       if (event.key === "Enter") {
         event.preventDefault();
         scoreGravityThread();
@@ -6470,6 +7277,7 @@
     updateFounderTweetCount();
     renderAll();
     renderFounderAll();
+    initMusicTab();
   </script>
 </body>
 </html>

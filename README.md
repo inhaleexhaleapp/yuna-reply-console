@@ -94,6 +94,18 @@ Supports common founder thread archetypes like:
 
 Replies are intentionally low-ego, short, human, slightly messy, and non-salesy. Project links are only suggested when a thread explicitly asks for them.
 
+### Music / Sound
+
+For the music side of `@inhaleexhaleapp`: indie game devs, game composers, and ambient / drone producers.
+
+- **Rooms**: gamedev WIP, looking for composer, composer peer, ambient / drone producer, music release, process / gear, soundtrack talk.
+- **Scene-aware replies**: picks up scenes (fog, forest, ruins, lantern, cave…), instruments (cello, felt piano, frame drum, field recordings…), and genres (folk horror, cozy, dark ambient…) and replies like someone who can already hear the soundtrack.
+- **Composer calls** are detected automatically. Replies lead with at most two human offers ("happy to send a short sketch"), never a hard pitch. A portfolio link is only added if you set a URL and allow it.
+- **Similarity guard**: every reply is compared with your last 30 used replies across all tabs. Near-duplicates are pushed down and flagged, because small accounts get filtered for repeated reply patterns. One template is never used twice in the same set.
+- **People to know**: paste accounts one per line (`@handle | category | followers | date | link | mood`, the format Grok returns). The list merges instead of overwriting, and whoever you haven't replied to lately floats to the top. "Replied today" keeps the rhythm honest.
+- **Music Search Radar** with a **Saturday shift** for `#ScreenshotSaturday`.
+- Shortcut: `/?mode=music`.
+
 ## Reply Worthiness Score
 
 Yuna includes a local Reply Worthiness panel above generated replies to help decide whether a pasted post deserves attention before drafting.
@@ -311,6 +323,7 @@ iOS Shortcuts can open the local console with a mode parameter to prepare the ri
 - `/?mode=founder`
 - `/?mode=wellness`
 - `/?mode=gravity`
+- `/?mode=music`
 
 These modes only switch tabs, show a small local status pill, adjust microcopy, and prioritize local radar presets.
 
