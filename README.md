@@ -116,6 +116,26 @@ The panel also shows a few plain-language reasons and a suggested reply approach
 
 Everything is calculated from the pasted text and selected local controls. No API, X integration, account, tracking, cloud storage, external service, or automation is used.
 
+## Echo Engine
+
+Template replies feel like templates when they don't touch the tweet. The Echo Engine is a small local heuristic layer that fixes that:
+
+- **Anchors**: pulls one concrete detail from the pasted text (a time like `3am`, a year, a count like `10 users`, a duration like `6 hours`, a sound like `432hz` or `rain sounds`, a ritual, a tool like `cursor`, a milestone like `app store rejection`, or a short `-ing` activity phrase) and writes it back into a few replies.
+- **Intent**: reads what the tweet is doing — question, invitation ("what are you building?"), share, celebration, struggle, confession — and picks the matching template family.
+- **Real answers to real questions**: "what helps you fall asleep?" gets a first-person answer instead of sympathy.
+- **No dangling "this"**: replies like "tried this with headphones" are pushed down when the tweet isn't actually sharing a track, link, or app.
+- At most 3 of the 5 replies are echo replies, so the set still feels varied. Echo replies show an `echo · <kind>` pill.
+
+## Copy Claude Prompt
+
+Both reply tabs have a **Copy Claude prompt** button. It copies a ready-to-paste prompt with the tweet, category, tone, detected intent, anchors, local worthiness score, link rules, and the console's voice rules and banned phrases. Paste it into claude.ai yourself when a tweet deserves a better-than-template reply.
+
+The console still sends nothing anywhere: no API, no key, no network. It only writes to your clipboard.
+
+## Keyboard
+
+- `⌘ Enter` / `Ctrl Enter` inside a tweet box generates replies.
+
 ## Human Texture Controls
 
 Human Texture Controls allow replies to shift between:
