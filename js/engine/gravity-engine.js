@@ -20,19 +20,6 @@ function freshnessScore(hours) {
   return 8;
 }
 
-function countPattern(text, pattern) {
-  const matches = text.match(pattern);
-  return matches ? matches.length : 0;
-}
-
-function compactWordCount(text) {
-  return text.trim().split(/\s+/).filter(Boolean).length;
-}
-
-function countEmojiLikeMarks(text) {
-  return countPattern(text, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu);
-}
-
 function detectGravityCultureSignals(candidate) {
   const text = `${candidate.text} ${candidate.handle} ${candidate.mode} ${(candidate.tags || []).join(" ")}`.toLowerCase();
   const boosts = [];
