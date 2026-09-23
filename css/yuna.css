@@ -1340,6 +1340,7 @@ select {
 
   .primary,
   .primary-actions button,
+  .primary-actions .file-button,
   .variant-actions button,
   .section-actions button,
   .query-actions button {
@@ -1410,4 +1411,3 @@ select {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
-
