@@ -131,3 +131,6 @@ const founderSearchRadarList = document.getElementById("founderSearchRadarList")
 const founderNightSearchList = document.getElementById("founderNightSearchList");
 const founderClearFavoritesBtn = document.getElementById("founderClearFavoritesBtn");
 const founderClearHistoryBtn = document.getElementById("founderClearHistoryBtn");
+const backupExportBtn = document.getElementById("backupExportBtn");
+const backupImportInput = document.getElementById("backupImportInput");
+const backupStatus = document.getElementById("backupStatus");

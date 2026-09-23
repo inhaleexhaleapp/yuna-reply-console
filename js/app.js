@@ -314,21 +314,56 @@ founderTweetInput.addEventListener("input", () => {
 founderCategorySelect.addEventListener("change", renderFounderWorthiness);
 founderToneSelect.addEventListener("change", renderFounderWorthiness);
 
+// Gravity Map shortcuts only apply while that tab is open, so ⌘R still reloads
+// and the reply boxes keep their own ⌘Enter.
 document.addEventListener("keydown", (event) => {
   const meta = event.metaKey || event.ctrlKey;
-  if (!meta) return;
+  if (!meta || event.altKey) return;
+  if (!document.getElementById("gravityPanel").classList.contains("is-active")) return;
   if (event.target && ["tweetInput", "founderTweetInput", "musicTweetInput"].includes(event.target.id)) return;
-  if (event.key === "Enter") {
+  if (event.key === "Enter" && event.shiftKey) {
+    event.preventDefault();
+    generateGravityReplies();
+  } else if (event.key === "Enter") {
     event.preventDefault();
     scoreGravityThread();
-  }
-  if (event.key.toLowerCase() === "s") {
+  } else if (event.key.toLowerCase() === "s" && !event.shiftKey) {
     event.preventDefault();
     saveGravitySession();
   }
-  if (event.key.toLowerCase() === "r") {
-    event.preventDefault();
-    generateGravityReplies();
+});
+
+backupExportBtn.addEventListener("click", () => {
+  const backup = collectBackup();
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `yuna-backup-${backup.exportedAt.slice(0, 10)}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  backupStatus.textContent = `Backup saved · ${summarizeBackupData(backup.data)}.`;
+});
+
+backupImportInput.addEventListener("change", async () => {
+  const file = backupImportInput.files && backupImportInput.files[0];
+  backupImportInput.value = "";
+  if (!file) return;
+  try {
+    const { exportedAt, entries } = parseBackup(await file.text());
+    const data = Object.fromEntries(entries);
+    const when = exportedAt ? formatDate(exportedAt) : "an unknown date";
+    const confirmed = window.confirm(`Replace this browser's Yuna data with the backup from ${when}?\n\n${summarizeBackupData(data)}`);
+    if (!confirmed) {
+      backupStatus.textContent = "Restore cancelled. Nothing changed.";
+      return;
+    }
+    Object.keys(localStorage).filter(isYunaStorageKey).forEach((key) => localStorage.removeItem(key));
+    entries.forEach(([key, value]) => localStorage.setItem(key, value));
+    window.location.reload();
+  } catch (error) {
+    backupStatus.textContent = `Restore failed: ${error.message}`;
   }
 });
 

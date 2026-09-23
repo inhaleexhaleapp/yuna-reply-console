@@ -160,3 +160,29 @@ test("text helpers: trimming and de-corporatizing", () => {
   const cleaned = y.removeAiCadence("This resonates deeply. Great insight! Keep going!");
   assert.ok(!/resonates deeply|great insight|keep going/i.test(cleaned));
 });
+
+test("backup: collects only Yuna keys and round-trips", () => {
+  const store = { yunaMusicState: '{"people":[{"handle":"@a"}],"used":[]}', yuna_session_current: "null", otherApp: "keep out" };
+  const fakeStorage = { get length() { return Object.keys(store).length; }, key: (i) => Object.keys(store)[i], getItem: (k) => store[k] };
+  const backup = plain(y.collectBackup(fakeStorage, new Date("2026-09-23T10:00:00Z")));
+  assert.deepEqual(Object.keys(backup.data).sort(), ["yunaMusicState", "yuna_session_current"]);
+  const restored = plain(y.parseBackup(JSON.stringify(backup)));
+  assert.equal(restored.entries.length, 2);
+  assert.equal(y.summarizeBackupData(backup.data), "1 person · 0 used replies · 0 radar lists");
+});
+
+test("backup: rejects files that are not Yuna backups", () => {
+  assert.throws(() => y.parseBackup("not json"), /valid JSON/);
+  assert.throws(() => y.parseBackup('{"app":"something-else","data":{}}'), /not a Yuna backup/);
+  assert.throws(() => y.parseBackup('{"app":"yuna-reply-console","data":{"evil":"x"}}'), /empty/);
+});
+
+test("radar list import merges instead of overwriting", () => {
+  const current = { CalmTech: [{ handle: "@a", url: "u1" }], Mine: [{ handle: "@m", url: "m1" }] };
+  const incoming = { CalmTech: [{ handle: "@A", url: "u1" }, { handle: "@b", url: "u2" }], NewList: [{ handle: "@c", url: "u3" }] };
+  const { lists, added } = plain(y.mergeRadarLists(current, incoming));
+  assert.equal(added, 2);
+  assert.deepEqual(lists.CalmTech.map((item) => item.handle), ["@a", "@b"]);
+  assert.deepEqual(lists.Mine.map((item) => item.handle), ["@m"]);
+  assert.deepEqual(lists.NewList.map((item) => item.handle), ["@c"]);
+});

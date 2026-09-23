@@ -614,6 +614,21 @@
         </section>
       </div>
     </section>
+
+    <section class="panel data-panel" aria-labelledby="data-title">
+      <div class="section-head">
+        <div>
+          <h2 id="data-title">Your data</h2>
+          <p class="cockpit-note">Everything lives in this browser only. Save a backup to move it between iPad and Mac, or to keep it safe if the browser clears its storage.</p>
+        </div>
+      </div>
+      <div class="primary-actions">
+        <button class="ghost" id="backupExportBtn" type="button">Save backup file</button>
+        <label class="ghost file-button" for="backupImportInput">Restore from backup</label>
+        <input id="backupImportInput" class="visually-hidden" type="file" accept=".json,application/json" />
+      </div>
+      <p class="status" id="backupStatus" role="status" aria-live="polite"></p>
+    </section>
   </main>
 
   <script src="js/data/wellness-data.js"></script>
@@ -622,6 +637,7 @@
   <script src="js/data/music-data.js"></script>
   <script src="js/core/utils.js"></script>
   <script src="js/core/storage.js"></script>
+  <script src="js/core/backup.js"></script>
   <script src="js/engine/text.js"></script>
   <script src="js/engine/worthiness.js"></script>
   <script src="js/engine/echo.js"></script>

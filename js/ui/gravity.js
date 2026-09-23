@@ -437,11 +437,12 @@ function importGravityLists() {
   try {
     const parsed = JSON.parse(gravityImportExport.value);
     if (!parsed.lists || typeof parsed.lists !== "object") throw new Error("Missing lists");
-    gravityState.lists = parsed.lists;
+    const { lists, added } = mergeRadarLists(gravityState.lists, parsed.lists);
+    gravityState.lists = lists;
     ensureGravityLists();
     writeGravityStorage();
     renderGravityLists();
-    setGravityStatus("Radar lists imported.");
+    setGravityStatus(`Radar lists merged. ${added} new candidates, existing ones kept.`);
   } catch (error) {
     setGravityStatus("Import failed. Paste exported radar JSON.");
   }

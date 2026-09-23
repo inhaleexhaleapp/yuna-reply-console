@@ -10,6 +10,7 @@ const ENGINE_FILES = [
   "data/founder-data.js",
   "data/music-data.js",
   "core/utils.js",
+  "core/backup.js",
   "engine/text.js",
   "engine/worthiness.js",
   "engine/echo.js",

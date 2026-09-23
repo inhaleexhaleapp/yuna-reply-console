@@ -1372,3 +1372,42 @@ select {
     grid-template-columns: 1fr;
   }
 }
+
+.data-panel {
+  margin-top: 22px;
+}
+
+.data-panel .primary-actions button {
+  padding: 0 16px;
+}
+
+.file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin: 0;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--soft);
+  background: rgba(200, 230, 255, 0.04);
+  font-size: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+}
+
+.file-button:hover {
+  border-color: rgba(200, 230, 255, 0.36);
+  background: rgba(200, 230, 255, 0.07);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
