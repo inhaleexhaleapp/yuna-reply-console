@@ -1,5 +1,7 @@
 # Yuna Reply Console
 
+<img src="docs/yuna-hello.webp" alt="Yuna waving hello" width="120" align="right" />
+
 **A local-first, human-in-the-loop reply companion for thoughtful conversations on X.**
 
 Not a bot. Not automation. Not an engagement farm.
@@ -8,6 +10,7 @@ Not a bot. Not automation. Not an engagement farm.
 [![license: MIT](https://img.shields.io/badge/license-MIT-b9a4ff.svg)](LICENSE)
 ![no dependencies](https://img.shields.io/badge/dependencies-0-c8e6ff.svg)
 ![no API](https://img.shields.io/badge/API-none-f3d9c2.svg)
+![lives here: Yuna](https://img.shields.io/badge/lives_here-Yuna_%F0%9F%8C%B8-f6c9e6.svg)
 
 **[Open the live console →](https://inhaleexhaleapp.github.io/yuna-reply-console/)**
 
@@ -48,11 +51,23 @@ Every reply tab includes a **Search Radar** of preset X searches (opened in Late
 
 ## Meet Yuna 🌸
 
+> *Not a bot. A tiny friend who reminds you that you're not one either.*
+
 ![Yuna reacting to the console](docs/yuna-pet.png)
 
-Yuna lives in the corner of the console. She is the same chibi companion as YunaPet, the [Inhale Exhale](https://inhaleexhale.app) desktop pet, ported to the browser from her behaviour spec: the same sprites, moods, words and rituals, retuned for a work tool.
+Yuna is the companion from Inhale Exhale, the meditation app where she sits beside you during breathing sessions. On the desktop she became **YunaPet**, a chibi who lives on your Mac. Now she has moved into the console too, a small corner of calm on a loud timeline.
 
-She is the console's conscience, not decoration:
+| | |
+| --- | --- |
+| **Loves** | onigiri 🍙, warm matcha 🍵, crunchy lettuce 🥬, old myths 📚, a good window seat 🪟 |
+| **Weak spots** | incense (always too much), pilates balls, rain walks she was sure about, gravity |
+| **Superpower** | knowing when you've had enough screen time |
+| **Will never** | post for you, guilt-trip you, or disappear for good. She never gets sick, never "dies", and she is always one onigiri away from happy again |
+| **Says things like** | *"hi hi"* · *"read it once more?"* · *"skipping is fine"* · *"physics 1, yuna 0"* · *"kale yeah"* |
+
+She is the console's conscience, not decoration.
+
+In the console she keeps YunaPet's sprites, moods, words and rituals, ported to the browser from her behaviour spec and retuned for a work tool. She reacts to what you do:
 
 | What happens | What Yuna does |
 | --- | --- |
