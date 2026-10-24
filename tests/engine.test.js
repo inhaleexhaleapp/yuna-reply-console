@@ -303,3 +303,54 @@ test("yuna: reactions and the avocado break", () => {
   assert.equal(y.yunaFormatCountdown(59), "00:59");
   assert.equal(y.yunaFormatCountdown(-3), "00:00");
 });
+
+test("yuna: avocado pomodoro moves focus → due → break → next round", () => {
+  const min = 60000;
+  let pomo = plain(y.yunaPomodoroStart("classic", 0));
+  assert.deepEqual(pomo, { phase: "focus", presetId: "classic", round: 1, endsAt: 25 * min });
+  assert.equal(plain(y.yunaPomodoroAdvance(pomo, 10 * min, true)).event, null);
+
+  let step = plain(y.yunaPomodoroAdvance(pomo, 25 * min, false));
+  assert.equal(step.event, "focus-done");
+  assert.equal(step.pomo.phase, "due");
+  assert.equal(plain(y.yunaPomodoroAdvance(step.pomo, 40 * min, false)).event, null, "the break waits while you are away");
+
+  step = plain(y.yunaPomodoroAdvance(step.pomo, 40 * min, true));
+  assert.equal(step.event, "break-start");
+  assert.equal(step.pomo.endsAt, 45 * min, "the break starts when you come back");
+
+  step = plain(y.yunaPomodoroAdvance(step.pomo, 45 * min, true));
+  assert.equal(step.event, "break-done");
+  assert.deepEqual(step.pomo, { phase: "focus", presetId: "classic", round: 2, endsAt: 70 * min });
+
+  const fourth = { phase: "due", presetId: "classic", round: 4, endsAt: 0 };
+  const long = plain(y.yunaPomodoroAdvance(fourth, 0, true)).pomo;
+  assert.equal(long.long, true);
+  assert.equal(long.endsAt, 15 * min, "every fourth break is long");
+  assert.equal(plain(y.yunaPomodoroStart("nope", 0)).presetId, "classic");
+});
+
+test("yuna: pause, resume, skip and time on X", () => {
+  const min = 60000;
+  const running = plain(y.yunaPomodoroStart("short", 0));
+  const paused = plain(y.yunaPomodoroPause(running, 5 * min));
+  assert.equal(paused.phase, "paused");
+  assert.equal(y.yunaPomodoroRemaining(paused, 99 * min), 10 * min);
+  const resumed = plain(y.yunaPomodoroResume(paused, 50 * min));
+  assert.deepEqual(resumed, { phase: "focus", presetId: "short", round: 1, endsAt: 60 * min });
+  assert.equal(plain(y.yunaPomodoroSkip(resumed, 51 * min)).phase, "due");
+  const breaking = { phase: "break", presetId: "short", round: 1, endsAt: 99 * min };
+  assert.equal(plain(y.yunaPomodoroSkip(breaking, 52 * min)).round, 2);
+
+  const day = new Date(2026, 9, 24, 14).getTime();
+  let log = y.yunaAddSocialTime(null, 20 * min, day);
+  log = y.yunaAddSocialTime(log, 12 * min, day + min);
+  assert.equal(y.yunaSocialMinutesToday(log, day), 32);
+  assert.equal(y.yunaSocialMinutesToday(log, day + 24 * 60 * min), 0, "a new day starts at zero");
+  assert.equal(y.yunaSocialMinutesToday(y.yunaAddSocialTime(null, 9 * 60 * min, day), day), 180, "forgotten tabs are capped");
+
+  assert.equal(y.yunaXTripNudge(23, false), "break");
+  assert.equal(y.yunaXTripNudge(4, false), "welcome");
+  assert.equal(y.yunaXTripNudge(0, false), null);
+  assert.equal(y.yunaXTripNudge(40, true), null, "a running pomodoro already handles it");
+});

@@ -23,7 +23,7 @@ It never connects to X. No API, no posting, liking, following, DMs, or scraping.
 git clone https://github.com/inhaleexhaleapp/yuna-reply-console.git
 cd yuna-reply-console
 open index.html        # or just double-click it
-node --test            # 29 tests, zero dependencies
+node --test            # 31 tests, zero dependencies
 ```
 
 No build step, no `npm install`, no server, no API key.
@@ -63,7 +63,17 @@ She is the console's conscience, not decoration:
 | Grok Scout finds living rooms | opens her book: "oh! 📖 3 living rooms" |
 | Grok Scout finds nothing worth it | gets rained on: "skipping is fine" |
 | ~25 minutes of real work | **Avocado Break** 🥑: offers 5 minutes away from the screen, with a countdown |
+| You come back after 15+ minutes on X | "you were on X for 23 min 👀" and a break offer |
 | It's past 11 pm | gets sleepy and says so |
+
+### Avocado Pomodoro 🍅🥑
+
+Social media eats time quietly, so Yuna carries a gentle Pomodoro. Start it from her menu (**15/3**, **25/5** or **45/10**, every fourth break is long) and a small timer sits at her feet.
+
+- The clock is wall-clock time, so the minutes you spend on X after opening a post, a search or Grok from the console count too.
+- If a round ends while you are still on X, the tab title changes to "🥑 break time", and an optional notification reminds you (only if you turn it on and allow it). The break itself waits until you come back, so you never return to a break that already ended.
+- Pause, skip, or stop at any time. It is a nudge, not a lock.
+- Yuna also keeps a private tally of time on X today, counted only for trips that start from the console. She can't see anything you do on X itself.
 
 When you leave her alone she has her own life, following YunaPet's idle ladder: breathing, peeking in from the edge, wandering, floating, perching on the tab bar (and falling off), coffee in the morning, snacks with a rare "salad supremacy" moment, mythology, incense disasters, pilates, rain walks and naps.
 
@@ -218,7 +228,7 @@ Scripts are plain classic `<script>` files that share one global scope. There ar
 node --test
 ```
 
-The engine files load into a Node `vm` context, so they are tested without a browser or any npm packages. The suites cover intent, anchors, echo replies, similarity, people-list parsing, Grok Scout prompts, parsing and ranking, Yuna's frames, words, idle ladder and reactions, composer calls, reply-set invariants (length, uniqueness, banned phrases), backup validation, list merging, and page integrity. GitHub Actions runs them on every push.
+The engine files load into a Node `vm` context, so they are tested without a browser or any npm packages. The suites cover intent, anchors, echo replies, similarity, people-list parsing, Grok Scout prompts, parsing and ranking, Yuna's frames, words, idle ladder, reactions and Pomodoro, composer calls, reply-set invariants (length, uniqueness, banned phrases), backup validation, list merging, and page integrity. GitHub Actions runs them on every push.
 
 ## Roadmap
 

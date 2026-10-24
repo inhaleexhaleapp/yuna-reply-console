@@ -273,3 +273,102 @@ function yunaFormatCountdown(seconds) {
   const safe = Math.max(0, Math.ceil(Number(seconds) || 0));
   return `${String(Math.floor(safe / 60)).padStart(2, "0")}:${String(safe % 60).padStart(2, "0")}`;
 }
+
+// ---------- Avocado Pomodoro ----------
+// A gentle timer for social-media time. Focus rounds count wall-clock time, so time
+// spent on X after opening a post from the console counts too.
+// Phases: off → focus → due (focus ended, waiting for you to come back) → break → focus …
+
+const yunaPomodoroPresets = [
+  { id: "short", label: "15 / 3", focus: 15, brk: 3, long: 10 },
+  { id: "classic", label: "25 / 5", focus: 25, brk: 5, long: 15 },
+  { id: "deep", label: "45 / 10", focus: 45, brk: 10, long: 20 }
+];
+const YUNA_LONG_BREAK_EVERY = 4;
+const YUNA_LONG_X_TRIP_MIN = 15;
+
+function yunaPomodoroPreset(id) {
+  return yunaPomodoroPresets.find((preset) => preset.id === id) || yunaPomodoroPresets[1];
+}
+
+function yunaPomodoroStart(presetId, now) {
+  const preset = yunaPomodoroPreset(presetId);
+  return { phase: "focus", presetId: preset.id, round: 1, endsAt: now + preset.focus * 60000 };
+}
+
+function yunaPomodoroRemaining(pomo, now) {
+  if (!pomo || pomo.phase === "off" || pomo.phase === "due") return 0;
+  if (pomo.phase === "paused") return Math.max(0, pomo.remainingMs);
+  return Math.max(0, pomo.endsAt - now);
+}
+
+function yunaPomodoroBreakMinutes(pomo) {
+  const preset = yunaPomodoroPreset(pomo.presetId);
+  return pomo.round % YUNA_LONG_BREAK_EVERY === 0 ? preset.long : preset.brk;
+}
+
+// Moves the timer forward. Returns { pomo, event } where event is null,
+// "focus-done", "break-start" or "break-done".
+function yunaPomodoroAdvance(pomo, now, visible) {
+  if (!pomo || pomo.phase === "off" || pomo.phase === "paused") return { pomo, event: null };
+  if (pomo.phase === "focus" && now >= pomo.endsAt) {
+    return { pomo: { ...pomo, phase: "due", dueAt: pomo.endsAt }, event: "focus-done" };
+  }
+  if (pomo.phase === "due" && visible) {
+    const minutes = yunaPomodoroBreakMinutes(pomo);
+    return {
+      pomo: { ...pomo, phase: "break", long: pomo.round % YUNA_LONG_BREAK_EVERY === 0, endsAt: now + minutes * 60000 },
+      event: "break-start"
+    };
+  }
+  if (pomo.phase === "break" && now >= pomo.endsAt) {
+    const preset = yunaPomodoroPreset(pomo.presetId);
+    return { pomo: { phase: "focus", presetId: pomo.presetId, round: pomo.round + 1, endsAt: now + preset.focus * 60000 }, event: "break-done" };
+  }
+  return { pomo, event: null };
+}
+
+function yunaPomodoroPause(pomo, now) {
+  if (!pomo || !["focus", "break"].includes(pomo.phase)) return pomo;
+  return { ...pomo, phase: "paused", pausedFrom: pomo.phase, remainingMs: Math.max(0, pomo.endsAt - now) };
+}
+
+function yunaPomodoroResume(pomo, now) {
+  if (!pomo || pomo.phase !== "paused") return pomo;
+  const { pausedFrom, remainingMs, ...rest } = pomo;
+  return { ...rest, phase: pausedFrom, endsAt: now + remainingMs };
+}
+
+// "Skip" ends the current focus (straight to break) or the current break (next round).
+function yunaPomodoroSkip(pomo, now) {
+  if (!pomo) return pomo;
+  if (pomo.phase === "focus") return { ...pomo, phase: "due", dueAt: now };
+  if (pomo.phase === "break") return yunaPomodoroAdvance({ ...pomo, endsAt: now }, now, true).pomo;
+  return pomo;
+}
+
+// Time on X, counted only for trips that start from a console link.
+function yunaDayKey(now) {
+  const date = new Date(now);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function yunaAddSocialTime(log, ms, now) {
+  const day = yunaDayKey(now);
+  const base = log && log.day === day ? log : { day, ms: 0, trips: 0 };
+  // A trip longer than 3 hours is almost certainly a forgotten tab, not scrolling.
+  const counted = Math.min(Math.max(0, ms), 3 * 60 * 60000);
+  return { day, ms: base.ms + counted, trips: base.trips + 1 };
+}
+
+function yunaSocialMinutesToday(log, now) {
+  return log && log.day === yunaDayKey(now) ? Math.round(log.ms / 60000) : 0;
+}
+
+// What Yuna says when you come back from a trip to X that started in the console.
+function yunaXTripNudge(minutes, pomodoroRunning) {
+  if (pomodoroRunning) return null;
+  if (minutes >= YUNA_LONG_X_TRIP_MIN) return "break";
+  if (minutes >= 1) return "welcome";
+  return null;
+}

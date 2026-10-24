@@ -24,7 +24,21 @@ const yunaPet = {
   tickTimer: null,
   breakTimer: null,
   reducedMotion: false,
-  state: { hidden: false, x: null, y: null, lastAt: {}, lastBreakOfferAt: 0 }
+  baseTitle: "",
+  pendingXAt: 0,
+  timer: null,
+  state: {
+    hidden: false,
+    x: null,
+    y: null,
+    lastAt: {},
+    lastBreakOfferAt: 0,
+    pomodoro: { phase: "off" },
+    presetId: "classic",
+    notify: false,
+    social: null,
+    awayAt: 0
+  }
 };
 
 function readYunaPetState() {
@@ -340,6 +354,7 @@ async function yunaReact(signal) {
 
 function yunaOfferBreak(force = false) {
   if (yunaPet.state.hidden || yunaPet.activity === "break") return;
+  if (yunaPomodoro().phase !== "off") return;
   const minutesSince = (Date.now() - (yunaPet.state.lastBreakOfferAt || 0)) / 60000;
   if (!force && !yunaShouldSuggestBreak(yunaPet.activeMinutes, minutesSince)) return;
   yunaPet.state.lastBreakOfferAt = Date.now();
@@ -363,7 +378,8 @@ function yunaOfferBreak(force = false) {
   }, 45000);
 }
 
-function yunaStartBreak() {
+// options.pomodoro: the Pomodoro owns the clock and ends the break itself.
+function yunaStartBreak(options = {}) {
   const generation = yunaBegin("break");
   yunaPet.activeMinutes = 0;
   yunaGoHome(0.5);
@@ -373,31 +389,159 @@ function yunaStartBreak() {
   yunaPet.bubble.classList.add("is-visible", "is-interactive");
   const render = () => {
     if (generation !== yunaPet.generation) return;
-    const left = (endsAt - Date.now()) / 1000;
-    if (left <= 0) {
+    const pomo = options.pomodoro ? yunaPomodoro() : null;
+    const left = pomo ? yunaPomodoroRemaining(pomo, Date.now()) / 1000 : (endsAt - Date.now()) / 1000;
+    if (!pomo && left <= 0) {
       yunaFinishBreak(generation);
       return;
     }
+    const title = pomo && pomo.long ? "long avocado break 🥑" : "🥑";
+    const clock = pomo && pomo.phase === "paused" ? `⏸ ${yunaFormatCountdown(left)}` : yunaFormatCountdown(left);
     yunaPet.bubble.innerHTML = `
-      <span class="yuna-countdown">🥑 ${yunaFormatCountdown(left)}</span>
+      <span class="yuna-countdown">${title} ${clock}</span>
       <span>Breathe. Stretch. Look at something far.</span>
-      <span class="yuna-bubble-actions"><button type="button" data-yuna-break="end">end break</button></span>`;
+      <span class="yuna-bubble-actions"><button type="button" data-yuna-break="${pomo ? "skip" : "end"}">end break</button></span>`;
     yunaPet.breakTimer = setTimeout(render, 1000);
   };
   render();
 }
 
-async function yunaFinishBreak(generation) {
+async function yunaFinishBreak(generation, nextLine = "welcome back ☁️") {
   clearTimeout(yunaPet.breakTimer);
   yunaPet.bubble.classList.remove("is-interactive");
   yunaClearBubble();
   yunaEffect("sparkle");
   yunaSay("break finished 🌙", 1.6, { force: true });
   if (!(await yunaWait(1.8, generation))) return;
-  yunaSay("welcome back ☁️", 1.8, { force: true });
-  if (!(await yunaWait(1.9, generation))) return;
+  yunaSay(nextLine, 2, { force: true });
+  if (!(await yunaWait(2.1, generation))) return;
   yunaPet.activity = "idle";
   yunaRunRitual("sip");
+}
+
+// ---------- avocado pomodoro ----------
+
+function yunaPomodoro() {
+  return yunaPet.state.pomodoro || { phase: "off" };
+}
+
+function yunaSetPomodoro(pomo) {
+  yunaPet.state.pomodoro = pomo;
+  writeYunaPetState();
+  yunaRenderTimer();
+}
+
+function yunaRenderTimer() {
+  const pomo = yunaPomodoro();
+  const timer = yunaPet.timer;
+  if (!timer) return;
+  if (pomo.phase === "off" || yunaPet.state.hidden) {
+    timer.hidden = true;
+    return;
+  }
+  const left = yunaFormatCountdown(yunaPomodoroRemaining(pomo, Date.now()) / 1000);
+  const label = {
+    focus: `🍅 ${left}`,
+    due: "🥑 now",
+    break: `🥑 ${left}`,
+    paused: `⏸ ${left}`
+  }[pomo.phase] || "";
+  timer.hidden = false;
+  timer.textContent = label;
+  timer.dataset.phase = pomo.phase;
+  timer.setAttribute("aria-label", `Avocado Pomodoro, round ${pomo.round}: ${label}`);
+}
+
+function yunaAlertTitle(on) {
+  document.title = on ? "🥑 break time · Yuna Reply Console" : yunaPet.baseTitle;
+}
+
+function yunaNotify(title, body) {
+  if (!yunaPet.state.notify || typeof Notification === "undefined" || Notification.permission !== "granted") return;
+  try {
+    new Notification(title, { body, icon: yunaFrameUrl("break-1"), silent: true });
+  } catch (error) {
+    // some browsers only allow notifications from a service worker; the tab title still changes
+  }
+}
+
+function yunaPomodoroTick() {
+  const before = yunaPomodoro();
+  const { pomo, event } = yunaPomodoroAdvance(before, Date.now(), !document.hidden);
+  if (pomo !== before) yunaSetPomodoro(pomo);
+  if (event === "focus-done") {
+    if (document.hidden) {
+      yunaAlertTitle(true);
+      yunaNotify("🥑 avocado break", "Yuna: X will still be there. A few minutes away from the screen?");
+    }
+  }
+  if (event === "break-start") {
+    yunaAlertTitle(false);
+    if (!yunaPet.state.hidden) {
+      yunaClearBubble();
+      yunaStartBreak({ pomodoro: true });
+      yunaSay(pomo.long ? "long break. you earned it 🥑" : "avocado break 🥑", 2.2, { force: true });
+      setTimeout(() => yunaPet.activity === "break" && yunaRenderTimer(), 2300);
+    }
+  }
+  if (event === "break-done" && yunaPet.activity === "break") {
+    yunaFinishBreak(yunaPet.generation, `round ${pomo.round} 🍅 gently`);
+  }
+  if (event === null) yunaRenderTimer();
+}
+
+function yunaPomodoroAction(action) {
+  const now = Date.now();
+  const pomo = yunaPomodoro();
+  if (action === "pomo-start") {
+    yunaSetPomodoro(yunaPomodoroStart(yunaPet.state.presetId, now));
+    const preset = yunaPomodoroPreset(yunaPet.state.presetId);
+    yunaSay(`🍅 ${preset.focus} min. i'll call you for a break`, 2.4, { force: true });
+    return;
+  }
+  if (action === "pomo-preset") {
+    const index = yunaPomodoroPresets.findIndex((preset) => preset.id === yunaPet.state.presetId);
+    yunaPet.state.presetId = yunaPomodoroPresets[(index + 1) % yunaPomodoroPresets.length].id;
+    writeYunaPetState();
+    return;
+  }
+  if (action === "pomo-pause") return yunaSetPomodoro(yunaPomodoroPause(pomo, now));
+  if (action === "pomo-resume") return yunaSetPomodoro(yunaPomodoroResume(pomo, now));
+  if (action === "pomo-skip") {
+    yunaSetPomodoro(yunaPomodoroSkip(pomo, now));
+    if (pomo.phase === "break" && yunaPet.activity === "break") yunaFinishBreak(yunaPet.generation, `round ${yunaPomodoro().round} 🍅`);
+    yunaPomodoroTick();
+    return;
+  }
+  if (action === "pomo-stop") {
+    yunaSetPomodoro({ phase: "off" });
+    yunaAlertTitle(false);
+    if (yunaPet.activity === "break") yunaFinishBreak(yunaPet.generation, "timer off. still here ☁️");
+  }
+}
+
+async function yunaToggleNotify() {
+  if (yunaPet.state.notify) {
+    yunaPet.state.notify = false;
+  } else if (typeof Notification !== "undefined") {
+    const permission = Notification.permission === "granted" ? "granted" : await Notification.requestPermission();
+    yunaPet.state.notify = permission === "granted";
+    if (!yunaPet.state.notify) yunaSay("no notifications allowed. the tab title will still blink 🥑", 2.6, { force: true });
+  }
+  writeYunaPetState();
+}
+
+// Coming back from X after opening a post, a search or Grok from the console.
+function yunaBackFromX(ms) {
+  const minutes = Math.round(ms / 60000);
+  const nudge = yunaXTripNudge(minutes, yunaPomodoro().phase !== "off");
+  if (yunaPet.state.hidden || !nudge || yunaPet.activity === "break") return;
+  if (nudge === "break") {
+    yunaSay(`you were on X for ${minutes} min 👀`, 2.6, { force: true });
+    setTimeout(() => yunaOfferBreak(true), 2700);
+    return;
+  }
+  if (Math.random() < 0.5) yunaSay("welcome back ☁️", 1.8);
 }
 
 // ---------- idle clock ----------
@@ -445,14 +589,34 @@ function yunaTick() {
 // ---------- menu ----------
 
 function yunaRenderMenu() {
-  const items = yunaMenuRituals.map((name) => `<button type="button" role="menuitem" data-yuna-menu="${name}">${escapeHtml(yunaRituals[name].label)}</button>`);
-  items.push('<button type="button" role="menuitem" data-yuna-menu="break">Avocado break 🥑</button>');
-  items.push('<button type="button" role="menuitem" data-yuna-menu="hide">Hide Yuna</button>');
-  yunaPet.menu.innerHTML = items.join("");
+  const pomo = yunaPomodoro();
+  const preset = yunaPomodoroPreset(yunaPet.state.presetId);
+  const item = (action, label) => `<button type="button" role="menuitem" data-yuna-menu="${action}">${escapeHtml(label)}</button>`;
+  const pomodoro = pomo.phase === "off"
+    ? [item("pomo-start", `Start 🍅 ${preset.label}`), item("pomo-preset", `Rhythm: ${preset.label} ↻`)]
+    : [
+        pomo.phase === "paused" ? item("pomo-resume", "Resume ▶") : item("pomo-pause", "Pause ⏸"),
+        item("pomo-skip", pomo.phase === "break" ? "Skip break" : "Break now 🥑"),
+        item("pomo-stop", "Stop timer")
+      ];
+  const minutes = yunaSocialMinutesToday(yunaPet.state.social, Date.now());
+  yunaPet.menu.innerHTML = `
+    <p class="yuna-menu-head">Avocado Pomodoro${pomo.phase !== "off" ? ` · round ${pomo.round}` : ""}</p>
+    ${pomodoro.join("")}
+    ${item("notify", `Remind me while I'm on X ${yunaPet.state.notify ? "🔔 on" : "🔕 off"}`)}
+    <p class="yuna-menu-note">${minutes ? `On X today via the console: ~${minutes} min` : "Time on X counts when you open it from here."}</p>
+    <details class="yuna-menu-rituals">
+      <summary>Yuna's rituals ✨</summary>
+      ${yunaMenuRituals.map((name) => item(name, yunaRituals[name].label)).join("")}
+      ${item("break", "Avocado break 🥑")}
+    </details>
+    ${item("hide", "Hide Yuna")}
+    <p class="yuna-menu-note">click to wave · drag to move</p>`;
 }
 
 function yunaToggleMenu(open) {
   const show = open ?? yunaPet.menu.hidden;
+  if (show) yunaRenderMenu();
   yunaPet.menu.hidden = !show;
   yunaPet.menuButton.setAttribute("aria-expanded", String(show));
   if (show) {
@@ -563,6 +727,8 @@ function yunaBindControls() {
     const action = button.dataset.yunaMenu;
     yunaToggleMenu(false);
     if (action === "hide") return yunaSetHidden(true);
+    if (action.startsWith("pomo-")) return yunaPomodoroAction(action);
+    if (action === "notify") return yunaToggleNotify();
     if (action === "break") return yunaStartBreak();
     if (action === "nap") return yunaSleep();
     yunaRunRitual(action, { manual: true });
@@ -583,6 +749,7 @@ function yunaBindControls() {
     yunaPet.bubble.classList.remove("is-interactive");
     if (action === "start") return yunaStartBreak();
     if (action === "end") return yunaFinishBreak(yunaPet.generation);
+    if (action === "skip") return yunaPomodoroAction("pomo-skip");
     yunaClearBubble();
     yunaSay("okay. i'll ask again later ☁️", 2, { force: true });
     yunaIdle(0.5);
@@ -612,6 +779,38 @@ function yunaTrackActivity() {
   });
 
   document.addEventListener("yuna:signal", (event) => yunaReact(event.detail || {}));
+
+  // Doors to X: radar searches, posts, profiles and Grok. Only these start the X clock.
+  const xDoors = '[data-radar-action="open"], [data-scout-action="open"], #scoutOpenGrokBtn, #gravityOpenThreadBtn, #gravityOpenProfileBtn, a[href*="x.com/"], a[href*="twitter.com/"]';
+  document.addEventListener("click", (event) => {
+    if (event.target.closest && event.target.closest(xDoors)) yunaPet.pendingXAt = Date.now();
+  }, true);
+
+  document.addEventListener("visibilitychange", () => {
+    const now = Date.now();
+    if (document.hidden) {
+      if (yunaPet.pendingXAt && now - yunaPet.pendingXAt < 5000) {
+        yunaPet.state.awayAt = now;
+        writeYunaPetState();
+      }
+      yunaPet.pendingXAt = 0;
+      return;
+    }
+    yunaAlertTitle(false);
+    yunaCountXTrip(now);
+    yunaPomodoroTick();
+  });
+
+  setInterval(yunaPomodoroTick, 1000);
+}
+
+function yunaCountXTrip(now) {
+  const awayAt = yunaPet.state.awayAt;
+  if (!awayAt) return;
+  yunaPet.state.awayAt = 0;
+  yunaPet.state.social = yunaAddSocialTime(yunaPet.state.social, now - awayAt, now);
+  writeYunaPetState();
+  yunaBackFromX(now - awayAt);
 }
 
 // ---------- startup ----------
@@ -626,13 +825,14 @@ function initYunaPet() {
   root.id = "yunaPet";
   root.innerHTML = `
     <p class="yuna-bubble" aria-live="polite"></p>
-    <div class="yuna-pet-body" title="Yuna · click to wave, drag to move, right-click for her menu">
+    <div class="yuna-pet-body" aria-label="Yuna. Click to wave, drag to move, right-click for her menu.">
       <img class="yuna-frame is-front" alt="" draggable="false" />
       <img class="yuna-frame" alt="" draggable="false" />
       <div class="yuna-fx" aria-hidden="true"></div>
     </div>
     <button class="yuna-menu-button" type="button" aria-label="Yuna's menu" aria-haspopup="menu" aria-expanded="false">⋯</button>
     <div class="yuna-menu" role="menu" aria-label="Yuna" hidden></div>
+    <button class="yuna-timer" type="button" hidden></button>
   `;
   const summon = document.createElement("button");
   summon.className = "yuna-summon";
@@ -649,8 +849,11 @@ function initYunaPet() {
     fx: root.querySelector(".yuna-fx"),
     bubble: root.querySelector(".yuna-bubble"),
     menu: root.querySelector(".yuna-menu"),
-    menuButton: root.querySelector(".yuna-menu-button")
+    menuButton: root.querySelector(".yuna-menu-button"),
+    timer: root.querySelector(".yuna-timer"),
+    baseTitle: document.title
   });
+  yunaPet.timer.addEventListener("click", () => yunaToggleMenu());
   root.classList.toggle("is-compact", yunaIsCompact());
   root.classList.toggle("is-still", yunaPet.reducedMotion);
 
@@ -672,5 +875,8 @@ function initYunaPet() {
   }
   summon.hidden = true;
   yunaIdle(0);
+  yunaRenderTimer();
+  if (yunaPomodoro().phase === "break") yunaStartBreak({ pomodoro: true });
+  if (!document.hidden) yunaCountXTrip(Date.now());
   if (yunaIsLateNight(hour)) setTimeout(() => yunaReact({ type: "late-night" }), 15000);
 }
