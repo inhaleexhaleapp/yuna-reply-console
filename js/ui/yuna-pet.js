@@ -94,8 +94,9 @@ function yunaClamp(x, y) {
   };
 }
 
-function yunaMoveTo(x, y, seconds = 0, easing = "ease-in-out") {
-  const point = yunaClamp(x, y);
+// free: allow part of Yuna to leave the screen (peeking in from the edge).
+function yunaMoveTo(x, y, seconds = 0, easing = "ease-in-out", free = false) {
+  const point = free ? { x, y: yunaClamp(x, y).y } : yunaClamp(x, y);
   yunaPet.root.style.transition = seconds > 0 ? `left ${seconds}s ${easing}, top ${seconds}s ${easing}` : "none";
   yunaPet.root.style.left = `${point.x}px`;
   yunaPet.root.style.top = `${point.y}px`;
@@ -178,6 +179,10 @@ function yunaClearBubble() {
 
 function yunaBegin(activity) {
   yunaPet.generation += 1;
+  if (activity !== "peek" && yunaPet.root.classList.contains("is-peeking")) {
+    yunaPet.root.classList.remove("is-peeking");
+    yunaGoHome(0.6);
+  }
   yunaPet.activity = activity;
   yunaPet.root.dataset.activity = activity;
   yunaPose(null);
@@ -249,12 +254,15 @@ async function yunaPeek() {
   const { w } = yunaSize();
   const home = yunaHome();
   yunaShow("peek-1", 0.3);
-  yunaMoveTo(window.innerWidth - w * 0.55, home.y, 1.35);
+  yunaPet.root.classList.add("is-peeking");
+  // Like the desktop pet: 119 of 140 points stay visible, the cut side tucks behind the screen edge.
+  yunaMoveTo(window.innerWidth - w * 0.85, home.y, 1.35, "ease-in-out", true);
   if (!(await yunaWait(1.4, generation))) return;
   if (Math.random() < 0.42) yunaSay(yunaPick(yunaLines.peekaboo), 2, { force: true });
   if (!(await yunaWait(yunaBetween([3.2, 5.4]), generation))) return;
   yunaGoHome(0.85);
   if (!(await yunaWait(0.9, generation))) return;
+  yunaPet.root.classList.remove("is-peeking");
   yunaIdle(0.4);
 }
 

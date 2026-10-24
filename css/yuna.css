@@ -1803,3 +1803,11 @@ select {
   display: grid;
   gap: 4px;
 }
+
+.yuna-pet.is-peeking .yuna-bubble {
+  right: 30%;
+}
+
+.yuna-pet.is-peeking .yuna-menu-button {
+  display: none;
+}
