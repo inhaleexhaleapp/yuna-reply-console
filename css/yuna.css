@@ -1480,3 +1480,262 @@ select {
   display: block;
   margin-top: 16px;
 }
+
+/* YunaPet: a small companion in the corner */
+.yuna-pet {
+  position: fixed;
+  z-index: 12;
+  width: 140px;
+  height: 210px;
+  left: calc(100vw - 160px);
+  top: calc(100vh - 220px);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.yuna-pet[hidden] {
+  display: none;
+}
+
+.yuna-pet.is-compact {
+  width: 84px;
+  height: 126px;
+}
+
+.yuna-pet-body {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  transform-origin: 50% 100%;
+}
+
+.yuna-pet[data-activity="drag"] .yuna-pet-body {
+  cursor: grabbing;
+}
+
+.yuna-pet.is-flipped .yuna-frame {
+  transform: scaleX(-1);
+}
+
+.yuna-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+  opacity: 0;
+  transition-property: opacity;
+  transition-timing-function: ease-in-out;
+  filter: drop-shadow(0 8px 14px rgba(4, 6, 20, 0.45));
+  pointer-events: none;
+}
+
+.yuna-frame.is-front {
+  opacity: 1;
+}
+
+.yuna-bubble {
+  position: absolute;
+  bottom: calc(100% - 18px);
+  right: 8px;
+  display: grid;
+  gap: 6px;
+  width: max-content;
+  max-width: 200px;
+  margin: 0;
+  padding: 8px 11px;
+  border: 1px solid rgba(200, 230, 255, 0.24);
+  border-radius: 14px 14px 4px 14px;
+  color: var(--text);
+  background: rgba(14, 18, 42, 0.92);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.yuna-bubble.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.yuna-bubble.is-interactive {
+  pointer-events: auto;
+}
+
+.yuna-bubble-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.yuna-bubble button,
+.yuna-menu button {
+  min-height: 30px;
+  padding: 4px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--text);
+  background: rgba(185, 164, 255, 0.12);
+  font: inherit;
+  cursor: pointer;
+}
+
+.yuna-countdown {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.yuna-menu-button {
+  position: absolute;
+  top: 36%;
+  right: -6px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--text);
+  background: rgba(14, 18, 42, 0.86);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.yuna-pet:hover .yuna-menu-button,
+.yuna-menu-button:focus-visible,
+.yuna-menu-button[aria-expanded="true"] {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .yuna-menu-button {
+    opacity: 0.8;
+  }
+}
+
+.yuna-menu {
+  position: absolute;
+  bottom: 30%;
+  right: calc(100% - 10px);
+  display: grid;
+  gap: 4px;
+  min-width: 170px;
+  padding: 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: rgba(12, 16, 38, 0.96);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+}
+
+.yuna-menu.opens-right {
+  right: auto;
+  left: calc(100% - 10px);
+}
+
+.yuna-menu[hidden] {
+  display: none;
+}
+
+.yuna-menu button {
+  text-align: left;
+  background: transparent;
+  border-color: transparent;
+}
+
+.yuna-menu button:hover,
+.yuna-menu button:focus-visible {
+  border-color: var(--line-strong);
+  background: rgba(185, 164, 255, 0.12);
+}
+
+.yuna-summon {
+  position: fixed;
+  right: 14px;
+  bottom: 12px;
+  z-index: 12;
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(14, 18, 42, 0.86);
+  cursor: pointer;
+}
+
+.yuna-summon[hidden] {
+  display: none;
+}
+
+/* poses */
+.pose-breathe { animation: yuna-breathe 4s ease-in-out infinite; }
+.pose-breathe-slow { animation: yuna-breathe 4.8s ease-in-out infinite; }
+.pose-bounce { animation: yuna-bounce 0.42s ease-in-out infinite; }
+.pose-float { animation: yuna-float 6.8s ease-in-out infinite; }
+.pose-sway { animation: yuna-sway 2.4s ease-in-out infinite; }
+.pose-swing { animation: yuna-sway 1.6s ease-in-out infinite; }
+.pose-wobble { animation: yuna-sway 0.7s ease-in-out infinite; }
+.pose-cough { animation: yuna-cough 0.35s ease-in-out 6; }
+.pose-shiver { animation: yuna-cough 0.25s ease-in-out 5; }
+.pose-launch { animation: yuna-launch 0.8s ease-out forwards; }
+.pose-flail { animation: yuna-flail 0.18s ease-in-out infinite; }
+.pose-dangle { animation: yuna-sway 0.9s ease-in-out infinite; }
+
+@keyframes yuna-breathe { 50% { transform: translateY(-2px) scale(1.01); } }
+@keyframes yuna-bounce { 50% { transform: translateY(-3.5px); } }
+@keyframes yuna-float {
+  0%, 100% { transform: translate(0, 0) rotate(-0.75deg) scale(1.016); }
+  50% { transform: translate(3px, -7px) rotate(0.75deg) scale(1.016); }
+}
+@keyframes yuna-sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+@keyframes yuna-cough { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+@keyframes yuna-launch { 40% { transform: translateY(-25px) scale(1.15) rotate(-8deg); } 100% { transform: translateY(15px) rotate(-25deg); } }
+@keyframes yuna-flail { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } }
+
+/* little effects */
+.yuna-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.yuna-fx-bit {
+  position: absolute;
+  left: calc(30% + var(--i) * 18%);
+  top: 18%;
+  color: #f6c9e6;
+  font-size: 1rem;
+  opacity: 0;
+  animation: yuna-rise 2.4s ease-out calc(var(--i) * 0.35s) infinite;
+}
+
+.fx-zz { color: #c8e6ff; left: calc(62% + var(--i) * 9%); }
+.fx-steam { color: #e8eefc; top: 46%; }
+.fx-smoke { color: #d9d4e6; font-size: 1.5rem; top: 28%; }
+.fx-sparkle, .fx-glyph { color: #f3d9c2; }
+.fx-rain { top: 0; color: #9fc3ff; animation-name: yuna-fall; animation-duration: 0.9s; }
+.fx-aura { left: 22%; top: 48%; font-size: 4rem; color: rgba(185, 164, 255, 0.5); animation-name: yuna-glow; }
+
+@keyframes yuna-rise {
+  0% { opacity: 0; transform: translateY(8px) scale(0.8); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-34px) scale(1.1); }
+}
+@keyframes yuna-fall {
+  0% { opacity: 0; transform: translateY(-10px); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(60px); }
+}
+@keyframes yuna-glow { 0%, 100% { opacity: 0.2; transform: scale(0.9); } 50% { opacity: 0.6; transform: scale(1.1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .yuna-pet *, .yuna-pet { animation: none !important; transition: none !important; }
+}
+
+.yuna-menu.opens-down {
+  bottom: auto;
+  top: 20%;
+}

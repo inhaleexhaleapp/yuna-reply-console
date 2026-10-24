@@ -92,6 +92,7 @@ function markUsed(reply) {
   writeStorage();
   renderAll();
   setStatus("Marked as used.");
+  yunaSignal("used");
 }
 
 function replyCard(reply, index) {

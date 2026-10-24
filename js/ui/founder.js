@@ -119,6 +119,7 @@ function markFounderUsed(reply) {
   writeFounderStorage();
   renderFounderAll();
   setFounderStatus("Marked as used.");
+  yunaSignal("used");
 }
 
 function founderReplyCard(reply, index) {

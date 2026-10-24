@@ -120,6 +120,7 @@ function scoreScoutAnswer() {
   renderScoutBoard();
   const go = scoutState.board.filter((post) => post.decision === "go").length;
   setScoutStatus(`${posts.length} rooms scored · ${go} worth entering. Skipping the rest is a valid choice.`);
+  yunaSignal("scout-scored", { go, total: posts.length });
 }
 
 function draftScoutPost(post) {
@@ -169,6 +170,7 @@ function initScoutTab() {
       focus: scoutFocusInput.value
     }));
     setScoutStatus("Grok prompt copied. Open Grok, paste it, then bring the answer back here.");
+    yunaSignal("scout-copy");
   });
   scoutOpenGrokBtn.addEventListener("click", () => {
     window.open("https://x.com/i/grok", "_blank", "noopener,noreferrer");

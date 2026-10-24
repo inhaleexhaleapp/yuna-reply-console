@@ -380,3 +380,4 @@ renderAll();
 renderFounderAll();
 initMusicTab();
 initScoutTab();
+initYunaPet();

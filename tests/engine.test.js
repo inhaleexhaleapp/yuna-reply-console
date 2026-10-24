@@ -249,3 +249,57 @@ test("grok scout: open, fresh, human rooms rank above crowds and promo", () => {
     assert.ok(post.reasons.length <= 4);
   });
 });
+
+test("yuna: every frame the brain uses ships as a file", () => {
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const frames = plain(y.YUNA_FRAMES);
+  frames.forEach((frame) => assert.ok(fs.existsSync(path.join(__dirname, "..", "assets", "yuna", `${frame}.webp`)), frame));
+  const used = new Set();
+  Object.values(plain(y.yunaRituals)).forEach((ritual) => ritual.steps.forEach((step) => used.add(step.frame)));
+  ["session-start", "generate", "limit-pause", "used", "scout-copy", "scout-scored", "late-night"].forEach((type) => {
+    const reaction = plain(y.yunaReaction({ type, go: 2, count: 1, limit: 3, intention: "full" }));
+    assert.ok(reaction, type);
+    if (reaction.frame) used.add(reaction.frame);
+  });
+  used.forEach((frame) => assert.ok(frames.includes(frame), `${frame} is used but not listed`));
+  plain(y.yunaMenuRituals).forEach((name) => assert.ok(y.yunaRituals[name], name));
+});
+
+test("yuna: words resolve for every mood and placeholder", () => {
+  const always = () => 0;
+  Object.keys(plain(y.yunaMoodWords)).forEach((mood) => assert.ok(y.yunaResolveWords(`@${mood}`, always)));
+  assert.equal(y.yunaResolveWords("@recovery", always), "blanket ☁️");
+  assert.equal(y.yunaResolveWords("plain words"), "plain words");
+  assert.equal(y.yunaResolveWords(null), null);
+});
+
+test("yuna: the idle ladder stays calm while you work", () => {
+  const ctx = (extra) => ({ mood: "playful", quietSec: 300, hour: 14, reducedMotion: false, compact: false, canPerch: true, lastAt: {}, ...extra });
+  const lucky = () => 0;
+  assert.equal(y.yunaNextIdleAction(ctx({ quietSec: 3 }), lucky), "stay", "busy people get no rituals");
+  assert.equal(y.yunaNextIdleAction(ctx({ hour: 8 }), lucky), "coffee", "mornings start with coffee");
+  assert.equal(y.yunaNextIdleAction(ctx({ hour: 14 }), lucky), "snack");
+  const motion = new Set(["pilates", "peek", "perch", "float", "walk"]);
+  for (let i = 0; i < 300; i += 1) {
+    const still = y.yunaNextIdleAction(ctx({ reducedMotion: true, quietSec: 20 + (i % 200) }));
+    assert.ok(!motion.has(still), `reduced motion picked ${still}`);
+  }
+  const cooled = y.yunaNextIdleAction(ctx({ hour: 8, lastAt: { coffee: 60000, snack: 60000, pilates: 60000, mythology: 60000, incense: 60000, rain: 60000 } }), lucky);
+  assert.equal(cooled, "sleep", "cooldowns skip recent rituals");
+  assert.ok(["stay", "whisper"].includes(y.yunaNextIdleAction(ctx({ quietSec: 17, compact: true }), lucky)), "small screens get no wandering");
+});
+
+test("yuna: reactions and the avocado break", () => {
+  assert.match(plain(y.yunaReaction({ type: "scout-scored", go: 1 })).say, /1 living room$/);
+  assert.equal(plain(y.yunaReaction({ type: "scout-scored", go: 0 })).frame, "rain-defeated");
+  assert.equal(plain(y.yunaReaction({ type: "generate", count: 3, limit: 3 })).suggestBreak, true);
+  assert.equal(plain(y.yunaReaction({ type: "session-start", intention: "map-only" })).ritual, "meditate");
+  assert.equal(y.yunaReaction({ type: "nope" }), null);
+  assert.equal(y.yunaShouldSuggestBreak(25, 999), true);
+  assert.equal(y.yunaShouldSuggestBreak(24, 999), false);
+  assert.equal(y.yunaShouldSuggestBreak(40, 10), false);
+  assert.equal(y.yunaFormatCountdown(299.2), "05:00");
+  assert.equal(y.yunaFormatCountdown(59), "00:59");
+  assert.equal(y.yunaFormatCountdown(-3), "00:00");
+});

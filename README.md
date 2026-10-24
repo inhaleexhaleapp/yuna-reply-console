@@ -23,7 +23,7 @@ It never connects to X. No API, no posting, liking, following, DMs, or scraping.
 git clone https://github.com/inhaleexhaleapp/yuna-reply-console.git
 cd yuna-reply-console
 open index.html        # or just double-click it
-node --test            # 25 tests, zero dependencies
+node --test            # 29 tests, zero dependencies
 ```
 
 No build step, no `npm install`, no server, no API key.
@@ -45,6 +45,34 @@ That is also what works on X for small accounts. Templated, repeated or link-hea
 | **Grok Scout ✦** | Let Grok look at live X, then let Yuna judge the rooms. An API-free round trip: copy a prompt, paste Grok's answer back, get a ranked board of posts worth your energy. |
 
 Every reply tab includes a **Search Radar** of preset X searches (opened in Latest view) for manual discovery.
+
+## Meet Yuna 🌸
+
+![Yuna reacting to the console](docs/yuna-pet.png)
+
+Yuna lives in the corner of the console. She is the same chibi companion as YunaPet, the [Inhale Exhale](https://inhaleexhale.app) desktop pet, ported to the browser from her behaviour spec: the same sprites, moods, words and rituals, retuned for a work tool.
+
+She is the console's conscience, not decoration:
+
+| What happens | What Yuna does |
+| --- | --- |
+| You choose a session intention | waves; on *Map only* or *Looking* she sits down to meditate |
+| You generate replies | sips coffee: "read it once more?", "one real detail is enough" |
+| You hit the reply limit you chose | falls asleep ("that's the limit you chose 🌙") and offers a break |
+| You mark a reply as used | "♡ sent by you, not me" |
+| Grok Scout finds living rooms | opens her book: "oh! 📖 3 living rooms" |
+| Grok Scout finds nothing worth it | gets rained on: "skipping is fine" |
+| ~25 minutes of real work | **Avocado Break** 🥑: offers 5 minutes away from the screen, with a countdown |
+| It's past 11 pm | gets sleepy and says so |
+
+When you leave her alone she has her own life, following YunaPet's idle ladder: breathing, peeking in from the edge, wandering, floating, perching on the tab bar (and falling off), coffee in the morning, snacks with a rare "salad supremacy" moment, mythology, incense disasters, pilates, rain walks and naps.
+
+- **She stays out of your way.** Rituals only start while you are quiet, and typing sends her back to calm breathing.
+- **Click** to wave, **double-click** for ♡, **drag** her anywhere (her spot is remembered), **right-click** or **⋯** for her menu, **Hide Yuna** to tuck her away (a small 🌸 pill brings her back).
+- **Respectful by default.** With *reduce motion* turned on she stops moving around and only changes poses. On phones she is smaller and never wanders.
+- **Still offline.** Her 40 frames ship as small WebP files in `assets/yuna/` (~1 MB total), and her state is one `localStorage` key that the backup file already includes.
+
+The brain is plain data and pure functions in `js/engine/yuna-brain.js`, so the tests check that every frame exists, every word resolves, reduced motion never picks a moving action, and she never starts a ritual while you work.
 
 ## Grok Scout: Grok looks, Yuna judges, you choose
 
@@ -170,12 +198,14 @@ Limits are a mindful pause, not a lock: you can deliberately bypass them. Sessio
 ```
 index.html            markup only
 css/yuna.css          styles (night-sky theme)
+assets/yuna/          Yuna's frames (WebP)
 js/
   data/               reply banks, lexicons, search presets per tab
   core/               utils, storage keys, backup, DOM refs, state
   engine/             pure logic: echo, worthiness, similarity, text rules,
-                      per-tab candidate builders, Claude prompt
-  ui/                 rendering and actions per tab
+                      per-tab candidate builders, Claude prompt,
+                      Grok Scout, Yuna's brain
+  ui/                 rendering and actions per tab, Yuna in the corner
   app.js              event wiring and startup (loaded last)
 tests/                node:test suites, zero dependencies
 ```
@@ -188,7 +218,7 @@ Scripts are plain classic `<script>` files that share one global scope. There ar
 node --test
 ```
 
-The engine files load into a Node `vm` context, so they are tested without a browser or any npm packages. The suites cover intent, anchors, echo replies, similarity, people-list parsing, Grok Scout prompts, parsing and ranking, composer calls, reply-set invariants (length, uniqueness, banned phrases), backup validation, list merging, and page integrity. GitHub Actions runs them on every push.
+The engine files load into a Node `vm` context, so they are tested without a browser or any npm packages. The suites cover intent, anchors, echo replies, similarity, people-list parsing, Grok Scout prompts, parsing and ranking, Yuna's frames, words, idle ladder and reactions, composer calls, reply-set invariants (length, uniqueness, banned phrases), backup validation, list merging, and page integrity. GitHub Actions runs them on every push.
 
 ## Roadmap
 

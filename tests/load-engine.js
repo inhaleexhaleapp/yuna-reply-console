@@ -20,7 +20,8 @@ const ENGINE_FILES = [
   "engine/founder-engine.js",
   "engine/music-engine.js",
   "engine/gravity-engine.js",
-  "engine/grok-scout.js"
+  "engine/grok-scout.js",
+  "engine/yuna-brain.js"
 ];
 
 function loadEngine() {

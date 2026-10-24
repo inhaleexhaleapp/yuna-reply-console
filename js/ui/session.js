@@ -75,6 +75,7 @@ function startSession(intentionKey) {
   hideSessionModal();
   writeSessionStorage();
   renderSessionBadge();
+  yunaSignal("session-start", { intention: intentionKey });
 }
 
 function endCurrentSession(reason = "ended") {
@@ -105,6 +106,7 @@ function ensureActiveSessionForReply(statusSetter) {
     );
     if (!confirmed) {
       statusSetter("Reply generation paused by session intention.");
+      yunaSignal("limit-pause");
       return false;
     }
     sessionState.bypassedLimit = true;
@@ -119,6 +121,7 @@ function recordReplyGeneration() {
   sessionState.updatedAt = new Date().toISOString();
   writeSessionStorage();
   renderSessionBadge();
+  yunaSignal("generate", { count: sessionState.replyCount, limit: sessionState.replyLimit, bypassed: Boolean(sessionState.bypassedLimit) });
 }
 
 function applyYunaSignatureLayer() {

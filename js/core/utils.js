@@ -70,3 +70,9 @@ function compactWordCount(text) {
 function countEmojiLikeMarks(text) {
   return countPattern(text, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu);
 }
+
+// Tells Yuna (js/ui/yuna-pet.js) what just happened. Does nothing if she isn't there.
+function yunaSignal(type, detail = {}) {
+  if (typeof document === "undefined" || typeof CustomEvent === "undefined") return;
+  document.dispatchEvent(new CustomEvent("yuna:signal", { detail: { ...detail, type } }));
+}

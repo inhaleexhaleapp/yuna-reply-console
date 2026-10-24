@@ -211,6 +211,7 @@ function initMusicTab() {
       musicState.used = musicState.used.slice(0, 80);
       writeMusicStorage();
       renderMusicAll();
+      yunaSignal("used");
     }
   });
 

@@ -1,6 +1,6 @@
 {
   "name": "yuna-reply-console",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "private": true,
   "description": "A local-first, human-in-the-loop reply companion for thoughtful conversations on X.",
   "license": "MIT",
