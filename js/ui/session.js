@@ -168,6 +168,11 @@ function applyShortcutLaunchMode() {
       tab: "musicPanel",
       whisper: new Date().getDay() === 6 ? "saturday. the screenshots are out." : "find one scene you can already hear."
     },
+    scout: {
+      label: "Grok Scout · opened by shortcut",
+      tab: "scoutPanel",
+      whisper: "let grok look. you choose."
+    },
     gravity: {
       label: "Gravity Map · opened by shortcut",
       tab: "gravityPanel",

@@ -18,7 +18,9 @@ const ENGINE_FILES = [
   "engine/claude-prompt.js",
   "engine/wellness-engine.js",
   "engine/founder-engine.js",
-  "engine/music-engine.js"
+  "engine/music-engine.js",
+  "engine/gravity-engine.js",
+  "engine/grok-scout.js"
 ];
 
 function loadEngine() {

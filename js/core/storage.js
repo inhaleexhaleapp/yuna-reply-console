@@ -66,7 +66,7 @@ function readShortcutLaunchMode() {
   try {
     const params = new URLSearchParams(window.location.search);
     const mode = (params.get("mode") || "").toLowerCase().trim();
-    return ["tonight", "founder", "wellness", "gravity", "music"].includes(mode) ? mode : "";
+    return ["tonight", "founder", "wellness", "gravity", "music", "scout"].includes(mode) ? mode : "";
   } catch (error) {
     return "";
   }

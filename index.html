@@ -54,6 +54,7 @@
       <button class="tab-button" id="wellnessTabBtn" type="button" role="tab" aria-selected="false" aria-controls="wellnessPanel" data-tab-target="wellnessPanel">Wellness / Yuna</button>
       <button class="tab-button" id="founderTabBtn" type="button" role="tab" aria-selected="false" aria-controls="founderPanel" data-tab-target="founderPanel">Indie Founder</button>
       <button class="tab-button" id="musicTabBtn" type="button" role="tab" aria-selected="false" aria-controls="musicPanel" data-tab-target="musicPanel">Music / Sound</button>
+      <button class="tab-button" id="scoutTabBtn" type="button" role="tab" aria-selected="false" aria-controls="scoutPanel" data-tab-target="scoutPanel">Grok Scout ✦</button>
     </nav>
 
     <section class="tab-panel is-active gravity-tab" id="gravityPanel" role="tabpanel" aria-labelledby="gravityTabBtn">
@@ -615,6 +616,81 @@
       </div>
     </section>
 
+    <section class="tab-panel scout-tab" id="scoutPanel" role="tabpanel" aria-labelledby="scoutTabBtn">
+      <div class="layout">
+        <section class="panel" aria-labelledby="scout-title">
+          <div class="section-head">
+            <div>
+              <h2 id="scout-title">Grok Scout</h2>
+              <p class="cockpit-note">Grok can see live X. Yuna can judge a room. Neither talks to the other: you carry the note between them.</p>
+            </div>
+          </div>
+
+          <ol class="scout-steps">
+            <li><strong>Copy the prompt</strong> and open Grok.</li>
+            <li><strong>Paste it into Grok</strong> yourself.</li>
+            <li><strong>Paste Grok's answer</strong> below. Yuna scores every room locally.</li>
+          </ol>
+
+          <div class="field-row">
+            <div>
+              <label for="scoutRoomSelect">Room</label>
+              <select id="scoutRoomSelect" aria-label="Scout room"></select>
+            </div>
+            <div>
+              <label for="scoutWindowSelect">Posted in</label>
+              <select id="scoutWindowSelect" aria-label="Time window">
+                <option value="6">last 6 hours</option>
+                <option value="24">last 24 hours</option>
+                <option value="48">last 48 hours</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div>
+              <label for="scoutCountSelect">How many</label>
+              <select id="scoutCountSelect" aria-label="Number of posts">
+                <option value="5">5 posts</option>
+                <option value="8">8 posts</option>
+                <option value="12">12 posts</option>
+              </select>
+            </div>
+            <div>
+              <label for="scoutFocusInput">Focus (optional)</label>
+              <input id="scoutFocusInput" type="text" placeholder="e.g. sleep sounds, flutter apps" />
+            </div>
+          </div>
+
+          <div class="primary-actions">
+            <button class="primary" id="scoutCopyPromptBtn" type="button" title="Copies a prompt for Grok. Nothing is sent anywhere by the console.">1 · Copy Grok prompt</button>
+            <button class="ghost" id="scoutOpenGrokBtn" type="button">Open Grok</button>
+          </div>
+
+          <label for="scoutAnswerInput">Grok's answer</label>
+          <textarea id="scoutAnswerInput" placeholder="@handle | followers | likes | replies | hours ago | post link | post text"></textarea>
+          <div class="input-meta">
+            <span id="scoutAnswerCount">0 posts found</span>
+            <span>⌘/Ctrl + Enter</span>
+          </div>
+          <div class="primary-actions">
+            <button class="primary" id="scoutScoreBtn" type="button">3 · Score the rooms</button>
+            <button class="ghost small danger" id="scoutClearBtn" type="button">Clear board</button>
+          </div>
+          <p class="status" id="scoutStatus" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel" aria-labelledby="scout-board-title">
+          <div class="section-head">
+            <div>
+              <h2 id="scout-board-title">Scout board</h2>
+              <p class="cockpit-note">Best rooms first. "Draft here" drops the post into the right tab; you still write, copy and post by hand.</p>
+            </div>
+          </div>
+          <div class="reply-list" id="scoutBoard"></div>
+        </section>
+      </div>
+    </section>
+
     <section class="panel data-panel" aria-labelledby="data-title">
       <div class="section-head">
         <div>
@@ -647,6 +723,7 @@
   <script src="js/engine/founder-engine.js"></script>
   <script src="js/engine/gravity-engine.js"></script>
   <script src="js/engine/music-engine.js"></script>
+  <script src="js/engine/grok-scout.js"></script>
   <script src="js/core/dom.js"></script>
   <script src="js/core/state.js"></script>
   <script src="js/ui/session.js"></script>
@@ -656,6 +733,7 @@
   <script src="js/ui/founder.js"></script>
   <script src="js/ui/gravity.js"></script>
   <script src="js/ui/music.js"></script>
+  <script src="js/ui/scout.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

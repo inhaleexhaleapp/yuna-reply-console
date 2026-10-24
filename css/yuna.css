@@ -1411,3 +1411,72 @@ select {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* Grok Scout */
+.scout-tab {
+  --accent-2: #c8e6ff;
+}
+
+.scout-tab .panel {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(185, 164, 255, 0.09), transparent 42%),
+    var(--panel);
+}
+
+.scout-tab input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--text);
+  background: rgba(4, 7, 20, 0.54);
+}
+
+.scout-steps {
+  margin: 4px 0 14px;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.scout-steps strong {
+  color: var(--text);
+}
+
+.scout-card-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.scout-card-head .reply-meta {
+  margin-top: 4px;
+}
+
+.scout-score {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.scout-go .scout-score {
+  border-color: rgba(185, 164, 255, 0.7);
+  box-shadow: 0 0 18px rgba(185, 164, 255, 0.25);
+}
+
+.scout-skip {
+  opacity: 0.62;
+}
+
+.scout-tab label[for="scoutAnswerInput"] {
+  display: block;
+  margin-top: 16px;
+}

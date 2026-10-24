@@ -379,3 +379,4 @@ updateFounderTweetCount();
 renderAll();
 renderFounderAll();
 initMusicTab();
+initScoutTab();

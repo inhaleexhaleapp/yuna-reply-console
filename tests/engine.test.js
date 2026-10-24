@@ -193,3 +193,59 @@ test("music: openers never repeat a word from the reply", () => {
     assert.equal((text.match(/lovely/g) || []).length, 1, text);
   }
 });
+
+const GROK_ANSWER = [
+  "Here are the posts:",
+  "1. @calmcoder | 2.4k | 31 | 6 | 2h | https://x.com/calmcoder/status/111 | what helps you actually fall asleep after a late coding night? tried everything",
+  "| @bigacct | 210k | 4,100 | 890 | 5h | https://x.com/bigacct/status/222 | hot take: meditation apps are a scam |",
+  "- **@promoguy** | 800 | 3 | 0 | 1h | https://x.com/promoguy/status/333 | GIVEAWAY drop your link and follow for follow, download now",
+  "@soloshipper | 1,150 | 18 | 4 | 30m | https://x.com/soloshipper/status/444 | finally got my first 10 users after 4 months building solo 🎉 what should i focus on next?",
+  "@soloshipper | 1,150 | 18 | 4 | 30m | https://x.com/soloshipper/status/444 | duplicate line",
+  "@handle | followers | likes | replies | hours ago | post link | post text",
+  "| --- | --- |"
+].join("\n");
+
+test("grok scout: prompt asks for the exact line format and stays manual", () => {
+  ["wellness", "founder", "music"].forEach((room) => {
+    const prompt = y.buildGrokScoutPrompt(room, { count: 5, hours: 6, focus: "rain sounds" });
+    assert.ok(prompt.includes(y.SCOUT_LINE_FORMAT));
+    assert.ok(prompt.includes("find 5 recent posts"));
+    assert.ok(prompt.includes("the last 6 hours"));
+    assert.ok(prompt.includes("focus: rain sounds."));
+  });
+  const fallback = y.buildGrokScoutPrompt("nope", { count: 99 });
+  assert.ok(fallback.includes("find 8 recent posts") && fallback.includes("the last 24 hours"));
+});
+
+test("grok scout: parses Grok's lines, numbers and noise", () => {
+  const posts = plain(y.parseScoutLines(GROK_ANSWER));
+  assert.equal(posts.length, 4, "header, separator, intro and duplicate links are skipped");
+  assert.deepEqual(posts[0], {
+    handle: "@calmcoder", followers: 2400, likes: 31, replies: 6, hoursAgo: 2,
+    link: "https://x.com/calmcoder/status/111",
+    text: "what helps you actually fall asleep after a late coding night? tried everything"
+  });
+  assert.equal(posts[1].followers, 210000);
+  assert.equal(posts[1].text, "hot take: meditation apps are a scam");
+  assert.equal(posts[2].handle, "@promoguy");
+  assert.equal(posts[3].hoursAgo, 0.5);
+  assert.equal(y.parseScoutNumber("~1.2M"), 1200000);
+  assert.equal(y.parseScoutHours("2 days"), 48);
+  assert.equal(plain(y.parseScoutLines("no handles here | at all")).length, 0);
+});
+
+test("grok scout: open, fresh, human rooms rank above crowds and promo", () => {
+  const ranked = plain(y.rankScoutPosts(y.parseScoutLines(GROK_ANSWER), "founder"));
+  assert.deepEqual(ranked.slice(0, 2).map((post) => post.handle).sort(), ["@calmcoder", "@soloshipper"]);
+  ranked.slice(0, 2).forEach((post) => assert.equal(post.decision, "go"));
+  const promo = ranked.find((post) => post.handle === "@promoguy");
+  const crowd = ranked.find((post) => post.handle === "@bigacct");
+  assert.equal(promo.decision, "skip");
+  assert.equal(promo.reasons[0], "smells like promo");
+  assert.equal(crowd.decision, "skip");
+  assert.ok(crowd.reasons.includes("already crowded"));
+  ranked.forEach((post) => {
+    assert.ok(post.score >= 0 && post.score <= 100);
+    assert.ok(post.reasons.length <= 4);
+  });
+});
